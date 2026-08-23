@@ -72,7 +72,7 @@ Useme — **польська** платформа. Це змінює три ре
 лишається цінним як джерело замовників і як безпечна угода.
 
 Практичний наслідок: ціни польському клієнту називайте **нетто** — у польському
-B2B це стандарт, і «5 900 zł netto» звучить професійніше за «5 900 zł».
+B2B це стандарт, і «8 900 zł netto» звучить професійніше за «8 900 zł».
 
 ### Як шукати замовлення самому
 
@@ -104,11 +104,11 @@ B2B це стандарт, і «5 900 zł netto» звучить професі�
 
 | Пакет | Ціна | Термін |
 |---|---|---|
-| START | 1 200 zł | 2 дні |
-| TEAM | 2 900 zł | 4 дні |
-| PRO | 5 900 zł | 7 днів |
-| Опіка | 600 zł/міс | — |
-| Повне ведення | 1 900 zł/міс | — |
+| START | 1 900 zł | 2 дні |
+| TEAM | 4 500 zł | 4 дні |
+| PRO | 8 900 zł | 7 днів |
+| Опіка | 900 zł/міс | — |
+| Повне ведення | 2 900 zł/міс | — |
 
 ---
 
@@ -137,9 +137,9 @@ CO DOSTAJESZ
 
 PAKIETY
 
-START — 1 200 zł, 2 dni. Notion + konfiguracja + jedno spotkanie. Bez Telegrama.
-TEAM — 2 900 zł, 4 dni. Plus bot z przyciskami, do 10 osób, szkolenie, raport tygodniowy.
-PRO — 5 900 zł, 7 dni. Plus pola pod Twoje procesy, Twój tracker zamiast Notion,
+START — 1 900 zł netto, 2 dni. Notion + konfiguracja + jedno spotkanie. Bez Telegrama.
+TEAM — 4 500 zł netto, 4 dni. Plus bot z przyciskami, do 10 osób, szkolenie, raport tygodniowy.
+PRO — 8 900 zł netto, 7 dni. Plus pola pod Twoje procesy, Twój tracker zamiast Notion,
 generowanie dokumentów, miesiąc wsparcia.
 
 Opcjonalnie później: opieka 600 zł/mies. albo pełne prowadzenie 1 900 zł/mies.
