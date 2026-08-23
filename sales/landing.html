@@ -38,8 +38,10 @@
 }
 
 /* ---- bilingual switching ---- */
-:root[data-lang="en"] .uk{ display:none !important; }
-:root:not([data-lang="en"]) .en{ display:none !important; }
+:root[data-lang="en"] .uk, :root[data-lang="en"] .pl{ display:none !important; }
+:root[data-lang="pl"] .uk, :root[data-lang="pl"] .en{ display:none !important; }
+:root:not([data-lang="en"]):not([data-lang="pl"]) .en,
+:root:not([data-lang="en"]):not([data-lang="pl"]) .pl{ display:none !important; }
 
 *{ box-sizing:border-box; }
 body{
@@ -195,9 +197,10 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
 
 <header>
   <div class="wrap bar">
-    <div class="mark"><span class="dot"></span><span class="uk">домовились&nbsp;— зроблено</span><span class="en">agreed&nbsp;— and done</span></div>
-    <div class="langs" role="group" aria-label="Мова / Language">
+    <div class="mark"><span class="dot"></span><span class="uk">домовились&nbsp;— зроблено</span><span class="en">agreed&nbsp;— and done</span><span class="pl">ustalone&nbsp;— i zrobione</span></div>
+    <div class="langs" role="group" aria-label="Мова / Język / Language">
       <button type="button" data-set="uk" aria-pressed="true">UA</button>
+      <button type="button" data-set="pl" aria-pressed="false">PL</button>
       <button type="button" data-set="en" aria-pressed="false">EN</button>
     </div>
   </div>
@@ -207,54 +210,54 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
   <div class="wrap hero">
     <div class="hero-grid">
       <div>
-        <div class="eyebrow"><span class="uk">Послуга · налаштування під ключ</span><span class="en">Service · done-for-you setup</span></div>
-        <h1><span class="uk">Зустріч закінчилась&nbsp;— задачі вже роздані</span><span class="en">The meeting ends. The tasks are already assigned.</span></h1>
+        <div class="eyebrow"><span class="uk">Послуга · налаштування під ключ</span><span class="en">Service · done-for-you setup</span><span class="pl">Usługa · wdrożenie pod klucz</span></div>
+        <h1><span class="uk">Зустріч закінчилась&nbsp;— задачі вже роздані</span><span class="en">The meeting ends. The tasks are already assigned.</span><span class="pl">Spotkanie się kończy. Zadania są już rozdane.</span></h1>
         <p class="lede">
           <span class="uk">Текст зустрічі перетворюється на задачі в Notion. Кожен співробітник отримує свої в Telegram і закриває їх однією кнопкою. У понеділок ви бачите, хто що обіцяв&nbsp;— і що з цього справді зробив.</span>
-          <span class="en">A meeting transcript turns into tasks in Notion. Each person gets theirs in Telegram and closes them with one tap. On Monday you see what was promised — and what actually got done.</span>
+          <span class="en">A meeting transcript turns into tasks in Notion. Each person gets theirs in Telegram and closes them with one tap. On Monday you see what was promised — and what actually got done.</span><span class="pl">Transkrypcja spotkania zamienia się w zadania w Notion. Każdy dostaje swoje na Telegramie i zamyka je jednym kliknięciem. W poniedziałek widzisz, kto co obiecał — i co z tego faktycznie zrobił.</span>
         </p>
         <div class="chips">
           <span class="chip">Notion</span>
           <span class="chip">Telegram</span>
-          <span class="chip"><span class="uk">Працює за 4 дні</span><span class="en">Live in 4 days</span></span>
-          <span class="chip"><span class="uk">Команді нічого не вчити</span><span class="en">Nothing new for the team to learn</span></span>
+          <span class="chip"><span class="uk">Працює за 4 дні</span><span class="en">Live in 4 days</span><span class="pl">Działa w 4 dni</span></span>
+          <span class="chip"><span class="uk">Команді нічого не вчити</span><span class="en">Nothing new for the team to learn</span><span class="pl">Zespół nie uczy się niczego nowego</span></span>
         </div>
       </div>
 
       <div class="transform">
         <div class="panel">
           <div class="panel-head">
-            <span><span class="uk">Транскрипція · планірка, 18 серпня</span><span class="en">Transcript · weekly sync, Aug 18</span></span>
+            <span><span class="uk">Транскрипція · планірка, 18 серпня</span><span class="en">Transcript · weekly sync, Aug 18</span><span class="pl">Transkrypcja · cotygodniowe spotkanie, 18 sierpnia</span></span>
             <span class="mono">40:12</span>
           </div>
           <div class="script">
-            <span class="row"><span class="who">Ігор:</span> <span class="uk">Коли зробиш?</span><span class="en">When will it be ready?</span></span>
-            <span class="row hit"><span class="who">Андрій:</span> <span class="uk">У мене ще «Орбіта» висить… Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.</span><span class="en">I still have Orbita hanging… Friday? I will sit down Thursday and send it Friday morning.</span></span>
-            <span class="row"><span class="who">Ігор:</span> <span class="uk">Пʼятниця. Тільки реально пʼятниця.</span><span class="en">Friday. An actual Friday this time.</span></span>
-            <span class="row"><span class="who">Оля:</span> <span class="uk">І з відгуками щось вирішіть…</span><span class="en">And someone deal with the reviews…</span></span>
+            <span class="row"><span class="who"><span class="uk">Ігор:</span><span class="en">Ihor:</span><span class="pl">Igor:</span></span> <span class="uk">Коли зробиш?</span><span class="en">When will it be ready?</span><span class="pl">Kiedy to będzie?</span></span>
+            <span class="row hit"><span class="who"><span class="uk">Андрій:</span><span class="en">Andriy:</span><span class="pl">Andrzej:</span></span> <span class="uk">У мене ще «Орбіта» висить… Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.</span><span class="en">I still have Orbita hanging… Friday? I will sit down Thursday and send it Friday morning.</span><span class="pl">Wisi mi jeszcze Orbita… Może do piątku? W czwartek siądę i w piątek rano wyślę.</span></span>
+            <span class="row"><span class="who"><span class="uk">Ігор:</span><span class="en">Ihor:</span><span class="pl">Igor:</span></span> <span class="uk">Пʼятниця. Тільки реально пʼятниця.</span><span class="en">Friday. An actual Friday this time.</span><span class="pl">Piątek. Tylko naprawdę piątek.</span></span>
+            <span class="row"><span class="who"><span class="uk">Оля:</span><span class="en">Olya:</span><span class="pl">Ola:</span></span> <span class="uk">І з відгуками щось вирішіть…</span><span class="en">And someone deal with the reviews…</span><span class="pl">I zróbcie w końcu coś z opiniami…</span></span>
           </div>
         </div>
 
-        <div class="arrow"><span class="rule"></span><span class="lbl"><span class="uk">автоматично</span><span class="en">automatically</span></span><span class="rule"></span></div>
+        <div class="arrow"><span class="rule"></span><span class="lbl"><span class="uk">автоматично</span><span class="en">automatically</span><span class="pl">automatycznie</span></span><span class="rule"></span></div>
 
         <div class="panel">
           <div class="panel-head">
-            <span>Notion · <span class="uk">Домовленості</span><span class="en">Commitments</span></span>
+            <span>Notion · <span class="uk">Домовленості</span><span class="en">Commitments</span><span class="pl">Ustalenia</span></span>
             <span class="mono">#1</span>
           </div>
           <div class="task">
-            <h3><span class="uk">Переробити КП для «Мілана» з розбивкою по каналах</span><span class="en">Rework the Milana proposal with a per-channel breakdown</span></h3>
+            <h3><span class="uk">Переробити КП для «Мілана» з розбивкою по каналах</span><span class="en">Rework the Milana proposal with a per-channel breakdown</span><span class="pl">Przerobić ofertę dla Milany z podziałem na kanały</span></h3>
             <dl class="fields">
-              <dt><span class="uk">Хто</span><span class="en">Owner</span></dt><dd>Андрій</dd>
-              <dt><span class="uk">Дедлайн</span><span class="en">Due</span></dt><dd><span class="uk">22 серпня, пт</span><span class="en">Fri, Aug 22</span></dd>
-              <dt><span class="uk">Пріоритет</span><span class="en">Priority</span></dt><dd><span class="uk">Високий</span><span class="en">High</span></dd>
-              <dt><span class="uk">Проєкт</span><span class="en">Project</span></dt><dd><span class="uk">Продажі</span><span class="en">Sales</span></dd>
+              <dt><span class="uk">Хто</span><span class="en">Owner</span><span class="pl">Kto</span></dt><dd><span class="uk">Андрій</span><span class="en">Andriy</span><span class="pl">Andrzej</span></dd>
+              <dt><span class="uk">Дедлайн</span><span class="en">Due</span><span class="pl">Termin</span></dt><dd><span class="uk">22 серпня, пт</span><span class="en">Fri, Aug 22</span><span class="pl">pt, 22 sierpnia</span></dd>
+              <dt><span class="uk">Пріоритет</span><span class="en">Priority</span><span class="pl">Priorytet</span></dt><dd><span class="uk">Високий</span><span class="en">High</span><span class="pl">Wysoki</span></dd>
+              <dt><span class="uk">Проєкт</span><span class="en">Project</span><span class="pl">Projekt</span></dt><dd><span class="uk">Продажі</span><span class="en">Sales</span><span class="pl">Sprzedaż</span></dd>
             </dl>
-            <div class="quote"><span class="uk">«Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.»</span><span class="en">“Friday? I will sit down Thursday and send it Friday morning.”</span></div>
+            <div class="quote"><span class="uk">«Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.»</span><span class="en">“Friday? I will sit down Thursday and send it Friday morning.”</span><span class="pl">„Może do piątku? W czwartek siądę i w piątek rano wyślę.”</span></div>
             <div class="states">
-              <span class="state s-done">✅ <span class="uk">Готово</span><span class="en">Done</span></span>
-              <span class="state s-wait">🕐 <span class="uk">Відкласти</span><span class="en">Postpone</span></span>
-              <span class="state s-drop">❌ <span class="uk">Не актуально</span><span class="en">Not relevant</span></span>
+              <span class="state s-done">✅ <span class="uk">Готово</span><span class="en">Done</span><span class="pl">Gotowe</span></span>
+              <span class="state s-wait">🕐 <span class="uk">Відкласти</span><span class="en">Postpone</span><span class="pl">Odłóż</span></span>
+              <span class="state s-drop">❌ <span class="uk">Не актуально</span><span class="en">Not relevant</span><span class="pl">Nieaktualne</span></span>
             </div>
           </div>
         </div>
@@ -264,53 +267,53 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
 
   <div class="band">
     <div class="wrap band-in">
-      <q><span class="uk">Ваша команда домовилась про шість речей минулого вівторка. Скільки з них зроблено?</span><span class="en">Your team agreed on six things last Tuesday. How many got done?</span></q>
+      <q><span class="uk">Ваша команда домовилась про шість речей минулого вівторка. Скільки з них зроблено?</span><span class="en">Your team agreed on six things last Tuesday. How many got done?</span><span class="pl">Twój zespół ustalił w zeszły wtorek sześć rzeczy. Ile z nich zrobiono?</span></q>
       <p>
         <span class="uk">Проблема не в людях. Домовленості живуть у голові керівника, у чиємусь блокноті й у голосовому повідомленні&nbsp;— тому їх ніхто й не контролює. Керівник стає живим нагадуванням для власних співробітників, і це з'їдає його тиждень.</span>
-        <span class="en">It is not that people are lazy. Commitments live in the manager's head, in somebody's notebook, in a voice message — so nobody tracks them. The manager becomes a human reminder system, and it eats the week.</span>
+        <span class="en">It is not that people are lazy. Commitments live in the manager's head, in somebody's notebook, in a voice message — so nobody tracks them. The manager becomes a human reminder system, and it eats the week.</span><span class="pl">To nie jest tak, że ludzie są leniwi. Ustalenia żyją w głowie szefa, w czyimś notesie, w wiadomości głosowej — więc nikt ich nie pilnuje. Szef staje się żywym przypominaczem dla własnych pracowników, i to zjada mu cały tydzień.</span>
       </p>
     </div>
   </div>
 
   <section class="wrap reveal">
     <div class="head">
-      <div class="eyebrow"><span class="uk">Як це працює</span><span class="en">How it works</span></div>
-      <h2><span class="uk">Пʼять кроків, з яких ви робите один</span><span class="en">Five steps. You do one of them.</span></h2>
+      <div class="eyebrow"><span class="uk">Як це працює</span><span class="en">How it works</span><span class="pl">Jak to działa</span></div>
+      <h2><span class="uk">Пʼять кроків, з яких ви робите один</span><span class="en">Five steps. You do one of them.</span><span class="pl">Pięć kroków. Ty robisz jeden z nich.</span></h2>
     </div>
     <div class="steps">
       <div class="step">
         <div class="n">01</div>
         <div>
-          <h3><span class="uk">Ви надсилаєте текст зустрічі</span><span class="en">You send the meeting text</span></h3>
-          <p><span class="uk">Транскрипція дзвінка, розшифровка запису або просто нотатки. Одне повідомлення&nbsp;— далі втручатись не треба.</span><span class="en">A call transcript, a recording turned into text, or plain notes. One message — after that you are out of the loop.</span></p>
+          <h3><span class="uk">Ви надсилаєте текст зустрічі</span><span class="en">You send the meeting text</span><span class="pl">Wysyłasz tekst spotkania</span></h3>
+          <p><span class="uk">Транскрипція дзвінка, розшифровка запису або просто нотатки. Одне повідомлення&nbsp;— далі втручатись не треба.</span><span class="en">A call transcript, a recording turned into text, or plain notes. One message — after that you are out of the loop.</span><span class="pl">Transkrypcja rozmowy, nagranie zamienione na tekst albo zwykłe notatki. Jedna wiadomość — potem już się w to nie angażujesz.</span></p>
         </div>
       </div>
       <div class="step">
         <div class="n">02</div>
         <div>
-          <h3><span class="uk">Асистент витягує домовленості</span><span class="en">The assistant pulls out the commitments</span></h3>
-          <p><span class="uk">Хто, що і до якої дати пообіцяв&nbsp;— разом із дослівною цитатою з розмови. Щоб потім не було «я такого не казав».</span><span class="en">Who promised what, by when — each with the verbatim quote from the conversation. So nobody gets to say “I never agreed to that”.</span></p>
+          <h3><span class="uk">Асистент витягує домовленості</span><span class="en">The assistant pulls out the commitments</span><span class="pl">Asystent wyciąga ustalenia</span></h3>
+          <p><span class="uk">Хто, що і до якої дати пообіцяв&nbsp;— разом із дослівною цитатою з розмови. Щоб потім не було «я такого не казав».</span><span class="en">Who promised what, by when — each with the verbatim quote from the conversation. So nobody gets to say “I never agreed to that”.</span><span class="pl">Kto co obiecał i do kiedy — każde z dosłownym cytatem z rozmowy. Żeby nikt nie mógł powiedzieć „ja tego nie mówiłem”.</span></p>
         </div>
       </div>
       <div class="step">
         <div class="n">03</div>
         <div>
-          <h3><span class="uk">Задачі зʼявляються в Notion</span><span class="en">Tasks appear in Notion</span></h3>
-          <p><span class="uk">З відповідальним, дедлайном, пріоритетом і джерелом&nbsp;— назвою зустрічі та датою. Ніхто нічого не друкує руками.</span><span class="en">With an owner, a deadline, a priority, and the source meeting and date. Nobody typed any of it.</span></p>
+          <h3><span class="uk">Задачі зʼявляються в Notion</span><span class="en">Tasks appear in Notion</span><span class="pl">Zadania pojawiają się w Notion</span></h3>
+          <p><span class="uk">З відповідальним, дедлайном, пріоритетом і джерелом&nbsp;— назвою зустрічі та датою. Ніхто нічого не друкує руками.</span><span class="en">With an owner, a deadline, a priority, and the source meeting and date. Nobody typed any of it.</span><span class="pl">Z osobą odpowiedzialną, terminem, priorytetem oraz nazwą i datą spotkania. Nikt tego nie wpisywał ręcznie.</span></p>
         </div>
       </div>
       <div class="step">
         <div class="n">04</div>
         <div>
-          <h3><span class="uk">Кожен отримує своє в Telegram</span><span class="en">Everyone gets theirs in Telegram</span></h3>
-          <p><span class="uk">Окреме повідомлення на кожну задачу з трьома кнопками. Натиснув&nbsp;— статус у Notion оновився сам, без вашої участі.</span><span class="en">One message per task, three buttons. A tap updates Notion by itself, without you touching anything.</span></p>
+          <h3><span class="uk">Кожен отримує своє в Telegram</span><span class="en">Everyone gets theirs in Telegram</span><span class="pl">Każdy dostaje swoje na Telegramie</span></h3>
+          <p><span class="uk">Окреме повідомлення на кожну задачу з трьома кнопками. Натиснув&nbsp;— статус у Notion оновився сам, без вашої участі.</span><span class="en">One message per task, three buttons. A tap updates Notion by itself, without you touching anything.</span><span class="pl">Jedna wiadomość na zadanie, trzy przyciski. Kliknięcie samo aktualizuje Notion, bez Twojego udziału.</span></p>
         </div>
       </div>
       <div class="step">
         <div class="n">05</div>
         <div>
-          <h3><span class="uk">У понеділок&nbsp;— звіт</span><span class="en">Monday: the report</span></h3>
-          <p><span class="uk">Що обіцяли проти того, що зробили. Виконано, у роботі, прострочено&nbsp;— і відсоток виконавчості по команді.</span><span class="en">Promised versus delivered. Done, in progress, overdue — and a completion rate for the team.</span></p>
+          <h3><span class="uk">У понеділок&nbsp;— звіт</span><span class="en">Monday: the report</span><span class="pl">Poniedziałek: raport</span></h3>
+          <p><span class="uk">Що обіцяли проти того, що зробили. Виконано, у роботі, прострочено&nbsp;— і відсоток виконавчості по команді.</span><span class="en">Promised versus delivered. Done, in progress, overdue — and a completion rate for the team.</span><span class="pl">Obiecane kontra zrobione. Gotowe, w toku, po terminie — i procent wykonania dla zespołu.</span></p>
         </div>
       </div>
     </div>
@@ -318,125 +321,125 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
 
   <section class="wrap reveal">
     <div class="head">
-      <div class="eyebrow"><span class="uk">Межі системи</span><span class="en">Where it stops</span></div>
-      <h2><span class="uk">І, що важливіше, чого воно не робить</span><span class="en">And, more importantly, what it will not do</span></h2>
-      <p><span class="uk">Половина розмов із керівниками впирається в одне побоювання: «а воно не понавигадує?». Відповідь&nbsp;— ні, і ось чому.</span><span class="en">Half of the conversations I have with team leads hit the same fear: “won't it just make things up?” It will not, and here is why.</span></p>
+      <div class="eyebrow"><span class="uk">Межі системи</span><span class="en">Where it stops</span><span class="pl">Gdzie się zatrzymuje</span></div>
+      <h2><span class="uk">І, що важливіше, чого воно не робить</span><span class="en">And, more importantly, what it will not do</span><span class="pl">I, co ważniejsze, czego nie zrobi</span></h2>
+      <p><span class="uk">Половина розмов із керівниками впирається в одне побоювання: «а воно не понавигадує?». Відповідь&nbsp;— ні, і ось чому.</span><span class="en">Half of the conversations I have with team leads hit the same fear: “won't it just make things up?” It will not, and here is why.</span><span class="pl">Połowa rozmów, które prowadzę z szefami zespołów, trafia w ten sam strach: „a czy to sobie czegoś nie wymyśli?”. Nie wymyśli, i oto dlaczego.</span></p>
     </div>
     <div class="grid-2">
       <div class="callout">
-        <h3><span class="uk">Не призначає відповідального сам</span><span class="en">It never assigns an owner on its own</span></h3>
-        <p><span class="uk">У зустрічі вище прозвучало «і з відгуками щось вирішіть» — без імені й без дати. Задача не створюється. Замість цього ви отримуєте питання:</span><span class="en">In the meeting above, “someone deal with the reviews” had no name and no date attached. No task is created. You get a question instead:</span></p>
-        <div class="ask"><span class="uk">❓ «Треба щось робити з відгуками» — відповідального не призначили. Створювати задачу? Якщо так, на кого?</span><span class="en">❓ “Someone deal with the reviews” — no owner was named. Create a task? If so, for whom?</span></div>
+        <h3><span class="uk">Не призначає відповідального сам</span><span class="en">It never assigns an owner on its own</span><span class="pl">Nigdy sam nie przypisuje osoby odpowiedzialnej</span></h3>
+        <p><span class="uk">У зустрічі вище прозвучало «і з відгуками щось вирішіть» — без імені й без дати. Задача не створюється. Замість цього ви отримуєте питання:</span><span class="en">In the meeting above, “someone deal with the reviews” had no name and no date attached. No task is created. You get a question instead:</span><span class="pl">Na spotkaniu powyżej „zróbcie coś z opiniami” padło bez nazwiska i bez daty. Zadanie nie powstaje. Zamiast tego dostajesz pytanie:</span></p>
+        <div class="ask"><span class="uk">❓ «Треба щось робити з відгуками» — відповідального не призначили. Створювати задачу? Якщо так, на кого?</span><span class="en">❓ “Someone deal with the reviews” — no owner was named. Create a task? If so, for whom?</span><span class="pl">❓ „Zróbcie coś z opiniami” — nie padło żadne nazwisko. Utworzyć zadanie? Jeśli tak, na kogo?</span></div>
       </div>
       <div class="card">
-        <h3><span class="uk">Не вигадує дедлайни</span><span class="en">It does not invent deadlines</span></h3>
-        <p><span class="uk">Якщо дата не звучала&nbsp;— у полі буде порожньо, а не правдоподібна вигадка. Порожнє поле помітно; вигадана дата&nbsp;— ні.</span><span class="en">If no date was spoken, the field stays empty rather than filled with something plausible. An empty field is visible. A fabricated date is not.</span></p>
-        <h3 style="margin-top:.6rem"><span class="uk">Не плутає ідею з рішенням</span><span class="en">It separates ideas from decisions</span></h3>
-        <p><span class="uk">«Кейси теж оновити б» прозвучало&nbsp;— і було відкладено вголос. Пропозиція, яку відхилили, задачею не стає.</span><span class="en">“We should update the case studies too” was raised — and shelved out loud. A suggestion that was turned down does not become a task.</span></p>
-        <h3 style="margin-top:.6rem"><span class="uk">Список ви бачите перший</span><span class="en">You see the list first</span></h3>
-        <p><span class="uk">Перед розсилкою команді таблиця показується вам. Нічого не летить людям за вашою спиною.</span><span class="en">The table is shown to you before anything reaches the team. Nothing goes out behind your back.</span></p>
+        <h3><span class="uk">Не вигадує дедлайни</span><span class="en">It does not invent deadlines</span><span class="pl">Nie wymyśla terminów</span></h3>
+        <p><span class="uk">Якщо дата не звучала&nbsp;— у полі буде порожньо, а не правдоподібна вигадка. Порожнє поле помітно; вигадана дата&nbsp;— ні.</span><span class="en">If no date was spoken, the field stays empty rather than filled with something plausible. An empty field is visible. A fabricated date is not.</span><span class="pl">Jeśli data nie padła, pole zostaje puste zamiast wypełnione czymś prawdopodobnym. Puste pole widać. Wymyślonej daty nie.</span></p>
+        <h3 style="margin-top:.6rem"><span class="uk">Не плутає ідею з рішенням</span><span class="en">It separates ideas from decisions</span><span class="pl">Oddziela pomysły od decyzji</span></h3>
+        <p><span class="uk">«Кейси теж оновити б» прозвучало&nbsp;— і було відкладено вголос. Пропозиція, яку відхилили, задачею не стає.</span><span class="en">“We should update the case studies too” was raised — and shelved out loud. A suggestion that was turned down does not become a task.</span><span class="pl">„Przydałoby się też odświeżyć case studies” padło — i zostało głośno odłożone. Propozycja, którą odrzucono, nie staje się zadaniem.</span></p>
+        <h3 style="margin-top:.6rem"><span class="uk">Список ви бачите перший</span><span class="en">You see the list first</span><span class="pl">Listę widzisz pierwszy</span></h3>
+        <p><span class="uk">Перед розсилкою команді таблиця показується вам. Нічого не летить людям за вашою спиною.</span><span class="en">The table is shown to you before anything reaches the team. Nothing goes out behind your back.</span><span class="pl">Tabela jest pokazywana Tobie, zanim cokolwiek trafi do zespołu. Nic nie idzie za Twoimi plecami.</span></p>
       </div>
     </div>
   </section>
 
   <section class="wrap reveal">
     <div class="head">
-      <div class="eyebrow"><span class="uk">Пакети</span><span class="en">Packages</span></div>
-      <h2><span class="uk">Фіксована ціна, фіксований термін</span><span class="en">Fixed price, fixed timeline</span></h2>
-      <p><span class="uk">Кожен пакет включає розбір однієї вашої реальної зустрічі&nbsp;— щоб ви побачили результат на власних даних, а не на демо.</span><span class="en">Every package includes processing one of your real meetings, so you see the result on your own data rather than on a demo.</span></p>
+      <div class="eyebrow"><span class="uk">Пакети</span><span class="en">Packages</span><span class="pl">Pakiety</span></div>
+      <h2><span class="uk">Фіксована ціна, фіксований термін</span><span class="en">Fixed price, fixed timeline</span><span class="pl">Stała cena, stały termin</span></h2>
+      <p><span class="uk">Кожен пакет включає розбір однієї вашої реальної зустрічі&nbsp;— щоб ви побачили результат на власних даних, а не на демо.</span><span class="en">Every package includes processing one of your real meetings, so you see the result on your own data rather than on a demo.</span><span class="pl">Każdy pakiet obejmuje przerobienie jednego Twojego prawdziwego spotkania — żebyś zobaczył efekt na własnych danych, a nie na demo.</span></p>
     </div>
     <div class="grid-3">
       <div class="card pack">
         <div class="name">Start</div>
-        <div class="price"><span class="uk">4 000 ₴</span><span class="en">$250</span></div>
-        <div class="term"><span class="uk">2 дні · підтримка 3 дні</span><span class="en">2 days · 3 days support</span></div>
+        <div class="price"><span class="uk">4 000 ₴</span><span class="en">$250</span><span class="pl">1 200 zł <span style="font-size:.55em;font-weight:500;color:var(--ink-3)">netto</span></span></div>
+        <div class="term"><span class="uk">2 дні · підтримка 3 дні</span><span class="en">2 days · 3 days support</span><span class="pl">2 dni · 3 dni wsparcia</span></div>
         <ul>
-          <li><span><span class="uk">База «Домовленості» в Notion</span><span class="en">Notion commitment database</span></span></li>
-          <li><span><span class="uk">Налаштування під ваші процеси</span><span class="en">Configured to your process</span></span></li>
-          <li><span><span class="uk">Розбір однієї зустрічі</span><span class="en">One meeting processed</span></span></li>
-          <li><span><span class="uk">Без Telegram-розсилки</span><span class="en">No Telegram delivery</span></span></li>
+          <li><span><span class="uk">База «Домовленості» в Notion</span><span class="en">Notion commitment database</span><span class="pl">Baza ustaleń w Notion</span></span></li>
+          <li><span><span class="uk">Налаштування під ваші процеси</span><span class="en">Configured to your process</span><span class="pl">Konfiguracja pod Twój proces</span></span></li>
+          <li><span><span class="uk">Розбір однієї зустрічі</span><span class="en">One meeting processed</span><span class="pl">Jedno spotkanie przerobione</span></span></li>
+          <li><span><span class="uk">Без Telegram-розсилки</span><span class="en">No Telegram delivery</span><span class="pl">Bez wysyłki na Telegram</span></span></li>
         </ul>
       </div>
       <div class="card pack hot">
-        <div class="tag"><span class="uk">Обирають найчастіше</span><span class="en">Most chosen</span></div>
+        <div class="tag"><span class="uk">Обирають найчастіше</span><span class="en">Most chosen</span><span class="pl">Wybierany najczęściej</span></div>
         <div class="name">Team</div>
-        <div class="price"><span class="uk">10 000 ₴</span><span class="en">$600</span></div>
-        <div class="term"><span class="uk">4 дні · підтримка 14 днів</span><span class="en">4 days · 14 days support</span></div>
+        <div class="price"><span class="uk">10 000 ₴</span><span class="en">$600</span><span class="pl">2 900 zł <span style="font-size:.55em;font-weight:500;color:var(--ink-3)">netto</span></span></div>
+        <div class="term"><span class="uk">4 дні · підтримка 14 днів</span><span class="en">4 days · 14 days support</span><span class="pl">4 dni · 14 dni wsparcia</span></div>
         <ul>
-          <li><span><span class="uk">Все з пакета Start</span><span class="en">Everything in Start</span></span></li>
-          <li><span><span class="uk">Telegram-бот з кнопками статусів</span><span class="en">Telegram bot with status buttons</span></span></li>
-          <li><span><span class="uk">До 10 співробітників</span><span class="en">Up to 10 team members</span></span></li>
-          <li><span><span class="uk">Тижневий звіт «обіцяли / зробили»</span><span class="en">Weekly promised-vs-delivered report</span></span></li>
-          <li><span><span class="uk">Навчання, 30 хвилин</span><span class="en">30-minute training call</span></span></li>
+          <li><span><span class="uk">Все з пакета Start</span><span class="en">Everything in Start</span><span class="pl">Wszystko z pakietu Start</span></span></li>
+          <li><span><span class="uk">Telegram-бот з кнопками статусів</span><span class="en">Telegram bot with status buttons</span><span class="pl">Bot na Telegramie z przyciskami statusu</span></span></li>
+          <li><span><span class="uk">До 10 співробітників</span><span class="en">Up to 10 team members</span><span class="pl">Do 10 osób w zespole</span></span></li>
+          <li><span><span class="uk">Тижневий звіт «обіцяли / зробили»</span><span class="en">Weekly promised-vs-delivered report</span><span class="pl">Tygodniowy raport obiecane/zrobione</span></span></li>
+          <li><span><span class="uk">Навчання, 30 хвилин</span><span class="en">30-minute training call</span><span class="pl">Szkolenie 30 minut</span></span></li>
         </ul>
       </div>
       <div class="card pack">
         <div class="name">Pro</div>
-        <div class="price"><span class="uk">20 000 ₴</span><span class="en">$1 200</span></div>
-        <div class="term"><span class="uk">7 днів · підтримка 30 днів</span><span class="en">7 days · 30 days support</span></div>
+        <div class="price"><span class="uk">20 000 ₴</span><span class="en">$1 200</span><span class="pl">5 900 zł <span style="font-size:.55em;font-weight:500;color:var(--ink-3)">netto</span></span></div>
+        <div class="term"><span class="uk">7 днів · підтримка 30 днів</span><span class="en">7 days · 30 days support</span><span class="pl">7 dni · 30 dni wsparcia</span></div>
         <ul>
-          <li><span><span class="uk">Все з пакета Team</span><span class="en">Everything in Team</span></span></li>
-          <li><span><span class="uk">Поля під ваші процеси</span><span class="en">Custom fields for your process</span></span></li>
-          <li><span><span class="uk">Ваш трекер замість Notion</span><span class="en">Your tracker instead of Notion</span></span></li>
-          <li><span><span class="uk">Документи за підсумками зустрічей</span><span class="en">Documents generated from meetings</span></span></li>
-          <li><span><span class="uk">Без обмеження на кількість людей</span><span class="en">No cap on team size</span></span></li>
+          <li><span><span class="uk">Все з пакета Team</span><span class="en">Everything in Team</span><span class="pl">Wszystko z pakietu Team</span></span></li>
+          <li><span><span class="uk">Поля під ваші процеси</span><span class="en">Custom fields for your process</span><span class="pl">Pola pod Twój proces</span></span></li>
+          <li><span><span class="uk">Ваш трекер замість Notion</span><span class="en">Your tracker instead of Notion</span><span class="pl">Twój tracker zamiast Notion</span></span></li>
+          <li><span><span class="uk">Документи за підсумками зустрічей</span><span class="en">Documents generated from meetings</span><span class="pl">Dokumenty generowane ze spotkań</span></span></li>
+          <li><span><span class="uk">Без обмеження на кількість людей</span><span class="en">No cap on team size</span><span class="pl">Bez limitu wielkości zespołu</span></span></li>
         </ul>
       </div>
     </div>
     <div class="sub-note">
       <span class="uk"><strong>Далі за бажанням.</strong> Обслуговування&nbsp;— 2&nbsp;500 ₴/міс: система працює, правки й нові співробітники на мені. Або повне ведення&nbsp;— 8&nbsp;000 ₴/міс: я сам розбираю до 20 ваших зустрічей на місяць і щопонеділка надсилаю звіт. Друге беруть ті, у кого зустрічей більше, ніж часу на них.</span>
-      <span class="en"><strong>Optional, afterwards.</strong> Maintenance — $60/mo: the system keeps running, changes and new team members are on me. Or full management — $200/mo: I process up to 20 of your meetings a month and send you the report every Monday. The second one is for people who have more meetings than time to review them.</span>
+      <span class="en"><strong>Optional, afterwards.</strong> Maintenance — $60/mo: the system keeps running, changes and new team members are on me. Or full management — $200/mo: I process up to 20 of your meetings a month and send you the report every Monday. The second one is for people who have more meetings than time to review them.</span><span class="pl"><strong>Opcjonalnie, później.</strong> Opieka&nbsp;— 600 zł netto/mies.: system działa, zmiany i nowe osoby w zespole są po mojej stronie. Albo pełne prowadzenie&nbsp;— 1 900 zł netto/mies.: sam przerabiam do 20 Twoich spotkań miesięcznie i w każdy poniedziałek wysyłam raport. To drugie biorą ci, którzy mają więcej spotkań niż czasu, żeby je przeglądać.</span>
     </div>
   </section>
 
   <section class="wrap reveal">
     <div class="head">
-      <div class="eyebrow"><span class="uk">Ваші дані</span><span class="en">Your data</span></div>
-      <h2><span class="uk">Що я бачу, а чого не бачу ніколи</span><span class="en">What I can see, and what I never can</span></h2>
-      <p><span class="uk">Ви впускаєте сторонню людину в робочі розмови компанії. Тому це варто проговорити до того, як ви спитаєте.</span><span class="en">You are letting an outsider near your company's internal conversations. So this is worth saying before you have to ask.</span></p>
+      <div class="eyebrow"><span class="uk">Ваші дані</span><span class="en">Your data</span><span class="pl">Twoje dane</span></div>
+      <h2><span class="uk">Що я бачу, а чого не бачу ніколи</span><span class="en">What I can see, and what I never can</span><span class="pl">Co widzę, a czego nie zobaczę nigdy</span></h2>
+      <p><span class="uk">Ви впускаєте сторонню людину в робочі розмови компанії. Тому це варто проговорити до того, як ви спитаєте.</span><span class="en">You are letting an outsider near your company's internal conversations. So this is worth saying before you have to ask.</span><span class="pl">Wpuszczasz obcą osobę w wewnętrzne rozmowy firmy. Więc warto to powiedzieć, zanim zdążysz zapytać.</span></p>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h3><span class="uk">Паролі не потрібні. Ніколи</span><span class="en">No passwords. Ever</span></h3>
-        <p><span class="uk">Доступ до Notion&nbsp;— це службовий токен, обмежений однією базою. Все інше у вашому воркспейсі для нього не існує.</span><span class="en">Notion access is a scoped integration token limited to a single database. The rest of your workspace does not exist for it.</span></p>
+        <h3><span class="uk">Паролі не потрібні. Ніколи</span><span class="en">No passwords. Ever</span><span class="pl">Żadnych haseł. Nigdy</span></h3>
+        <p><span class="uk">Доступ до Notion&nbsp;— це службовий токен, обмежений однією базою. Все інше у вашому воркспейсі для нього не існує.</span><span class="en">Notion access is a scoped integration token limited to a single database. The rest of your workspace does not exist for it.</span><span class="pl">Dostęp do Notion to token ograniczony do jednej bazy. Reszta Twojego workspace dla niego nie istnieje.</span></p>
       </div>
       <div class="card">
-        <h3><span class="uk">Бота створюєте ви</span><span class="en">You create the bot</span></h3>
-        <p><span class="uk">Telegram-бот реєструється з вашого акаунта, при мені на екрані. Токен від початку і назавжди лишається у вас.</span><span class="en">The Telegram bot is registered from your account, on your screen, with me watching. The token stays yours from the first minute.</span></p>
+        <h3><span class="uk">Бота створюєте ви</span><span class="en">You create the bot</span><span class="pl">Bota tworzysz Ty</span></h3>
+        <p><span class="uk">Telegram-бот реєструється з вашого акаунта, при мені на екрані. Токен від початку і назавжди лишається у вас.</span><span class="en">The Telegram bot is registered from your account, on your screen, with me watching. The token stays yours from the first minute.</span><span class="pl">Bot na Telegramie jest zakładany z Twojego konta, na Twoim ekranie, przy mnie. Token zostaje u Ciebie od pierwszej minuty.</span></p>
       </div>
       <div class="card">
-        <h3><span class="uk">Тестова зустріч видаляється</span><span class="en">The test meeting is deleted</span></h3>
-        <p><span class="uk">Транскрипція, яку ви даєте на перевірку, видаляється після здачі. Далі система працює на вашому боці&nbsp;— ваших зустрічей я не бачу взагалі.</span><span class="en">The transcript you hand over for the test is deleted after delivery. After that the system runs on your side and I never see your meetings at all.</span></p>
+        <h3><span class="uk">Тестова зустріч видаляється</span><span class="en">The test meeting is deleted</span><span class="pl">Testowe spotkanie jest kasowane</span></h3>
+        <p><span class="uk">Транскрипція, яку ви даєте на перевірку, видаляється після здачі. Далі система працює на вашому боці&nbsp;— ваших зустрічей я не бачу взагалі.</span><span class="en">The transcript you hand over for the test is deleted after delivery. After that the system runs on your side and I never see your meetings at all.</span><span class="pl">Transkrypcja, którą dajesz do testu, jest kasowana po oddaniu. Potem system działa po Twojej stronie, a ja nie widzę Twoich spotkań w ogóle.</span></p>
       </div>
       <div class="card">
-        <h3><span class="uk">Доступи відкликаються</span><span class="en">Access is revoked</span></h3>
-        <p><span class="uk">Після завершення робіт я прибираю свої доступи й письмово повідомляю, що це зроблено. NDA підписую без питань.</span><span class="en">When the work is done I remove my own access and confirm in writing that I have. NDA signed on request, no questions.</span></p>
+        <h3><span class="uk">Доступи відкликаються</span><span class="en">Access is revoked</span><span class="pl">Dostępy są odbierane</span></h3>
+        <p><span class="uk">Після завершення робіт я прибираю свої доступи й письмово повідомляю, що це зроблено. NDA підписую без питань.</span><span class="en">When the work is done I remove my own access and confirm in writing that I have. NDA signed on request, no questions.</span><span class="pl">Po zakończeniu pracy usuwam swoje dostępy i potwierdzam to na piśmie. NDA podpisuję na życzenie, bez pytań.</span></p>
       </div>
     </div>
   </section>
 
   <section class="wrap fit reveal">
     <div class="head">
-      <div class="eyebrow"><span class="uk">Чесно</span><span class="en">Straight answer</span></div>
-      <h2><span class="uk">Кому це потрібно, а кому&nbsp;— ні</span><span class="en">Who this is for, and who it is not for</span></h2>
+      <div class="eyebrow"><span class="uk">Чесно</span><span class="en">Straight answer</span><span class="pl">Szczerze</span></div>
+      <h2><span class="uk">Кому це потрібно, а кому&nbsp;— ні</span><span class="en">Who this is for, and who it is not for</span><span class="pl">Dla kogo to jest, a dla kogo nie</span></h2>
     </div>
     <div class="grid-2">
       <div class="card">
-        <h3><span class="uk">Спрацює</span><span class="en">Worth it</span></h3>
+        <h3><span class="uk">Спрацює</span><span class="en">Worth it</span><span class="pl">Warto</span></h3>
         <ul class="yes">
-          <li><span><span class="uk">3+ зустрічі на тиждень і команда від 3 до 20 людей</span><span class="en">3+ meetings a week, a team of 3 to 20</span></span></li>
-          <li><span><span class="uk">Ви пояснюєте одне й те саме вдруге і втретє</span><span class="en">You explain the same thing a second and third time</span></span></li>
-          <li><span><span class="uk">Половина планірки йде на «то що ми там вирішили?»</span><span class="en">Half the sync goes to “so what did we decide?”</span></span></li>
-          <li><span><span class="uk">Задачі губляться між зустріччю і трекером</span><span class="en">Tasks get lost between the meeting and the tracker</span></span></li>
+          <li><span><span class="uk">3+ зустрічі на тиждень і команда від 3 до 20 людей</span><span class="en">3+ meetings a week, a team of 3 to 20</span><span class="pl">3+ spotkania tygodniowo, zespół od 3 do 20 osób</span></span></li>
+          <li><span><span class="uk">Ви пояснюєте одне й те саме вдруге і втретє</span><span class="en">You explain the same thing a second and third time</span><span class="pl">Tłumaczysz to samo drugi i trzeci raz</span></span></li>
+          <li><span><span class="uk">Половина планірки йде на «то що ми там вирішили?»</span><span class="en">Half the sync goes to “so what did we decide?”</span><span class="pl">Połowa spotkania idzie na „to co my właściwie ustaliliśmy?”</span></span></li>
+          <li><span><span class="uk">Задачі губляться між зустріччю і трекером</span><span class="en">Tasks get lost between the meeting and the tracker</span><span class="pl">Zadania giną między spotkaniem a trackerem</span></span></li>
         </ul>
       </div>
       <div class="card">
-        <h3><span class="uk">Не спрацює</span><span class="en">Not worth it</span></h3>
+        <h3><span class="uk">Не спрацює</span><span class="en">Not worth it</span><span class="pl">Nie warto</span></h3>
         <ul class="no">
-          <li><span><span class="uk">Команда з двох людей&nbsp;— вам вистачить нотатника</span><span class="en">A team of two — a notes app is enough</span></span></li>
-          <li><span><span class="uk">Зустрічі не записуються і записувати їх ви не плануєте</span><span class="en">Meetings are not recorded and you do not plan to start</span></span></li>
-          <li><span><span class="uk">У вас уже є працюючий процес, якого дотримуються</span><span class="en">You already have a process people actually follow</span></span></li>
-          <li><span><span class="uk">Потрібен повноцінний проєктний менеджмент, а не контроль доручень</span><span class="en">You need full project management, not commitment tracking</span></span></li>
+          <li><span><span class="uk">Команда з двох людей&nbsp;— вам вистачить нотатника</span><span class="en">A team of two — a notes app is enough</span><span class="pl">Zespół dwuosobowy — wystarczy notatnik</span></span></li>
+          <li><span><span class="uk">Зустрічі не записуються і записувати їх ви не плануєте</span><span class="en">Meetings are not recorded and you do not plan to start</span><span class="pl">Spotkania nie są nagrywane i nie planujecie zacząć</span></span></li>
+          <li><span><span class="uk">У вас уже є працюючий процес, якого дотримуються</span><span class="en">You already have a process people actually follow</span><span class="pl">Macie już proces, którego ludzie faktycznie się trzymają</span></span></li>
+          <li><span><span class="uk">Потрібен повноцінний проєктний менеджмент, а не контроль доручень</span><span class="en">You need full project management, not commitment tracking</span><span class="pl">Potrzebujesz pełnego zarządzania projektami, a nie pilnowania ustaleń</span></span></li>
         </ul>
       </div>
     </div>
@@ -444,20 +447,20 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
 
   <div class="cta">
     <div class="wrap cta-in">
-      <div class="eyebrow"><span class="uk">Далі</span><span class="en">Next</span></div>
-      <h2><span class="uk">Напишіть, як у вас зараз проходять зустрічі</span><span class="en">Tell me how your meetings run today</span></h2>
+      <div class="eyebrow"><span class="uk">Далі</span><span class="en">Next</span><span class="pl">Dalej</span></div>
+      <h2><span class="uk">Напишіть, як у вас зараз проходять зустрічі</span><span class="en">Tell me how your meetings run today</span><span class="pl">Napisz, jak u Was wyglądają teraz spotkania</span></h2>
       <p>
         <span class="uk">Скажу чесно, чи допоможе вам ця система, чи вам достатньо звичайного трекера. Якщо достатньо&nbsp;— так і скажу, це нормальна відповідь.</span>
-        <span class="en">I will tell you honestly whether this will help you, or whether a plain task tracker is enough. If it is enough, I will say so — that is a fine answer.</span>
+        <span class="en">I will tell you honestly whether this will help you, or whether a plain task tracker is enough. If it is enough, I will say so — that is a fine answer.</span><span class="pl">Powiem szczerze, czy to Wam pomoże, czy wystarczy zwykły tracker. Jeśli wystarczy — tak powiem, to jest w porządku odpowiedź.</span>
       </p>
-      <div class="line"><span class="dot"></span><span class="uk">Відповідайте в тому ж чаті, де отримали це посилання</span><span class="en">Just reply in the chat where you got this link</span></div>
+      <div class="line"><span class="dot"></span><span class="uk">Відповідайте в тому ж чаті, де отримали це посилання</span><span class="en">Just reply in the chat where you got this link</span><span class="pl">Odpisz po prostu tam, gdzie dostałeś ten link</span></div>
     </div>
   </div>
 </main>
 
 <footer class="wrap">
   <span class="uk">Приклади на сторінці&nbsp;— демонстраційні. Дані реальних клієнтів не показуються.</span>
-  <span class="en">All examples on this page are demonstrations. No client data is shown.</span>
+  <span class="en">All examples on this page are demonstrations. No client data is shown.</span><span class="pl">Wszystkie przykłady na tej stronie są demonstracyjne. Nie pokazuję danych klientów.</span>
 </footer>
 
 <script>
@@ -466,14 +469,14 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
   var btns = document.querySelectorAll('.langs button');
   function set(lang, persist){
     root.setAttribute('data-lang', lang);
-    root.setAttribute('lang', lang === 'en' ? 'en' : 'uk');
+    root.setAttribute('lang', lang);
     btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === lang)); });
     if (persist) { try { localStorage.setItem('lang', lang); } catch (e) {} }
   }
   btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set, true); }); });
   var saved = null;
   try { saved = localStorage.getItem('lang'); } catch (e) {}
-  set(saved === 'en' ? 'en' : 'uk', false);
+  set(['en', 'pl', 'uk'].indexOf(saved) >= 0 ? saved : 'uk', false);
 
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
