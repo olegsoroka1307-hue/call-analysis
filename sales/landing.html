@@ -1,0 +1,490 @@
+<title>Домовились — зроблено</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Literata:wght@600;700&display=swap">
+
+<style>
+:root{
+  --paper:#F4F5F9; --surface:#FFFFFF; --surface-2:#EAECF4; --surface-3:#E0E3EF;
+  --ink:#111426; --ink-2:#4A4F67; --ink-3:#787E99;
+  --line:#DBDEEC; --line-strong:#C3C8DD;
+  --accent:#2B36D6; --accent-ink:#2B36D6; --accent-soft:#E6E8FC;
+  --done:#0E7A56; --done-soft:#DEF0E8;
+  --wait:#8F5C0D; --wait-soft:#F6EBD7;
+  --drop:#8A3040; --drop-soft:#F6E3E6;
+  --shadow:0 1px 2px rgba(17,20,38,.05), 0 12px 32px -18px rgba(17,20,38,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0A0C15; --surface:#131727; --surface-2:#1B2033; --surface-3:#232941;
+    --ink:#E9EBF5; --ink-2:#A7ADC6; --ink-3:#767C99;
+    --line:#262C41; --line-strong:#343B55;
+    --accent:#8E97FF; --accent-ink:#A6ADFF; --accent-soft:#1B2047;
+    --done:#4ECB9C; --done-soft:#102B22;
+    --wait:#E0AA55; --wait-soft:#2C2214;
+    --drop:#E88A98; --drop-soft:#2E1A1E;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px -20px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0A0C15; --surface:#131727; --surface-2:#1B2033; --surface-3:#232941;
+  --ink:#E9EBF5; --ink-2:#A7ADC6; --ink-3:#767C99;
+  --line:#262C41; --line-strong:#343B55;
+  --accent:#8E97FF; --accent-ink:#A6ADFF; --accent-soft:#1B2047;
+  --done:#4ECB9C; --done-soft:#102B22;
+  --wait:#E0AA55; --wait-soft:#2C2214;
+  --drop:#E88A98; --drop-soft:#2E1A1E;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px -20px rgba(0,0,0,.7);
+}
+
+/* ---- bilingual switching ---- */
+:root[data-lang="en"] .uk{ display:none !important; }
+:root:not([data-lang="en"]) .en{ display:none !important; }
+
+*{ box-sizing:border-box; }
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans", ui-sans-serif, system-ui, "Segoe UI", Roboto, sans-serif;
+  font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{ font-family:Literata, ui-serif, Georgia, "Times New Roman", serif; font-weight:700; text-wrap:balance; margin:0; letter-spacing:-.01em; }
+p{ margin:0; }
+a{ color:var(--accent-ink); }
+:focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:3px; }
+
+.wrap{ width:min(1080px, calc(100% - 2.5rem)); margin-inline:auto; }
+.mono{ font-family:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+.eyebrow{
+  font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+
+/* ---- header ---- */
+header{
+  border-bottom:1px solid var(--line); background:var(--paper);
+  position:sticky; top:0; z-index:20;
+}
+.bar{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.85rem 0; }
+.mark{ display:flex; align-items:center; gap:.6rem; font-family:"IBM Plex Mono", monospace; font-size:.82rem; font-weight:600; letter-spacing:.02em; color:var(--ink); }
+.mark .dot{ width:9px; height:9px; border-radius:50%; background:var(--done); box-shadow:0 0 0 4px var(--done-soft); flex:none; }
+.langs{ display:flex; border:1px solid var(--line-strong); border-radius:999px; overflow:hidden; background:var(--surface); }
+.langs button{
+  font-family:"IBM Plex Mono", monospace; font-size:.72rem; font-weight:600; letter-spacing:.08em;
+  padding:.38rem .8rem; border:0; background:transparent; color:var(--ink-3); cursor:pointer;
+}
+.langs button[aria-pressed="true"]{ background:var(--accent); color:#fff; }
+
+/* ---- hero ---- */
+.hero{ padding:5rem 0 3.5rem; }
+.hero-grid{ display:grid; grid-template-columns:1.05fr .95fr; gap:3.5rem; align-items:center; }
+h1{ font-size:clamp(2.15rem, 4.4vw, 3.35rem); line-height:1.08; margin:1rem 0 1.25rem; }
+.lede{ font-size:1.075rem; color:var(--ink-2); max-width:36em; }
+.chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.75rem; }
+.chip{
+  font-family:"IBM Plex Mono", monospace; font-size:.73rem; letter-spacing:.04em;
+  border:1px solid var(--line-strong); border-radius:999px; padding:.32rem .7rem; color:var(--ink-2); background:var(--surface);
+}
+
+/* ---- transform device (hero + example) ---- */
+.transform{ display:grid; gap:.9rem; }
+.panel{ background:var(--surface); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); overflow:hidden; }
+.panel-head{
+  display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+  padding:.55rem .9rem; border-bottom:1px solid var(--line); background:var(--surface-2);
+  font-family:"IBM Plex Mono", monospace; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3);
+}
+.script{ padding:1rem .95rem; font-family:"IBM Plex Mono", monospace; font-size:.795rem; line-height:1.75; color:var(--ink-2); }
+.script .who{ color:var(--ink-3); }
+.script .row{ display:block; padding:.1rem .45rem; border-left:2px solid transparent; }
+.script .hit{ border-left-color:var(--accent); background:var(--accent-soft); color:var(--ink); border-radius:0 4px 4px 0; }
+.arrow{ display:flex; align-items:center; gap:.7rem; padding-inline:.2rem; color:var(--ink-3); }
+.arrow .rule{ flex:1; height:1px; background:var(--line-strong); }
+.arrow .lbl{ font-family:"IBM Plex Mono", monospace; font-size:.66rem; letter-spacing:.12em; text-transform:uppercase; }
+
+.task{ padding:1.05rem 1.1rem 1.1rem; }
+.task h3{ font-size:1.06rem; line-height:1.35; margin-bottom:.85rem; }
+.fields{ display:grid; grid-template-columns:auto 1fr; gap:.42rem 1.1rem; font-size:.83rem; }
+.fields dt{ font-family:"IBM Plex Mono", monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); padding-top:.18rem; }
+.fields dd{ margin:0; color:var(--ink); font-variant-numeric:tabular-nums; }
+.quote{
+  margin-top:.95rem; padding:.6rem .8rem; border-left:2px solid var(--line-strong);
+  background:var(--surface-2); border-radius:0 6px 6px 0;
+  font-family:"IBM Plex Mono", monospace; font-size:.76rem; line-height:1.6; color:var(--ink-2);
+}
+.states{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:1rem; padding-top:.9rem; border-top:1px dashed var(--line-strong); }
+.state{ font-family:"IBM Plex Mono", monospace; font-size:.72rem; padding:.3rem .6rem; border-radius:6px; white-space:nowrap; }
+.s-done{ background:var(--done-soft); color:var(--done); }
+.s-wait{ background:var(--wait-soft); color:var(--wait); }
+.s-drop{ background:var(--drop-soft); color:var(--drop); }
+
+/* ---- pull quote band ---- */
+.band{ border-block:1px solid var(--line); background:var(--surface); }
+.band-in{ padding:3.25rem 0; display:grid; gap:1rem; max-width:44rem; }
+.band q{ font-family:Literata, serif; font-weight:600; font-size:clamp(1.4rem,2.7vw,1.9rem); line-height:1.35; quotes:none; display:block; }
+.band p{ color:var(--ink-2); }
+
+/* ---- sections ---- */
+section{ padding:4.25rem 0; }
+.head{ display:grid; gap:.7rem; margin-bottom:2.5rem; max-width:40rem; }
+.head h2{ font-size:clamp(1.5rem,2.6vw,2rem); line-height:1.2; }
+.head p{ color:var(--ink-2); }
+
+/* steps */
+.steps{ display:grid; gap:0; border-top:1px solid var(--line); }
+.step{ display:grid; grid-template-columns:3.5rem 1fr; gap:1.5rem; padding:1.35rem 0; border-bottom:1px solid var(--line); align-items:start; }
+.step .n{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; font-weight:600; color:var(--accent-ink); padding-top:.15rem; }
+.step h3{ font-family:"IBM Plex Sans", sans-serif; font-weight:600; font-size:1rem; margin-bottom:.2rem; }
+.step p{ color:var(--ink-2); font-size:.94rem; max-width:52ch; }
+
+/* generic cards */
+.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:1.3rem 1.35rem; display:grid; gap:.5rem; align-content:start; }
+.card h3{ font-family:"IBM Plex Sans", sans-serif; font-weight:600; font-size:.98rem; }
+.card p{ color:var(--ink-2); font-size:.92rem; }
+
+/* packages */
+.pack{ position:relative; }
+.pack.hot{ border-color:var(--accent); }
+.pack .tag{ position:absolute; top:-.65rem; left:1.3rem; background:var(--accent); color:#fff; font-family:"IBM Plex Mono", monospace; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .55rem; border-radius:4px; }
+.pack .name{ font-family:"IBM Plex Mono", monospace; font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); }
+.price{ font-family:Literata, serif; font-weight:700; font-size:1.75rem; font-variant-numeric:tabular-nums; line-height:1.1; }
+.term{ font-family:"IBM Plex Mono", monospace; font-size:.72rem; color:var(--ink-3); letter-spacing:.04em; }
+.pack ul{ margin:.6rem 0 0; padding:0; list-style:none; display:grid; gap:.42rem; font-size:.9rem; color:var(--ink-2); }
+.pack li{ display:grid; grid-template-columns:1.1rem 1fr; gap:.35rem; }
+.pack li::before{ content:"→"; color:var(--accent-ink); font-family:"IBM Plex Mono", monospace; font-size:.8rem; line-height:1.7; }
+.sub-note{ margin-top:1.5rem; padding:1.1rem 1.3rem; border:1px dashed var(--line-strong); border-radius:12px; color:var(--ink-2); font-size:.93rem; background:var(--surface); }
+
+/* fit lists */
+.fit ul{ margin:.4rem 0 0; padding:0; list-style:none; display:grid; gap:.5rem; font-size:.93rem; color:var(--ink-2); }
+.fit li{ display:grid; grid-template-columns:1.3rem 1fr; gap:.4rem; }
+.fit .yes li::before{ content:"✓"; color:var(--done); font-weight:600; }
+.fit .no li::before{ content:"×"; color:var(--drop); font-weight:600; }
+
+/* callout */
+.callout{ background:var(--accent-soft); border:1px solid color-mix(in srgb, var(--accent) 25%, transparent); border-radius:12px; padding:1.2rem 1.35rem; display:grid; gap:.5rem; }
+.callout h3{ font-family:"IBM Plex Sans", sans-serif; font-weight:600; font-size:.98rem; }
+.callout p{ font-size:.93rem; color:var(--ink-2); }
+.callout .ask{ font-family:"IBM Plex Mono", monospace; font-size:.8rem; color:var(--ink); background:var(--surface); border-radius:8px; padding:.65rem .8rem; line-height:1.6; }
+
+/* cta */
+.cta{ border-top:1px solid var(--line); background:var(--surface); }
+.cta-in{ padding:4rem 0; display:grid; gap:1rem; max-width:38rem; }
+.cta h2{ font-size:clamp(1.5rem,2.6vw,2rem); }
+.cta p{ color:var(--ink-2); }
+.cta .line{ margin-top:.6rem; display:inline-flex; align-items:center; gap:.6rem; font-family:"IBM Plex Mono", monospace; font-size:.85rem; border:1px solid var(--line-strong); border-radius:8px; padding:.7rem 1rem; background:var(--paper); }
+.cta .line .dot{ width:8px; height:8px; border-radius:50%; background:var(--done); flex:none; }
+footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", monospace; font-size:.72rem; letter-spacing:.04em; }
+
+@media (max-width:880px){
+  .hero-grid{ grid-template-columns:1fr; gap:2.5rem; }
+  .grid-3{ grid-template-columns:1fr; }
+  .grid-2{ grid-template-columns:1fr; }
+  .hero{ padding:3.25rem 0 2.5rem; }
+  section{ padding:3.25rem 0; }
+  .step{ grid-template-columns:2.25rem 1fr; gap:1rem; }
+}
+
+.reveal{ opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease; }
+.reveal.in{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  .reveal{ opacity:1; transform:none; transition:none; }
+  *{ animation:none !important; }
+}
+</style>
+
+<header>
+  <div class="wrap bar">
+    <div class="mark"><span class="dot"></span><span class="uk">домовились&nbsp;— зроблено</span><span class="en">agreed&nbsp;— and done</span></div>
+    <div class="langs" role="group" aria-label="Мова / Language">
+      <button type="button" data-set="uk" aria-pressed="true">UA</button>
+      <button type="button" data-set="en" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow"><span class="uk">Послуга · налаштування під ключ</span><span class="en">Service · done-for-you setup</span></div>
+        <h1><span class="uk">Зустріч закінчилась&nbsp;— задачі вже роздані</span><span class="en">The meeting ends. The tasks are already assigned.</span></h1>
+        <p class="lede">
+          <span class="uk">Текст зустрічі перетворюється на задачі в Notion. Кожен співробітник отримує свої в Telegram і закриває їх однією кнопкою. У понеділок ви бачите, хто що обіцяв&nbsp;— і що з цього справді зробив.</span>
+          <span class="en">A meeting transcript turns into tasks in Notion. Each person gets theirs in Telegram and closes them with one tap. On Monday you see what was promised — and what actually got done.</span>
+        </p>
+        <div class="chips">
+          <span class="chip">Notion</span>
+          <span class="chip">Telegram</span>
+          <span class="chip"><span class="uk">Працює за 4 дні</span><span class="en">Live in 4 days</span></span>
+          <span class="chip"><span class="uk">Команді нічого не вчити</span><span class="en">Nothing new for the team to learn</span></span>
+        </div>
+      </div>
+
+      <div class="transform">
+        <div class="panel">
+          <div class="panel-head">
+            <span><span class="uk">Транскрипція · планірка, 18 серпня</span><span class="en">Transcript · weekly sync, Aug 18</span></span>
+            <span class="mono">40:12</span>
+          </div>
+          <div class="script">
+            <span class="row"><span class="who">Ігор:</span> <span class="uk">Коли зробиш?</span><span class="en">When will it be ready?</span></span>
+            <span class="row hit"><span class="who">Андрій:</span> <span class="uk">У мене ще «Орбіта» висить… Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.</span><span class="en">I still have Orbita hanging… Friday? I will sit down Thursday and send it Friday morning.</span></span>
+            <span class="row"><span class="who">Ігор:</span> <span class="uk">Пʼятниця. Тільки реально пʼятниця.</span><span class="en">Friday. An actual Friday this time.</span></span>
+            <span class="row"><span class="who">Оля:</span> <span class="uk">І з відгуками щось вирішіть…</span><span class="en">And someone deal with the reviews…</span></span>
+          </div>
+        </div>
+
+        <div class="arrow"><span class="rule"></span><span class="lbl"><span class="uk">автоматично</span><span class="en">automatically</span></span><span class="rule"></span></div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <span>Notion · <span class="uk">Домовленості</span><span class="en">Commitments</span></span>
+            <span class="mono">#1</span>
+          </div>
+          <div class="task">
+            <h3><span class="uk">Переробити КП для «Мілана» з розбивкою по каналах</span><span class="en">Rework the Milana proposal with a per-channel breakdown</span></h3>
+            <dl class="fields">
+              <dt><span class="uk">Хто</span><span class="en">Owner</span></dt><dd>Андрій</dd>
+              <dt><span class="uk">Дедлайн</span><span class="en">Due</span></dt><dd><span class="uk">22 серпня, пт</span><span class="en">Fri, Aug 22</span></dd>
+              <dt><span class="uk">Пріоритет</span><span class="en">Priority</span></dt><dd><span class="uk">Високий</span><span class="en">High</span></dd>
+              <dt><span class="uk">Проєкт</span><span class="en">Project</span></dt><dd><span class="uk">Продажі</span><span class="en">Sales</span></dd>
+            </dl>
+            <div class="quote"><span class="uk">«Давай до пʼятниці? Я в четвер сяду і в пʼятницю зранку відправлю.»</span><span class="en">“Friday? I will sit down Thursday and send it Friday morning.”</span></div>
+            <div class="states">
+              <span class="state s-done">✅ <span class="uk">Готово</span><span class="en">Done</span></span>
+              <span class="state s-wait">🕐 <span class="uk">Відкласти</span><span class="en">Postpone</span></span>
+              <span class="state s-drop">❌ <span class="uk">Не актуально</span><span class="en">Not relevant</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="band">
+    <div class="wrap band-in">
+      <q><span class="uk">Ваша команда домовилась про шість речей минулого вівторка. Скільки з них зроблено?</span><span class="en">Your team agreed on six things last Tuesday. How many got done?</span></q>
+      <p>
+        <span class="uk">Проблема не в людях. Домовленості живуть у голові керівника, у чиємусь блокноті й у голосовому повідомленні&nbsp;— тому їх ніхто й не контролює. Керівник стає живим нагадуванням для власних співробітників, і це з'їдає його тиждень.</span>
+        <span class="en">It is not that people are lazy. Commitments live in the manager's head, in somebody's notebook, in a voice message — so nobody tracks them. The manager becomes a human reminder system, and it eats the week.</span>
+      </p>
+    </div>
+  </div>
+
+  <section class="wrap reveal">
+    <div class="head">
+      <div class="eyebrow"><span class="uk">Як це працює</span><span class="en">How it works</span></div>
+      <h2><span class="uk">Пʼять кроків, з яких ви робите один</span><span class="en">Five steps. You do one of them.</span></h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <div>
+          <h3><span class="uk">Ви надсилаєте текст зустрічі</span><span class="en">You send the meeting text</span></h3>
+          <p><span class="uk">Транскрипція дзвінка, розшифровка запису або просто нотатки. Одне повідомлення&nbsp;— далі втручатись не треба.</span><span class="en">A call transcript, a recording turned into text, or plain notes. One message — after that you are out of the loop.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div>
+          <h3><span class="uk">Асистент витягує домовленості</span><span class="en">The assistant pulls out the commitments</span></h3>
+          <p><span class="uk">Хто, що і до якої дати пообіцяв&nbsp;— разом із дослівною цитатою з розмови. Щоб потім не було «я такого не казав».</span><span class="en">Who promised what, by when — each with the verbatim quote from the conversation. So nobody gets to say “I never agreed to that”.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div>
+          <h3><span class="uk">Задачі зʼявляються в Notion</span><span class="en">Tasks appear in Notion</span></h3>
+          <p><span class="uk">З відповідальним, дедлайном, пріоритетом і джерелом&nbsp;— назвою зустрічі та датою. Ніхто нічого не друкує руками.</span><span class="en">With an owner, a deadline, a priority, and the source meeting and date. Nobody typed any of it.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <div>
+          <h3><span class="uk">Кожен отримує своє в Telegram</span><span class="en">Everyone gets theirs in Telegram</span></h3>
+          <p><span class="uk">Окреме повідомлення на кожну задачу з трьома кнопками. Натиснув&nbsp;— статус у Notion оновився сам, без вашої участі.</span><span class="en">One message per task, three buttons. A tap updates Notion by itself, without you touching anything.</span></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">05</div>
+        <div>
+          <h3><span class="uk">У понеділок&nbsp;— звіт</span><span class="en">Monday: the report</span></h3>
+          <p><span class="uk">Що обіцяли проти того, що зробили. Виконано, у роботі, прострочено&nbsp;— і відсоток виконавчості по команді.</span><span class="en">Promised versus delivered. Done, in progress, overdue — and a completion rate for the team.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <div class="head">
+      <div class="eyebrow"><span class="uk">Межі системи</span><span class="en">Where it stops</span></div>
+      <h2><span class="uk">І, що важливіше, чого воно не робить</span><span class="en">And, more importantly, what it will not do</span></h2>
+      <p><span class="uk">Половина розмов із керівниками впирається в одне побоювання: «а воно не понавигадує?». Відповідь&nbsp;— ні, і ось чому.</span><span class="en">Half of the conversations I have with team leads hit the same fear: “won't it just make things up?” It will not, and here is why.</span></p>
+    </div>
+    <div class="grid-2">
+      <div class="callout">
+        <h3><span class="uk">Не призначає відповідального сам</span><span class="en">It never assigns an owner on its own</span></h3>
+        <p><span class="uk">У зустрічі вище прозвучало «і з відгуками щось вирішіть» — без імені й без дати. Задача не створюється. Замість цього ви отримуєте питання:</span><span class="en">In the meeting above, “someone deal with the reviews” had no name and no date attached. No task is created. You get a question instead:</span></p>
+        <div class="ask"><span class="uk">❓ «Треба щось робити з відгуками» — відповідального не призначили. Створювати задачу? Якщо так, на кого?</span><span class="en">❓ “Someone deal with the reviews” — no owner was named. Create a task? If so, for whom?</span></div>
+      </div>
+      <div class="card">
+        <h3><span class="uk">Не вигадує дедлайни</span><span class="en">It does not invent deadlines</span></h3>
+        <p><span class="uk">Якщо дата не звучала&nbsp;— у полі буде порожньо, а не правдоподібна вигадка. Порожнє поле помітно; вигадана дата&nbsp;— ні.</span><span class="en">If no date was spoken, the field stays empty rather than filled with something plausible. An empty field is visible. A fabricated date is not.</span></p>
+        <h3 style="margin-top:.6rem"><span class="uk">Не плутає ідею з рішенням</span><span class="en">It separates ideas from decisions</span></h3>
+        <p><span class="uk">«Кейси теж оновити б» прозвучало&nbsp;— і було відкладено вголос. Пропозиція, яку відхилили, задачею не стає.</span><span class="en">“We should update the case studies too” was raised — and shelved out loud. A suggestion that was turned down does not become a task.</span></p>
+        <h3 style="margin-top:.6rem"><span class="uk">Список ви бачите перший</span><span class="en">You see the list first</span></h3>
+        <p><span class="uk">Перед розсилкою команді таблиця показується вам. Нічого не летить людям за вашою спиною.</span><span class="en">The table is shown to you before anything reaches the team. Nothing goes out behind your back.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <div class="head">
+      <div class="eyebrow"><span class="uk">Пакети</span><span class="en">Packages</span></div>
+      <h2><span class="uk">Фіксована ціна, фіксований термін</span><span class="en">Fixed price, fixed timeline</span></h2>
+      <p><span class="uk">Кожен пакет включає розбір однієї вашої реальної зустрічі&nbsp;— щоб ви побачили результат на власних даних, а не на демо.</span><span class="en">Every package includes processing one of your real meetings, so you see the result on your own data rather than on a demo.</span></p>
+    </div>
+    <div class="grid-3">
+      <div class="card pack">
+        <div class="name">Start</div>
+        <div class="price"><span class="uk">4 000 ₴</span><span class="en">$250</span></div>
+        <div class="term"><span class="uk">2 дні · підтримка 3 дні</span><span class="en">2 days · 3 days support</span></div>
+        <ul>
+          <li><span><span class="uk">База «Домовленості» в Notion</span><span class="en">Notion commitment database</span></span></li>
+          <li><span><span class="uk">Налаштування під ваші процеси</span><span class="en">Configured to your process</span></span></li>
+          <li><span><span class="uk">Розбір однієї зустрічі</span><span class="en">One meeting processed</span></span></li>
+          <li><span><span class="uk">Без Telegram-розсилки</span><span class="en">No Telegram delivery</span></span></li>
+        </ul>
+      </div>
+      <div class="card pack hot">
+        <div class="tag"><span class="uk">Обирають найчастіше</span><span class="en">Most chosen</span></div>
+        <div class="name">Team</div>
+        <div class="price"><span class="uk">10 000 ₴</span><span class="en">$600</span></div>
+        <div class="term"><span class="uk">4 дні · підтримка 14 днів</span><span class="en">4 days · 14 days support</span></div>
+        <ul>
+          <li><span><span class="uk">Все з пакета Start</span><span class="en">Everything in Start</span></span></li>
+          <li><span><span class="uk">Telegram-бот з кнопками статусів</span><span class="en">Telegram bot with status buttons</span></span></li>
+          <li><span><span class="uk">До 10 співробітників</span><span class="en">Up to 10 team members</span></span></li>
+          <li><span><span class="uk">Тижневий звіт «обіцяли / зробили»</span><span class="en">Weekly promised-vs-delivered report</span></span></li>
+          <li><span><span class="uk">Навчання, 30 хвилин</span><span class="en">30-minute training call</span></span></li>
+        </ul>
+      </div>
+      <div class="card pack">
+        <div class="name">Pro</div>
+        <div class="price"><span class="uk">20 000 ₴</span><span class="en">$1 200</span></div>
+        <div class="term"><span class="uk">7 днів · підтримка 30 днів</span><span class="en">7 days · 30 days support</span></div>
+        <ul>
+          <li><span><span class="uk">Все з пакета Team</span><span class="en">Everything in Team</span></span></li>
+          <li><span><span class="uk">Поля під ваші процеси</span><span class="en">Custom fields for your process</span></span></li>
+          <li><span><span class="uk">Ваш трекер замість Notion</span><span class="en">Your tracker instead of Notion</span></span></li>
+          <li><span><span class="uk">Документи за підсумками зустрічей</span><span class="en">Documents generated from meetings</span></span></li>
+          <li><span><span class="uk">Без обмеження на кількість людей</span><span class="en">No cap on team size</span></span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sub-note">
+      <span class="uk"><strong>Далі за бажанням.</strong> Обслуговування&nbsp;— 2&nbsp;500 ₴/міс: система працює, правки й нові співробітники на мені. Або повне ведення&nbsp;— 8&nbsp;000 ₴/міс: я сам розбираю до 20 ваших зустрічей на місяць і щопонеділка надсилаю звіт. Друге беруть ті, у кого зустрічей більше, ніж часу на них.</span>
+      <span class="en"><strong>Optional, afterwards.</strong> Maintenance — $60/mo: the system keeps running, changes and new team members are on me. Or full management — $200/mo: I process up to 20 of your meetings a month and send you the report every Monday. The second one is for people who have more meetings than time to review them.</span>
+    </div>
+  </section>
+
+  <section class="wrap reveal">
+    <div class="head">
+      <div class="eyebrow"><span class="uk">Ваші дані</span><span class="en">Your data</span></div>
+      <h2><span class="uk">Що я бачу, а чого не бачу ніколи</span><span class="en">What I can see, and what I never can</span></h2>
+      <p><span class="uk">Ви впускаєте сторонню людину в робочі розмови компанії. Тому це варто проговорити до того, як ви спитаєте.</span><span class="en">You are letting an outsider near your company's internal conversations. So this is worth saying before you have to ask.</span></p>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="uk">Паролі не потрібні. Ніколи</span><span class="en">No passwords. Ever</span></h3>
+        <p><span class="uk">Доступ до Notion&nbsp;— це службовий токен, обмежений однією базою. Все інше у вашому воркспейсі для нього не існує.</span><span class="en">Notion access is a scoped integration token limited to a single database. The rest of your workspace does not exist for it.</span></p>
+      </div>
+      <div class="card">
+        <h3><span class="uk">Бота створюєте ви</span><span class="en">You create the bot</span></h3>
+        <p><span class="uk">Telegram-бот реєструється з вашого акаунта, при мені на екрані. Токен від початку і назавжди лишається у вас.</span><span class="en">The Telegram bot is registered from your account, on your screen, with me watching. The token stays yours from the first minute.</span></p>
+      </div>
+      <div class="card">
+        <h3><span class="uk">Тестова зустріч видаляється</span><span class="en">The test meeting is deleted</span></h3>
+        <p><span class="uk">Транскрипція, яку ви даєте на перевірку, видаляється після здачі. Далі система працює на вашому боці&nbsp;— ваших зустрічей я не бачу взагалі.</span><span class="en">The transcript you hand over for the test is deleted after delivery. After that the system runs on your side and I never see your meetings at all.</span></p>
+      </div>
+      <div class="card">
+        <h3><span class="uk">Доступи відкликаються</span><span class="en">Access is revoked</span></h3>
+        <p><span class="uk">Після завершення робіт я прибираю свої доступи й письмово повідомляю, що це зроблено. NDA підписую без питань.</span><span class="en">When the work is done I remove my own access and confirm in writing that I have. NDA signed on request, no questions.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap fit reveal">
+    <div class="head">
+      <div class="eyebrow"><span class="uk">Чесно</span><span class="en">Straight answer</span></div>
+      <h2><span class="uk">Кому це потрібно, а кому&nbsp;— ні</span><span class="en">Who this is for, and who it is not for</span></h2>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <h3><span class="uk">Спрацює</span><span class="en">Worth it</span></h3>
+        <ul class="yes">
+          <li><span><span class="uk">3+ зустрічі на тиждень і команда від 3 до 20 людей</span><span class="en">3+ meetings a week, a team of 3 to 20</span></span></li>
+          <li><span><span class="uk">Ви пояснюєте одне й те саме вдруге і втретє</span><span class="en">You explain the same thing a second and third time</span></span></li>
+          <li><span><span class="uk">Половина планірки йде на «то що ми там вирішили?»</span><span class="en">Half the sync goes to “so what did we decide?”</span></span></li>
+          <li><span><span class="uk">Задачі губляться між зустріччю і трекером</span><span class="en">Tasks get lost between the meeting and the tracker</span></span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="uk">Не спрацює</span><span class="en">Not worth it</span></h3>
+        <ul class="no">
+          <li><span><span class="uk">Команда з двох людей&nbsp;— вам вистачить нотатника</span><span class="en">A team of two — a notes app is enough</span></span></li>
+          <li><span><span class="uk">Зустрічі не записуються і записувати їх ви не плануєте</span><span class="en">Meetings are not recorded and you do not plan to start</span></span></li>
+          <li><span><span class="uk">У вас уже є працюючий процес, якого дотримуються</span><span class="en">You already have a process people actually follow</span></span></li>
+          <li><span><span class="uk">Потрібен повноцінний проєктний менеджмент, а не контроль доручень</span><span class="en">You need full project management, not commitment tracking</span></span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <div class="wrap cta-in">
+      <div class="eyebrow"><span class="uk">Далі</span><span class="en">Next</span></div>
+      <h2><span class="uk">Напишіть, як у вас зараз проходять зустрічі</span><span class="en">Tell me how your meetings run today</span></h2>
+      <p>
+        <span class="uk">Скажу чесно, чи допоможе вам ця система, чи вам достатньо звичайного трекера. Якщо достатньо&nbsp;— так і скажу, це нормальна відповідь.</span>
+        <span class="en">I will tell you honestly whether this will help you, or whether a plain task tracker is enough. If it is enough, I will say so — that is a fine answer.</span>
+      </p>
+      <div class="line"><span class="dot"></span><span class="uk">Відповідайте в тому ж чаті, де отримали це посилання</span><span class="en">Just reply in the chat where you got this link</span></div>
+    </div>
+  </div>
+</main>
+
+<footer class="wrap">
+  <span class="uk">Приклади на сторінці&nbsp;— демонстраційні. Дані реальних клієнтів не показуються.</span>
+  <span class="en">All examples on this page are demonstrations. No client data is shown.</span>
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var btns = document.querySelectorAll('.langs button');
+  function set(lang, persist){
+    root.setAttribute('data-lang', lang);
+    root.setAttribute('lang', lang === 'en' ? 'en' : 'uk');
+    btns.forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === lang)); });
+    if (persist) { try { localStorage.setItem('lang', lang); } catch (e) {} }
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ set(b.dataset.set, true); }); });
+  var saved = null;
+  try { saved = localStorage.getItem('lang'); } catch (e) {}
+  set(saved === 'en' ? 'en' : 'uk', false);
+
+  var items = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function(el){ el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  items.forEach(function(el){ io.observe(el); });
+})();
+</script>
