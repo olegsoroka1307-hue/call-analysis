@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Секрети й дані — ніколи в git
+.env
+config.yaml
+secrets/*
+!secrets/.gitkeep
+data/
