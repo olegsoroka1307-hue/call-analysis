@@ -1,0 +1,6 @@
+# Чисті адреси замість імен файлів. Netlify читає цей файл автоматично.
+/spotkania      /landing.html         200
+/poczta         /landing-email.html   200
+/meetings       /landing.html         200
+/email          /landing-email.html   200
+/               /landing.html         302
