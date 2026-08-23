@@ -174,8 +174,9 @@ section{ padding:4.25rem 0; }
 .cta-in{ padding:4rem 0; display:grid; gap:1rem; max-width:38rem; }
 .cta h2{ font-size:clamp(1.5rem,2.6vw,2rem); }
 .cta p{ color:var(--ink-2); }
-.cta .line{ margin-top:.6rem; display:inline-flex; align-items:center; gap:.6rem; font-family:"IBM Plex Mono", monospace; font-size:.85rem; border:1px solid var(--line-strong); border-radius:8px; padding:.7rem 1rem; background:var(--paper); }
-.cta .line .dot{ width:8px; height:8px; border-radius:50%; background:var(--done); flex:none; }
+.line{ margin-top:.6rem; display:inline-flex; align-items:center; gap:.6rem; font-family:"IBM Plex Mono", monospace; font-size:.85rem; border:1px solid var(--line-strong); border-radius:8px; padding:.7rem 1rem; background:var(--paper); width:fit-content; }
+.line .dot{ width:8px; height:8px; border-radius:50%; background:var(--done); flex:none; }
+.band .line{ background:var(--paper); }
 footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", monospace; font-size:.72rem; letter-spacing:.04em; }
 
 @media (max-width:880px){
@@ -215,6 +216,11 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
         <p class="lede">
           <span class="uk">Текст зустрічі перетворюється на задачі в Notion. Кожен співробітник отримує свої в Telegram і закриває їх однією кнопкою. У понеділок ви бачите, хто що обіцяв&nbsp;— і що з цього справді зробив.</span>
           <span class="en">A meeting transcript turns into tasks in Notion. Each person gets theirs in Telegram and closes them with one tap. On Monday you see what was promised — and what actually got done.</span><span class="pl">Transkrypcja spotkania zamienia się w zadania w Notion. Każdy dostaje swoje na Telegramie i zamyka je jednym kliknięciem. W poniedziałek widzisz, kto co obiecał — i co z tego faktycznie zrobił.</span>
+        </p>
+        <p class="lede" style="margin-top:1rem;font-size:.93rem;color:var(--ink-3)">
+          <span class="uk">Notion і Telegram — стандартна звʼязка. Працюєте в ClickUp, Trello, Asana чи Teams — систему підключаємо до вашого трекера.</span>
+          <span class="pl">Notion i Telegram to wersja domyślna. Pracujecie w ClickUp, Trello, Asanie albo Teams — system podłączamy do Waszego trackera.</span>
+          <span class="en">Notion and Telegram are the default pair. If you work in ClickUp, Trello, Asana or Teams, the system connects to your tracker instead.</span>
         </p>
         <div class="chips">
           <span class="chip">Notion</span>
@@ -279,6 +285,11 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
     <div class="head">
       <div class="eyebrow"><span class="uk">Як це працює</span><span class="en">How it works</span><span class="pl">Jak to działa</span></div>
       <h2><span class="uk">Пʼять кроків, з яких ви робите один</span><span class="en">Five steps. You do one of them.</span><span class="pl">Pięć kroków. Ty robisz jeden z nich.</span></h2>
+      <p>
+        <span class="uk">Ви не запроваджуєте новий процес і нічого не міняєте в роботі команди. Ви просто надсилаєте текст зустрічі — решта відбувається без вас.</span>
+        <span class="pl">Nie wprowadzacie nowego procesu i nic nie zmieniacie w pracy zespołu. Po prostu wysyłasz tekst spotkania — reszta dzieje się bez Ciebie.</span>
+        <span class="en">You are not introducing a new process, and nothing changes in how the team works. You just send the meeting text — the rest happens without you.</span>
+      </p>
     </div>
     <div class="steps">
       <div class="step">
@@ -319,6 +330,18 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
     </div>
   </section>
 
+  <div class="band">
+    <div class="wrap band-in">
+      <q><span class="uk">Хочете побачити це на одній своїй зустрічі?</span><span class="pl">Chcesz zobaczyć to na jednym swoim spotkaniu?</span><span class="en">Want to see this on one of your own meetings?</span></q>
+      <p>
+        <span class="uk">Розбір однієї вашої реальної зустрічі входить у кожен пакет. Надішліть транскрипцію будь-якої планірки — і побачите результат на власних людях і власних задачах, а не на демонстрації.</span>
+        <span class="pl">Przerobienie jednego Waszego prawdziwego spotkania jest w każdym pakiecie. Wyślij transkrypcję dowolnej odprawy — zobaczysz efekt na własnych ludziach i własnych zadaniach, a nie na demie.</span>
+        <span class="en">Processing one of your real meetings is included in every package. Send a transcript of any weekly sync and you will see the result on your own people and your own tasks, not on a demo.</span>
+      </p>
+      <div class="line"><span class="dot"></span><span class="uk">Відповідайте в тому ж чаті, де отримали це посилання</span><span class="pl">Odpisz po prostu tam, gdzie dostałeś ten link</span><span class="en">Just reply in the chat where you got this link</span></div>
+    </div>
+  </div>
+
   <section class="wrap reveal">
     <div class="head">
       <div class="eyebrow"><span class="uk">Межі системи</span><span class="en">Where it stops</span><span class="pl">Gdzie się zatrzymuje</span></div>
@@ -348,6 +371,17 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
       <h2><span class="uk">Фіксована ціна, фіксований термін</span><span class="en">Fixed price, fixed timeline</span><span class="pl">Stała cena, stały termin</span></h2>
       <p><span class="uk">Кожен пакет включає розбір однієї вашої реальної зустрічі&nbsp;— щоб ви побачили результат на власних даних, а не на демо.</span><span class="en">Every package includes processing one of your real meetings, so you see the result on your own data rather than on a demo.</span><span class="pl">Każdy pakiet obejmuje przerobienie jednego Twojego prawdziwego spotkania — żebyś zobaczył efekt na własnych danych, a nie na demo.</span></p>
     </div>
+    <div class="sub-note" style="margin:0 0 1.5rem">
+      <span class="uk"><strong>З чим це порівнювати.</strong> Керівник, який після кожної зустрічі витрачає 20 хвилин на виписування домовленостей, а потім ще пів години на тиждень на нагадування людям:<br>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.9em">3 зустрічі на тиждень × 30 хвилин × 4 тижні = <strong>6 годин на місяць</strong></span><br>
+      І це лише оформлення задач — без походів за співробітниками й без роботи, переробленої через забуту домовленість. Скільки коштує ваша година, знаєте тільки ви.</span>
+      <span class="pl"><strong>Z czym to porównać.</strong> Szef, który po każdym spotkaniu spisuje ustalenia przez 20 minut, a potem jeszcze pół godziny tygodniowo przypomina ludziom:<br>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.9em">3 spotkania tygodniowo × 30 minut × 4 tygodnie = <strong>6 godzin miesięcznie</strong></span><br>
+      I to samo spisywanie zadań — bez biegania za pracownikami i bez pracy przerobionej od nowa przez zapomniane ustalenie. Ile kosztuje Wasza godzina, wiecie tylko Wy.</span>
+      <span class="en"><strong>What to compare it against.</strong> A team lead who spends 20 minutes after every meeting writing up what was agreed, then another half hour a week reminding people:<br>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:.9em">3 meetings a week × 30 minutes × 4 weeks = <strong>6 hours a month</strong></span><br>
+      And that is only writing the tasks down — before chasing anyone, and before redoing work lost to a forgotten commitment. What your hour is worth, only you know.</span>
+    </div>
     <div class="grid-3">
       <div class="card pack">
         <div class="name">Start</div>
@@ -365,6 +399,7 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
         <div class="name">Team</div>
         <div class="price"><span class="uk">10 000 ₴</span><span class="en">$600</span><span class="pl">2 900 zł <span style="font-size:.55em;font-weight:500;color:var(--ink-3)">netto</span></span></div>
         <div class="term"><span class="uk">4 дні · підтримка 14 днів</span><span class="en">4 days · 14 days support</span><span class="pl">4 dni · 14 dni wsparcia</span></div>
+        <div class="term" style="color:var(--accent-ink);font-weight:500"><span class="uk">Перша справжня зустріч працює на 4-й день</span><span class="pl">Pierwsze prawdziwe spotkanie działa 4. dnia</span><span class="en">Your first real meeting runs on day 4</span></div>
         <ul>
           <li><span><span class="uk">Все з пакета Start</span><span class="en">Everything in Start</span><span class="pl">Wszystko z pakietu Start</span></span></li>
           <li><span><span class="uk">Telegram-бот з кнопками статусів</span><span class="en">Telegram bot with status buttons</span><span class="pl">Bot na Telegramie z przyciskami statusu</span></span></li>
@@ -427,6 +462,7 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
       <div class="card">
         <h3><span class="uk">Спрацює</span><span class="en">Worth it</span><span class="pl">Warto</span></h3>
         <ul class="yes">
+          <li><span><span class="uk">Агенції, IT- і sales-команди, рекрутинг, будівництво, e-commerce</span><span class="pl">Agencje, zespoły IT i sprzedaży, rekrutacja, budowlanka, e-commerce</span><span class="en">Agencies, IT and sales teams, recruiting, construction, e-commerce</span></span></li>
           <li><span><span class="uk">3+ зустрічі на тиждень і команда від 3 до 20 людей</span><span class="en">3+ meetings a week, a team of 3 to 20</span><span class="pl">3+ spotkania tygodniowo, zespół od 3 do 20 osób</span></span></li>
           <li><span><span class="uk">Ви пояснюєте одне й те саме вдруге і втретє</span><span class="en">You explain the same thing a second and third time</span><span class="pl">Tłumaczysz to samo drugi i trzeci raz</span></span></li>
           <li><span><span class="uk">Половина планірки йде на «то що ми там вирішили?»</span><span class="en">Half the sync goes to “so what did we decide?”</span><span class="pl">Połowa spotkania idzie na „to co my właściwie ustaliliśmy?”</span></span></li>
