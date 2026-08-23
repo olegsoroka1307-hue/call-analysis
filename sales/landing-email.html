@@ -67,6 +67,7 @@ header{ border-bottom:1px solid var(--line); background:var(--paper); position:s
 
 .hero{ padding:5rem 0 3.5rem; }
 h1{ font-size:clamp(2.1rem, 4.3vw, 3.25rem); line-height:1.08; margin:1rem 0 1.25rem; max-width:16ch; }
+.subtitle{ font-size:1.2rem; font-weight:500; color:var(--ink); max-width:32em; margin-bottom:1rem; }
 .lede{ font-size:1.075rem; color:var(--ink-2); max-width:40em; }
 .chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.75rem; }
 .chip{ font-family:"IBM Plex Mono", monospace; font-size:.73rem; border:1px solid var(--line-strong); border-radius:999px; padding:.32rem .7rem; color:var(--ink-2); background:var(--surface); }
@@ -109,7 +110,7 @@ section{ padding:4.25rem 0; }
 .card p{ color:var(--ink-2); font-size:.92rem; }
 .card .seal{ font-family:"IBM Plex Mono", monospace; font-size:.72rem; color:var(--ok); background:var(--ok-soft); border-radius:6px; padding:.4rem .6rem; }
 
-.packs{ display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; max-width:46rem; }
+.packs{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
 .pack{ position:relative; }
 .pack.hot{ border-color:var(--accent); }
 .pack .tag2{ position:absolute; top:-.65rem; left:1.3rem; background:var(--accent); color:#fff; font-family:"IBM Plex Mono", monospace; font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; padding:.2rem .55rem; border-radius:4px; }
@@ -186,6 +187,11 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
   <div class="wrap hero">
     <div class="eyebrow"><span class="uk">Послуга · налаштування під ключ</span><span class="pl">Usługa · wdrożenie pod klucz</span><span class="en">Service · done-for-you setup</span></div>
     <h1><span class="uk">Важливе зверху. Решта може почекати</span><span class="pl">Ważne na wierzchu. Reszta może poczekać</span><span class="en">The important mail on top. The rest can wait</span></h1>
+    <p class="subtitle">
+      <span class="uk">AI-система, яка щодня перетворює сотні листів на короткий список того, що справді потребує вашої уваги.</span>
+      <span class="pl">System AI, który codziennie zamienia setki wiadomości w krótką listę tego, co naprawdę wymaga Twojej uwagi.</span>
+      <span class="en">An AI system that turns hundreds of emails a day into a short list of what actually needs you.</span>
+    </p>
     <p class="lede">
       <span class="uk">Система читає вашу пошту, відкриває PDF і сторінки за посиланнями — і розкладає все на три стоси: що потребує вас, що ні, і що вона не змогла вирішити сама. Разом із резюме: хто написав, про що, що зробити й до якої дати.</span>
       <span class="pl">System czyta Twoją pocztę, otwiera PDF-y i strony z linków — i układa wszystko na trzy stosy: co wymaga Ciebie, co nie, i czego nie umiał rozstrzygnąć sam. Razem ze streszczeniem: kto napisał, o co chodzi, co zrobić i do kiedy.</span>
@@ -329,7 +335,7 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
     <div class="packs">
       <div class="card pack">
         <div class="name">Start</div>
-        <div class="price"><span class="uk">6 000 ₴</span><span class="pl">2 400 zł <span class="net">netto</span></span><span class="en">$500</span></div>
+        <div class="price"><span class="uk">6 000 ₴</span><span class="pl">1 200 zł <span class="net">netto</span></span><span class="en">$300</span></div>
         <div class="term"><span class="uk">3 дні · підтримка 7 днів</span><span class="pl">3 dni · 7 dni wsparcia</span><span class="en">3 days · 7 days support</span></div>
         <ul>
           <li><span><span class="uk">Підключення до Gmail</span><span class="pl">Podłączenie do Gmaila</span><span class="en">Gmail connected</span></span></li>
@@ -340,22 +346,38 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
       </div>
       <div class="card pack hot">
         <div class="tag2"><span class="uk">Обирають частіше</span><span class="pl">Wybierany częściej</span><span class="en">Most chosen</span></div>
-        <div class="name"><span class="uk">Під ключ</span><span class="pl">Pod klucz</span><span class="en">Full setup</span></div>
-        <div class="price"><span class="uk">12 000 ₴</span><span class="pl">4 900 zł <span class="net">netto</span></span><span class="en">$1 000</span></div>
+        <div class="name">Business</div>
+        <div class="price"><span class="uk">12 000 ₴</span><span class="pl">2 900 zł <span class="net">netto</span></span><span class="en">$700</span></div>
         <div class="term"><span class="uk">6 днів · підтримка 30 днів</span><span class="pl">6 dni · 30 dni wsparcia</span><span class="en">6 days · 30 days support</span></div>
+        <div class="term" style="color:var(--accent-ink);font-weight:500"><span class="uk">Ваша справжня пошта розібрана на 6-й день</span><span class="pl">Wasza prawdziwa poczta rozłożona 6. dnia</span><span class="en">Your real inbox is sorted on day 6</span></div>
         <ul>
           <li><span><span class="uk">Все з пакета Start</span><span class="pl">Wszystko z pakietu Start</span><span class="en">Everything in Start</span></span></li>
           <li><span><span class="uk">Звіт у Google Таблицю</span><span class="pl">Raport do arkusza Google</span><span class="en">Report into a Google Sheet</span></span></li>
           <li><span><span class="uk">Читання сторінок за посиланнями</span><span class="pl">Czytanie stron z linków</span><span class="en">Linked pages read</span></span></li>
-          <li><span><span class="uk">Налаштування правил під ваш бізнес</span><span class="pl">Reguły dopasowane do Twojej firmy</span><span class="en">Rules tuned to your business</span></span></li>
+          <li><span><span class="uk">Правила під ваш бізнес</span><span class="pl">Reguły dopasowane do Waszej firmy</span><span class="en">Rules tuned to your business</span></span></li>
           <li><span><span class="uk">Запуск за розкладом + навчання 30 хв</span><span class="pl">Uruchomienie wg harmonogramu + szkolenie 30 min</span><span class="en">Scheduled runs + 30-minute training</span></span></li>
+        </ul>
+      </div>
+      <div class="card pack">
+        <div class="name">Pro</div>
+        <div class="price"><span class="uk">20 000 ₴</span><span class="pl">4 900 zł <span class="net">netto</span></span><span class="en">$1 200</span></div>
+        <div class="term"><span class="uk">10 днів · підтримка 30 днів</span><span class="pl">10 dni · 30 dni wsparcia</span><span class="en">10 days · 30 days support</span></div>
+        <ul>
+          <li><span><span class="uk">Все з пакета Business</span><span class="pl">Wszystko z pakietu Business</span><span class="en">Everything in Business</span></span></li>
+          <li><span><span class="uk">Важливе одразу в Telegram або Slack</span><span class="pl">Ważne od razu na Telegramie albo Slacku</span><span class="en">Important mail straight to Telegram or Slack</span></span></li>
+          <li><span><span class="uk">Розпізнавання сканів і фото (OCR)</span><span class="pl">Rozpoznawanie skanów i zdjęć (OCR)</span><span class="en">Scans and photos recognised (OCR)</span></span></li>
+          <li><span><span class="uk">Кілька поштових скриньок</span><span class="pl">Kilka skrzynek pocztowych</span><span class="en">Several mailboxes</span></span></li>
+          <li><span><span class="uk">Передача в CRM або Notion</span><span class="pl">Przekazywanie do CRM albo Notion</span><span class="en">Handoff into your CRM or Notion</span></span></li>
         </ul>
       </div>
     </div>
     <div class="sub-note">
-      <span class="uk"><strong>Про вартість роботи ШІ.</strong> Розбір одного листа коштує приблизно 2–3 центи, і платите ви напряму постачальнику, не мені. При 200 листах на день є режим, що відсіює розсилки без звернення до ШІ — він ріже цей рахунок приблизно навпіл. Порахую під ваш обсяг до початку робіт.</span>
-      <span class="pl"><strong>O koszcie pracy AI.</strong> Przerobienie jednego listu kosztuje około 2–3 centów i płacisz bezpośrednio dostawcy, nie mnie. Przy 200 listach dziennie jest tryb odsiewający mailingi bez udziału AI — tnie ten rachunek mniej więcej o połowę. Policzę to pod Twój wolumen przed rozpoczęciem prac.</span>
-      <span class="en"><strong>On the AI cost.</strong> Processing one email costs roughly 2–3 cents, paid directly to the provider, not to me. At 200 emails a day there is a mode that filters bulk mail without involving the AI at all — it roughly halves that bill. I will calculate it for your volume before we start.</span>
+      <span class="uk"><strong>Про вартість роботи ШІ.</strong> Вона залежить від кількості й довжини листів, від вкладень і числа сторінок у них — тому назвати одну цифру наперед чесно не вийде. Перед впровадженням порахую очікувану місячну суму на вибірці саме вашої скриньки, і ви побачите її до того, як щось платити. Платите ви напряму постачальнику, не мені.<br><br>
+      <strong>Далі за бажанням:</strong> опіка від 300 zł/міс — система працює, правила й нові адреси на мені.</span>
+      <span class="pl"><strong>O koszcie pracy AI.</strong> Zależy od liczby i długości wiadomości oraz od załączników i liczby stron w nich — dlatego uczciwie nie da się podać jednej liczby z góry. Przed wdrożeniem policzę przewidywany miesięczny koszt na próbce Państwa skrzynki i zobaczą go Państwo, zanim cokolwiek zapłacą. Płacą Państwo bezpośrednio dostawcy, nie mnie.<br><br>
+      <strong>Opcjonalnie dalej:</strong> opieka od 300 zł netto/mies. — system działa, reguły i nowe adresy są po mojej stronie.</span>
+      <span class="en"><strong>On the AI cost.</strong> It depends on how many emails you get, how long they are, and how many pages their attachments run to — so quoting one number up front would not be honest. Before we start I will calculate the expected monthly cost on a sample of your own mailbox, and you will see it before paying anything. You pay the provider directly, not me.<br><br>
+      <strong>Optional afterwards:</strong> maintenance from 300 zl/mo — the system keeps running, rules and new addresses are on me.</span>
     </div>
   </section>
 
@@ -371,6 +393,7 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
           <li><span><span class="uk">Від 50 листів на день на одну скриньку</span><span class="pl">Od 50 listów dziennie na jedną skrzynkę</span><span class="en">From 50 emails a day in one mailbox</span></span></li>
           <li><span><span class="uk">Ви вже пропускали рахунок або запит клієнта</span><span class="pl">Zdarzyło Ci się przegapić fakturę albo zapytanie klienta</span><span class="en">You have already missed an invoice or a client request</span></span></li>
           <li><span><span class="uk">Пошту читає власник, бо делегувати нікому</span><span class="pl">Pocztę czyta właściciel, bo nie ma komu tego oddać</span><span class="en">The owner reads the mail because there is nobody to delegate to</span></span></li>
+          <li><span><span class="uk">Важливе приходить у сканах і фото — це пакет Pro, з розпізнаванням</span><span class="pl">Ważne rzeczy przychodzą w skanach i zdjęciach — to pakiet Pro, z rozpoznawaniem</span><span class="en">The important things arrive as scans and photos — that is the Pro package, with recognition</span></span></li>
           <li><span><span class="uk">Важливе приходить у вкладеннях, а не в тексті</span><span class="pl">Ważne rzeczy przychodzą w załącznikach, nie w treści</span><span class="en">The important things arrive as attachments, not as text</span></span></li>
         </ul>
       </div>
@@ -380,7 +403,7 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
           <li><span><span class="uk">До 20 листів на день — ви й так усі читаєте</span><span class="pl">Do 20 listów dziennie — i tak czytasz wszystkie</span><span class="en">Under 20 emails a day — you read them all anyway</span></span></li>
           <li><span><span class="uk">Потрібні автоматичні відповіді клієнтам</span><span class="pl">Potrzebujesz automatycznych odpowiedzi do klientów</span><span class="en">You want automatic replies to clients</span></span></li>
           <li><span><span class="uk">Пошта не на Gmail і переїжджати ви не плануєте</span><span class="pl">Poczta nie jest na Gmailu i nie planujesz migracji</span><span class="en">Your mail is not on Gmail and you are not moving</span></span></li>
-          <li><span><span class="uk">Важливе живе у сканах без тексту</span><span class="pl">Ważne rzeczy są w skanach bez warstwy tekstowej</span><span class="en">The important things live in scans with no text layer</span></span></li>
+          <li><span><span class="uk">Ви хочете, щоб система ухвалювала рішення замість вас</span><span class="pl">Chcesz, żeby system decydował za Ciebie</span><span class="en">You want the system to make the decisions for you</span></span></li>
         </ul>
       </div>
     </div>
