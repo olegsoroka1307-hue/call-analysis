@@ -46,7 +46,7 @@ HOW I HANDLE YOUR DATA
 
 I do not ask for passwords, ever. Notion access is a scoped integration token limited to a single database. You create the Telegram bot yourself and hold the token. Test transcripts are deleted after delivery and my access is revoked when the job closes — I will confirm in writing when I have done it. NDA on request, no questions asked.
 
-I built this system to run my own team before I offered it to anyone else. That means when something breaks, I already know why.
+I wrote this system myself rather than reselling someone else's tool. Changes happen on my side, and nothing about it locks you in.
 
 Send me a message describing how your team runs meetings today. I will tell you straight whether this will help you or not.
 ```
@@ -105,8 +105,8 @@ into Notion, then pushed to each person in Telegram where they confirm status wi
 The status syncs back automatically. You get a weekly report showing what was promised
 against what was actually delivered.
 
-I run this system on my own team, so I am not describing a plan — I am describing something
-that is already working.
+I built this system myself, so any change happens on my side — there is no
+vendor to wait on.
 
 For [їхній розмір команди] people I would deliver this in [3-5] days, fixed price, with a
 training call at the end so you are not dependent on me afterwards.
@@ -132,8 +132,8 @@ into Notion, then pushed to each person individually where they confirm status w
 The status syncs back automatically. Your PM stops being the router and starts being a
 reviewer.
 
-I run this system on my own team, so I am not describing a plan — I am describing something
-that is already working. Note that my current build pushes to Telegram; Slack is a
+I built this system myself, so any change happens on my side — there is no
+vendor to wait on. Note that my current build pushes to Telegram; Slack is a
 straightforward swap, and I would do that as part of the setup rather than as an extra.
 
 For 12 people I would deliver this in 5 days, fixed price, with a training call at the end.

@@ -64,7 +64,7 @@ WHAT YOU GET
 
 WHY ME
 
-I built this system for myself first, running my own team's meetings through it before selling it to anyone. It is not a template I downloaded — I wrote it, and I know exactly what breaks and why.
+I wrote this system myself. It is not a template I downloaded and rebranded, which means changes happen on my side rather than waiting on someone else's roadmap, and you are not locked into a tool you cannot get out of.
 
 ABOUT YOUR DATA
 

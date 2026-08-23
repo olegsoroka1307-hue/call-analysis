@@ -172,7 +172,7 @@ terminem i dosłownym cytatem z rozmowy → każdy dostaje swoje na Telegramie z
 statusu → cotygodniowy raport dla Ciebie, kto co wykonał. Zespół nie uczy się nowego
 narzędzia.
 
-Tego systemu używam na co dzień u siebie, więc to nie jest plan — to działa.
+System napisałem sam, więc każdą zmianę robię u siebie, bez czekania na dostawcę.
 
 Dla Twojego zlecenia: [pakiet] — [cena] zł, [termin] dni, ze szkoleniem na koniec,
 żebyście nie byli ode mnie zależni.
