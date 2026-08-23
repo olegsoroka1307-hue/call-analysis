@@ -145,15 +145,39 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
 .reveal{ opacity:0; transform:translateY(10px); transition:opacity .5s ease, transform .5s ease; }
 .reveal.in{ opacity:1; transform:none; }
 @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; transition:none; } *{ animation:none !important; } }
+
+/* ---- контакти ---- */
+.contacts{ display:flex; flex-wrap:wrap; gap:.6rem; margin-top:.4rem; }
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+  font-family:"IBM Plex Mono", monospace; font-size:.85rem; font-weight:500;
+  border-radius:9px; padding:.7rem 1.1rem; border:1px solid transparent;
+}
+.btn-primary{ background:var(--accent); color:#fff; }
+.btn-primary:hover{ filter:brightness(1.08); }
+.btn-ghost{ background:var(--paper); color:var(--ink); border-color:var(--line-strong); }
+.btn-ghost:hover{ border-color:var(--accent); }
+.tg-top{
+  display:inline-flex; align-items:center; gap:.4rem; text-decoration:none;
+  font-family:"IBM Plex Mono", monospace; font-size:.75rem; color:var(--ink-2);
+  border:1px solid var(--line-strong); border-radius:999px; padding:.3rem .7rem;
+  background:var(--surface);
+}
+.tg-top:hover{ border-color:var(--accent); color:var(--accent-ink); }
+.bar-right{ display:flex; align-items:center; gap:.6rem; }
+@media (max-width:560px){ .tg-top span.label{ display:none; } }
 </style>
 
 <header>
   <div class="wrap bar">
     <div class="mark"><span class="dot"></span><span class="uk">важливе зверху</span><span class="pl">ważne na wierzchu</span><span class="en">important on top</span></div>
+    <div class="bar-right">
+      <a class="tg-top" href="https://t.me/olesor72">✈️ <span class="label">@olesor72</span></a>
     <div class="langs" role="group" aria-label="Мова / Język / Language">
       <button type="button" data-set="uk" aria-pressed="true">UA</button>
       <button type="button" data-set="pl" aria-pressed="false">PL</button>
       <button type="button" data-set="en" aria-pressed="false">EN</button>
+    </div>
     </div>
   </div>
 </header>
@@ -371,6 +395,9 @@ footer{ padding:2rem 0 3rem; color:var(--ink-3); font-family:"IBM Plex Mono", mo
         <span class="pl">Powiem szczerze, czy ten system Ci pomoże, czy wystarczy kilka filtrów w samym Gmailu. Jeśli wystarczy — tak powiem, to jest w porządku odpowiedź.</span>
         <span class="en">I will tell you honestly whether this will help, or whether a few Gmail filters would do. If they would, I will say so — that is a fine answer.</span>
       </p>
+      <div class="contacts">
+        <a class="btn btn-primary" href="https://t.me/olesor72">✈️ <span class="uk">Написати в Telegram</span><span class="pl">Napisz na Telegramie</span><span class="en">Message me on Telegram</span></a>
+      </div>
       <div class="line"><span class="dot"></span><span class="uk">Відповідайте в тому ж чаті, де отримали це посилання</span><span class="pl">Odpisz po prostu tam, gdzie dostałeś ten link</span><span class="en">Just reply in the chat where you got this link</span></div>
     </div>
   </div>
