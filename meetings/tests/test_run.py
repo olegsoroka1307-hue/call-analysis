@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import pytest
 
-from run import build_parser, cmd_people, cmd_register
+from run import _read_transcript, build_parser, cmd_document, cmd_people, cmd_register
 
 
 def parse(argv: list[str]):
@@ -13,6 +13,7 @@ def parse(argv: list[str]):
 def test_every_command_from_the_readme_exists():
     for argv in (
         ["analyze", "narada.txt"],
+        ["document", "narada.txt"],
         ["report"],
         ["listen"],
         ["register"],
@@ -59,3 +60,70 @@ def test_empty_registry_points_at_the_next_step(cfg, capsys):
 def test_bad_command_is_refused(argv):
     with pytest.raises(SystemExit):
         parse(argv)
+
+
+# ── document ────────────────────────────────────────────────────────
+def test_document_flags():
+    args = parse([
+        "document", "narada.txt", "--kind", "методичка",
+        "--what", "як готувати КП", "--name", "Планірка",
+    ])
+    assert args.kind == "методичка"
+    assert args.what == "як готувати КП"
+    assert args.name == "Планірка"
+
+
+def test_document_needs_a_readable_transcript(cfg, tmp_path, capsys):
+    args = parse(["document", str(tmp_path / "нема.txt"), "--what", "x", "--kind", "кп"])
+    assert cmd_document(cfg, args) == 2
+    assert "Немає файлу" in capsys.readouterr().err
+
+
+def test_document_without_what_stops_when_it_cannot_ask(cfg, tmp_path, capsys, monkeypatch):
+    # У скрипті чи в пайпі спитати нікого: краще сказати про це, ніж
+    # вигадати за власника, що саме зробити з наради.
+    monkeypatch.setattr("sys.stdin.isatty", lambda: False, raising=False)
+    path = tmp_path / "narada.txt"
+    path.write_text("Саша: почнемо з бюджету.", encoding="utf-8")
+
+    args = parse(["document", str(path), "--kind", "кп"])
+    assert cmd_document(cfg, args) == 2
+    assert "--what" in capsys.readouterr().err
+
+
+def test_document_without_kind_stops_when_it_cannot_ask(cfg, tmp_path, capsys, monkeypatch):
+    monkeypatch.setattr("sys.stdin.isatty", lambda: False, raising=False)
+    path = tmp_path / "narada.txt"
+    path.write_text("Саша: почнемо з бюджету.", encoding="utf-8")
+
+    args = parse(["document", str(path), "--what", "шаблон"])
+    assert cmd_document(cfg, args) == 2
+    err = capsys.readouterr().err
+    assert "--kind" in err and "методичка" in err
+
+
+# ── читання транскрипції ────────────────────────────────────────────
+def test_transcript_is_read_from_a_file(tmp_path):
+    path = tmp_path / "narada.txt"
+    path.write_text("Саша: почнемо з бюджету.", encoding="utf-8")
+    assert _read_transcript(str(path)) == "Саша: почнемо з бюджету."
+
+
+def test_missing_file_is_reported(tmp_path, capsys):
+    assert _read_transcript(str(tmp_path / "нема.txt")) is None
+    assert "Немає файлу" in capsys.readouterr().err
+
+
+def test_blank_transcript_is_refused(tmp_path, capsys):
+    path = tmp_path / "porozhnya.txt"
+    path.write_text("   \n\n", encoding="utf-8")
+    assert _read_transcript(str(path)) is None
+    assert "порожня" in capsys.readouterr().err
+
+
+def test_blank_stdin_is_refused_too(monkeypatch, capsys):
+    import io
+
+    monkeypatch.setattr("sys.stdin", io.StringIO("  \n"))
+    assert _read_transcript("-") is None
+    assert "порожня" in capsys.readouterr().err

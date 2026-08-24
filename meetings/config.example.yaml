@@ -40,3 +40,6 @@ default_priority: "Середній"
 # Реєстр співробітників і памʼять про вже розібрані наради.
 registry_db: "data/registry.db"
 error_log: "data/errors.jsonl"
+
+# Куди складати документи, зроблені командою document.
+documents_dir: "outputs"

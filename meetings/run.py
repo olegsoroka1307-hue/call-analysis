@@ -3,6 +3,7 @@
 
   python run.py analyze narada.txt --name "Планірка 24.08"
   python run.py report
+  python run.py document narada.txt --kind методичка --what "як робити КП"
   python run.py listen
   python run.py register
 """
@@ -15,6 +16,8 @@ from pathlib import Path
 from meetings.config import (
     Config, ConfigError, api_key, load_dotenv, notion_key, telegram_token,
 )
+from meetings.document import KINDS, DocumentError, DocumentWriter
+from meetings.document import save as save_document
 from meetings.errorlog import ErrorLog
 from meetings.extractor import Extractor
 from meetings.notion import NotionClient, NotionError
@@ -34,18 +37,25 @@ def _telegram(cfg: Config) -> TelegramClient:
     return TelegramClient(telegram_token(), timeout=cfg.request_timeout_seconds)
 
 
-def cmd_analyze(cfg: Config, args) -> int:
-    if args.transcript == "-":
-        transcript = sys.stdin.read()
+def _read_transcript(source: str) -> str | None:
+    """Транскрипція з файлу або зі stdin. None — читати нічого."""
+    if source == "-":
+        text = sys.stdin.read()
     else:
-        path = Path(args.transcript)
+        path = Path(source)
         if not path.exists():
             print(f"\n❌ Немає файлу {path}\n", file=sys.stderr)
-            return 2
-        transcript = path.read_text(encoding="utf-8")
-
-    if not transcript.strip():
+            return None
+        text = path.read_text(encoding="utf-8")
+    if not text.strip():
         print("\n❌ Транскрипція порожня.\n", file=sys.stderr)
+        return None
+    return text
+
+
+def cmd_analyze(cfg: Config, args) -> int:
+    transcript = _read_transcript(args.transcript)
+    if transcript is None:
         return 2
 
     import anthropic
@@ -161,6 +171,47 @@ def cmd_register(cfg: Config, args) -> int:
     return 0
 
 
+def cmd_document(cfg: Config, args) -> int:
+    """Робить із наради готовий документ: методичку, інструкцію, шаблон, КП."""
+    transcript = _read_transcript(args.transcript)
+    if transcript is None:
+        return 2
+
+    # Два питання зі SKILL.md. Без них документ вийшов би переказом наради,
+    # тому коли їх не передали прапорцями — питаємо.
+    interactive = args.transcript != "-" and sys.stdin.isatty()
+    what, kind = args.what.strip(), args.kind.strip().lower()
+    if not what:
+        if not interactive:
+            print("\n❌ Потрібен --what: що цінного витягти з наради.\n", file=sys.stderr)
+            return 2
+        what = input("\nЩо цінного витягти з цієї наради? ").strip()
+    if not kind:
+        if not interactive:
+            print(
+                f"\n❌ Потрібен --kind, один із: {', '.join(KINDS)}.\n", file=sys.stderr
+            )
+            return 2
+        kind = input(f"У що перетворити ({'/'.join(KINDS)})? ").strip().lower()
+
+    import anthropic
+
+    try:
+        writer = DocumentWriter(cfg, client=anthropic.Anthropic(api_key=api_key()))
+        doc = writer.write(transcript, what=what, kind=kind, meeting=args.name)
+        path = save_document(doc, cfg.documents_dir)
+    except DocumentError as exc:
+        print(f"\n❌ {exc}\n", file=sys.stderr)
+        return 1
+
+    print(f"\n✅ {doc.title}")
+    print(f"   {path}")
+    for question in doc.missing:
+        print(f"   ПОТРІБНА ВАША ВІДПОВІДЬ: {question}")
+    print()
+    return 0
+
+
 def cmd_people(cfg: Config, args) -> int:
     registry = Registry(cfg.registry_db)
     try:
@@ -205,6 +256,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--dry-run", action="store_true",
                    help="лише показати домовленості, нічого не створювати")
     p.set_defaults(func=cmd_analyze)
+
+    p = sub.add_parser("document", help="зробити з наради документ")
+    p.add_argument("transcript", help="файл із транскрипцією, або - для stdin")
+    p.add_argument("--what", default="", help="що цінного витягти з наради")
+    p.add_argument("--kind", default="",
+                   help=f"вид документа: {', '.join(KINDS)}")
+    p.add_argument("--name", default="", help="назва наради")
+    p.set_defaults(func=cmd_document)
 
     p = sub.add_parser("report", help="звіт «що обіцяли — що зробили»")
     p.add_argument("--meeting", default="", help="лише по одній нараді")

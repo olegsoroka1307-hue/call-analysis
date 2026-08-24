@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from meetings.document import _DocumentSchema
 from meetings.extractor import _CommitmentSchema, _Schema
 from meetings.models import Commitment, Delivery
 
@@ -64,6 +65,21 @@ def extraction(
             commitments=[commitment_schema()] if commitments is None else commitments,
             unclear=unclear or [],
             injection_suspected=injection_suspected,
+        ),
+        stop_reason=stop_reason,
+    )
+
+
+def document(
+    title: str = "Як готувати КП",
+    filename: str = "yak-gotuvaty-kp",
+    body: str = "## Крок 1\n\nЗібрати вимоги.\n\n> «спершу питаємо бюджет»",
+    missing: list[str] | None = None,
+    stop_reason: str = "end_turn",
+) -> FakeParsedResponse:
+    return FakeParsedResponse(
+        _DocumentSchema(
+            title=title, filename=filename, body=body, missing=missing or []
         ),
         stop_reason=stop_reason,
     )

@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from meetings.config import Config  # noqa: E402
+from meetings.document import DocumentWriter  # noqa: E402
+from meetings.document import save as save_document  # noqa: E402
 from meetings.errorlog import ErrorLog  # noqa: E402
 from meetings.extractor import Extractor  # noqa: E402
 from meetings.pipeline import handle_callbacks, process_meeting  # noqa: E402
@@ -24,7 +26,7 @@ from meetings.report import build_rows, render  # noqa: E402
 from meetings.telegram import pack_callback  # noqa: E402
 from tests.fakes import (  # noqa: E402
     FakeAnthropic, FakeNotion, FakeTelegram, callback_update,
-    commitment_schema, extraction,
+    commitment_schema, document, extraction,
 )
 
 OUT = ROOT / "data" / "demo"
@@ -168,6 +170,33 @@ def main() -> int:
     later = date(2026, 8, 31)
     print()
     print(render(build_rows(tasks, today=later), meeting="Планірка", today=later))
+
+    # Режим DOCUMENT: із тієї ж наради — готова методичка.
+    writer = DocumentWriter(cfg, client=FakeAnthropic(default=document(
+        title="Як ми ведемо об'єкт від планірки до здачі",
+        filename="yak-vedemo-obyekt",
+        body=(
+            "## Хто за що відповідає\n\n"
+            "Комерційну пропозицію готує продажник, акти — фінансист.\n\n"
+            "> «я скину КП до четверга»\n\n"
+            "## Терміни\n\n"
+            "Терміни називають на планірці й фіксують датою, а не «на тижні»."
+        ),
+        missing=["Хто підписує КП, якщо продажника немає на місці?"],
+    )))
+    doc = writer.write(
+        TRANSCRIPT, what="як ми ведемо об'єкт", kind="методичка",
+        meeting="Планірка", today=TODAY,
+    )
+    path = save_document(doc, OUT / "outputs")
+
+    print()
+    print("─" * 62)
+    print("ДОКУМЕНТ ЗА НАРАДОЮ")
+    print("─" * 62)
+    print(f"{doc.title}  →  {path}")
+    print()
+    print(doc.markdown())
 
     print()
     print(errlog.summary())

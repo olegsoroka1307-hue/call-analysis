@@ -44,6 +44,7 @@ class Config:
 
     registry_db: str = "data/registry.db"
     error_log: str = "data/errors.jsonl"
+    documents_dir: str = "outputs"
 
     request_timeout_seconds: int = 30
     safe_mode: bool = True

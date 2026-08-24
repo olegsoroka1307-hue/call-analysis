@@ -111,6 +111,32 @@ class MeetingResult:
 
 
 @dataclass
+class Document:
+    """Готовий документ за нарадою: методичка, інструкція, шаблон, КП."""
+
+    title: str
+    body: str                   # Markdown, без заголовка першого рівня
+    filename: str               # без розширення й без шляху
+    kind: str = ""
+    source: str = ""            # «Назва зустрічі — дата»
+    missing: list[str] = field(default_factory=list)
+    path: str = ""              # заповнюється після запису на диск
+
+    def markdown(self) -> str:
+        """Документ у тому вигляді, в якому лягає у файл."""
+        parts = [f"# {self.title}", ""]
+        if self.source:
+            parts += [f"*За нарадою: {self.source}*", ""]
+        parts.append(self.body)
+        if self.missing:
+            # Пробіли в документі мають бути видні в самому документі, а не
+            # лише в консолі: файл підуть читати без нас.
+            parts += ["", "---", "", "## Треба уточнити", ""]
+            parts += [f"- {item}" for item in self.missing]
+        return "\n".join(parts).rstrip() + "\n"
+
+
+@dataclass
 class ReportRow:
     """Рядок звіту «що обіцяли — що зробили»."""
 
