@@ -23,3 +23,8 @@ class ErrorLog:
             entry["exception"] = f"{type(exc).__name__}: {exc}"
         with self.path.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    def summary(self) -> str:
+        if not self.count:
+            return "Збоїв немає."
+        return f"Збоїв: {self.count}. Деталі: {self.path}"

@@ -61,6 +61,7 @@ class MeetingResult:
     meeting: str
     commitments: list[Commitment] = field(default_factory=list)
     deliveries: list[Delivery] = field(default_factory=list)
+    unclear: list[str] = field(default_factory=list)
     created_in_notion: int = 0
     skipped_duplicate: bool = False
     degraded: bool = False
@@ -84,6 +85,8 @@ class MeetingResult:
         )
         for d in self.unreached:
             out.append(f"  НЕ дійшло до {d.name}: {d.error or 'немає в реєстрі бота'}")
+        for question in self.unclear:
+            out.append(f"  ПОТРІБНА ВАША ВІДПОВІДЬ: {question}")
         if self.degraded:
             out.append(f"  УВАГА: {self.degraded_reason}")
         return out
