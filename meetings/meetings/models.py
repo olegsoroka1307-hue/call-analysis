@@ -3,14 +3,32 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-# Статуси в Notion. Значення збігаються з назвами опцій у базі «Домовленості».
-NOT_STARTED = "Не начата"
-IN_PROGRESS = "В работе"
+# Статуси в Notion. Значення мають збігатися з назвами опцій у базі
+# «Домовленості» символ у символ, інакше Notion відхилить запис.
+NOT_STARTED = "Не почато"
+IN_PROGRESS = "В роботі"
 DONE = "Готово"
-POSTPONED = "Отложено"
-CANCELLED = "Отменена"
+POSTPONED = "Відкладено"
+CANCELLED = "Скасовано"
 
 STATUSES = (NOT_STARTED, IN_PROGRESS, DONE, POSTPONED, CANCELLED)
+
+HIGH = "Високий"
+MEDIUM = "Середній"
+LOW = "Низький"
+
+PRIORITIES = (HIGH, MEDIUM, LOW)
+
+# Назви колонок у базі. Тримаємо в одному місці: якщо клієнт перейменує
+# поле у себе, правка потрібна лише тут.
+F_TASK = "Задача"
+F_RESPONSIBLE = "Відповідальний"
+F_DEADLINE = "Дедлайн"
+F_PRIORITY = "Пріоритет"
+F_STATUS = "Статус"
+F_PROJECT = "Проєкт"
+F_SOURCE = "Джерело"
+F_QUOTE = "Цитата"
 
 
 @dataclass
@@ -20,7 +38,7 @@ class Commitment:
     responsible: str
     task: str
     deadline: str = ""          # ISO-дата або порожньо, якщо не називали
-    priority: str = "Средний"
+    priority: str = MEDIUM
     project: str = ""
     quote: str = ""             # дослівна цитата з розмови
     source: str = ""            # «Назва зустрічі — дата»
