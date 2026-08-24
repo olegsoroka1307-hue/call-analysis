@@ -41,7 +41,7 @@ def commitment_schema(
     responsible: str = "Саша",
     task: str = "Надіслати КП Альфі",
     deadline: str = "2026-08-28",
-    priority: str = "Высокий",
+    priority: str = "Високий",
     project: str = "Продажі",
     quote: str = "Я скину КП до четверга.",
 ) -> _CommitmentSchema:
@@ -96,6 +96,19 @@ class FakeResponse:
         return self._body
 
 
+def db_schema(options: list[str] | None = None, field: str = "Проєкт") -> FakeResponse:
+    """Відповідь Notion на читання схеми бази: які опції має поле «Проєкт»."""
+    return FakeResponse(200, {
+        "id": "db-1",
+        "properties": {
+            field: {
+                "type": "multi_select",
+                "multi_select": {"options": [{"name": name} for name in (options or [])]},
+            }
+        },
+    })
+
+
 class FakeSession:
     """Віддає відповіді за скриптом і запамʼятовує кожен запит."""
 
@@ -123,11 +136,15 @@ class FakeSession:
 
 # ── Notion / Telegram на рівні обʼєктів ─────────────────────────────
 class FakeNotion:
-    def __init__(self, fail_on: set[str] | None = None) -> None:
+    def __init__(self, fail_on: set[str] | None = None,
+                 notes: list[str] | None = None) -> None:
         self.created: list[Commitment] = []
         self.statuses: list[tuple[str, str]] = []
         self.fail_on = fail_on or set()
         self.counter = 0
+        # Зауваження, які справжній клієнт лишає, коли задача записалась
+        # не такою, якою її зняли з наради.
+        self.notes: list[str] = list(notes or [])
 
     def create_task(self, commitment: Commitment) -> str:
         from meetings.notion import NotionError
@@ -147,6 +164,10 @@ class FakeNotion:
 
     def query_tasks(self, source: str = "") -> list[dict]:
         return []
+
+    def take_notes(self) -> list[str]:
+        notes, self.notes = self.notes, []
+        return notes
 
 
 class FakeTelegram:

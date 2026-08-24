@@ -9,8 +9,8 @@ TODAY = date(2026, 8, 24)
 
 def task(**kwargs) -> dict:
     base = {
-        "responsible": "Саша", "task": "КП", "status": "Не начата",
-        "deadline": "", "priority": "Средний", "project": "", "source": "Планірка",
+        "responsible": "Саша", "task": "КП", "status": "Не почато",
+        "deadline": "", "priority": "Середній", "project": "", "source": "Планірка",
     }
     base.update(kwargs)
     return base
@@ -32,7 +32,7 @@ def test_done_task_is_never_overdue():
 
 
 def test_cancelled_task_is_never_overdue():
-    rows = build_rows([task(deadline="2026-01-01", status="Отменена")], today=TODAY)
+    rows = build_rows([task(deadline="2026-01-01", status="Скасовано")], today=TODAY)
     assert rows[0].overdue_days == 0
 
 
@@ -58,8 +58,8 @@ def test_execution_rate_ignores_cancelled():
     rows = build_rows(
         [
             task(task="1", status="Готово"),
-            task(task="2", status="Не начата"),
-            task(task="3", status="Отменена"),
+            task(task="2", status="Не почато"),
+            task(task="3", status="Скасовано"),
         ],
         today=TODAY,
     )
@@ -74,10 +74,10 @@ def test_each_task_appears_in_exactly_one_block():
     rows = build_rows(
         [
             task(task="зроблена", status="Готово"),
-            task(task="прострочена", status="В работе", deadline="2026-08-01"),
-            task(task="в роботі", status="В работе", deadline="2026-09-10"),
-            task(task="відкладена", status="Отложено"),
-            task(task="скасована", status="Отменена"),
+            task(task="прострочена", status="В роботі", deadline="2026-08-01"),
+            task(task="в роботі", status="В роботі", deadline="2026-09-10"),
+            task(task="відкладена", status="Відкладено"),
+            task(task="скасована", status="Скасовано"),
             task(task="нова"),
         ],
         today=TODAY,

@@ -74,6 +74,13 @@ def process_meeting(
             problems.append(
                 f"не створено задач у Notion: {failed} — див. журнал збоїв"
             )
+        # Задача записана, але не такою, як її зняли з наради: не завівся
+        # проєкт, підмінився пріоритет. Це не збій, але людина має це побачити.
+        notes = notion.take_notes()
+        for note in notes:
+            errlog.record("notion", note)
+        if notes:
+            problems.append(f"записано з поправками: {len(notes)} — див. журнал збоїв")
     elif commitments:
         problems.append(
             "Notion не налаштований: задачі нікуди не записані, кнопки не працюватимуть"
@@ -94,11 +101,28 @@ def process_meeting(
             names = ", ".join(d.name for d in result.unreached)
             problems.append(f"задачі не дійшли до: {names}")
 
+    # Нарада вважається розібраною лише тоді, коли результат десь осів:
+    # сторінками в Notion, а якщо Notion не налаштований — доставленими
+    # повідомленнями. Інакше повторний запуск мовчки пропустив би нараду, і
+    # задачі зникли б разом зі збоєм — це найдорожча помилка з можливих.
+    if not commitments:
+        persisted = True
+    elif notion is not None:
+        persisted = result.created_in_notion > 0
+    else:
+        persisted = any(delivery.reached for delivery in result.deliveries)
+
+    if persisted:
+        registry.mark_meeting(fingerprint, title, len(commitments))
+    else:
+        problems.append(
+            "нічого не збережено — нараду не позначено розібраною, "
+            "запустіть ту саму команду ще раз"
+        )
+
     if problems:
         result.degraded = True
         result.degraded_reason = "; ".join(problems)
-
-    registry.mark_meeting(fingerprint, title, len(commitments))
     return result
 
 

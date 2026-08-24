@@ -128,3 +128,34 @@ def test_injection_patterns(text):
 
 def test_ordinary_meeting_talk_is_not_an_injection():
     assert detect_injection("Коля: систему запустимо в понеділок, звіт я надішлю.") is None
+
+
+def test_too_many_commitments_are_capped_and_the_owner_is_told(cfg):
+    # Модель іноді робить задачу з кожної репліки. Мовчки відрізати хвіст не
+    # можна: власник має знати, що частина наради лишилася нерозібраною.
+    cfg.max_commitments = 2
+    script = [extraction(commitments=[
+        commitment_schema(task=f"Задача {i}") for i in range(1, 6)
+    ])]
+    _, commitments, unclear = _extractor(cfg, script=script).extract("текст", today=TODAY)
+
+    assert [c.task for c in commitments] == ["Задача 1", "Задача 2"]
+    assert any("max_commitments" in question for question in unclear)
+    assert any("решту (3)" in question for question in unclear)
+
+
+def test_commitments_within_the_cap_say_nothing(cfg):
+    cfg.max_commitments = 5
+    script = [extraction(commitments=[commitment_schema(task="Одна")])]
+    _, commitments, unclear = _extractor(cfg, script=script).extract("текст", today=TODAY)
+    assert len(commitments) == 1
+    assert unclear == []
+
+
+def test_priority_from_the_model_matches_the_notion_options(cfg):
+    # Значення пріоритету йде в Notion як опція select: розбіжність тут
+    # означала б відхилений запис.
+    from meetings.models import PRIORITIES
+
+    _, commitments, _ = _extractor(cfg).extract("текст", today=TODAY)
+    assert commitments[0].priority in PRIORITIES

@@ -54,22 +54,22 @@ MODEL_ANSWER = extraction(
     commitments=[
         commitment_schema(
             responsible="Саша", task="Надіслати КП для Альфи",
-            deadline="2026-08-27", priority="Высокий", project="Продажі",
+            deadline="2026-08-27", priority="Високий", project="Продажі",
             quote="я скину їм КП до четверга",
         ),
         commitment_schema(
             responsible="Коля", task="Зробити звіт по рекламних кампаніях",
-            deadline="2026-08-25", priority="Высокий", project="Реклама",
+            deadline="2026-08-25", priority="Високий", project="Реклама",
             quote="звіт по кампаніях зроблю завтра",
         ),
         commitment_schema(
             responsible="Марія", task="Підготувати акти за серпень",
-            deadline="2026-08-31", priority="Средний", project="Фінанси",
+            deadline="2026-08-31", priority="Середній", project="Фінанси",
             quote="підготую до кінця місяця",
         ),
         commitment_schema(
             responsible="Петро", task="Полагодити форму на мобільних",
-            deadline="2026-08-24", priority="Высокий", project="Дніпро-Буд",
+            deadline="2026-08-24", priority="Високий", project="Дніпро-Буд",
             quote="форма падає на мобільних, візьму сьогодні",
         ),
     ],
@@ -159,7 +159,7 @@ def main() -> int:
     tasks = [
         {
             "page_id": c.page_id, "task": c.task, "responsible": c.responsible,
-            "status": statuses.get(c.page_id.replace("-", ""), "Не начата"),
+            "status": statuses.get(c.page_id.replace("-", ""), "Не почато"),
             "deadline": c.deadline, "priority": c.priority,
             "project": c.project, "source": c.source,
         }

@@ -9,8 +9,8 @@ from meetings.pipeline import handle_callbacks, process_meeting
 from meetings.registry import transcript_fingerprint
 from meetings.telegram import pack_callback
 from .fakes import (
-    FakeAnthropic, FakeNotion, FakeTelegram, api_status_error, callback_update,
-    commitment_schema, extraction,
+    FakeAnthropic, FakeNotion, FakeResponse, FakeSession, FakeTelegram,
+    api_status_error, callback_update, commitment_schema, db_schema, extraction,
 )
 
 TODAY = date(2026, 8, 24)
@@ -21,7 +21,7 @@ PAGE_ID = "1a2b3c4d5e6f47788990aabbccddeeff"
 def two_commitments():
     return extraction(commitments=[
         commitment_schema(responsible="Саша", task="Надіслати КП"),
-        commitment_schema(responsible="Марія", task="Підготувати акт", priority="Средний"),
+        commitment_schema(responsible="Марія", task="Підготувати акт", priority="Середній"),
     ])
 
 
@@ -212,3 +212,107 @@ def test_several_failures_are_all_named(cfg, registry, errlog):
     result = run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
     assert "Notion" in result.degraded_reason
     assert "не дійшли до" in result.degraded_reason
+
+
+# ── стан ────────────────────────────────────────────────────────────
+# Нарада позначається розібраною лише після успішного запису. Інакше збій
+# Notion назавжди ховає нараду: повторний запуск пропустив би її як «вже
+# розібрану», і задачі зникли б разом зі збоєм.
+
+def test_meeting_is_marked_only_after_a_successful_write(cfg, registry, errlog):
+    result = run(cfg, registry, errlog, notion=FakeNotion(), telegram=FakeTelegram())
+    assert result.created_in_notion == 2
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is True
+
+
+def test_total_notion_failure_leaves_the_meeting_unmarked(cfg, registry, errlog):
+    notion = FakeNotion(fail_on={"Надіслати КП", "Підготувати акт"})
+    result = run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
+
+    assert result.created_in_notion == 0
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is False
+    assert "запустіть ту саму команду ще раз" in result.degraded_reason
+
+
+def test_meeting_is_marked_when_some_tasks_got_through(cfg, registry, errlog):
+    # Часткова невдача не має змушувати розбирати нараду наново: створені
+    # задачі подвоїлися б.
+    notion = FakeNotion(fail_on={"Надіслати КП"})
+    run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is True
+
+
+def test_without_notion_a_delivered_meeting_counts_as_processed(cfg, registry, errlog):
+    registry.add("Саша", 111)
+    run(cfg, registry, errlog, notion=None, telegram=FakeTelegram())
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is True
+
+
+def test_without_notion_an_undelivered_meeting_stays_unprocessed(cfg, registry, errlog):
+    # Нікого немає в реєстрі: ні записано, ні надіслано — губити нараду не можна.
+    run(cfg, registry, errlog, notion=None, telegram=FakeTelegram())
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is False
+
+
+def test_meeting_without_commitments_is_not_reprocessed(cfg, registry, errlog):
+    script = [extraction(commitments=[])]
+    run(cfg, registry, errlog, script=script, notion=FakeNotion())
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is True
+
+
+def test_notion_notes_reach_the_log_and_the_summary(cfg, registry, errlog):
+    # Задача записана, але без проєкту — це має бути видно, а не загубитися.
+    notion = FakeNotion(notes=["«Надіслати КП»: записано без поля «Проєкт»"])
+    result = run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
+
+    assert "записано з поправками: 1" in result.degraded_reason
+    entries = [json.loads(line) for line in open(errlog.path, encoding="utf-8")]
+    assert any("без поля «Проєкт»" in e["message"] for e in entries)
+
+
+# ── справжній клієнт Notion усередині конвеєра ──────────────────────
+# Решта тестів конвеєра працює з FakeNotion. Цей — зі справжнім
+# NotionClient на підробленій сесії: він ловить розходження між тим, що
+# конвеєр викликає, і тим, що клієнт уміє.
+
+def test_real_notion_client_works_end_to_end(cfg, registry, errlog):
+    from meetings.notion import NotionClient
+
+    registry.add("Саша", 111)
+    registry.add("Марія", 222)
+    session = FakeSession([
+        db_schema(["Продажі"]),                  # схема: опція вже є
+        FakeResponse(200, {"id": "page-1"}),
+        FakeResponse(200, {"id": "page-2"}),
+    ])
+    notion = NotionClient("secret_x", "db-1", session=session)
+
+    result = run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
+
+    assert result.created_in_notion == 2
+    assert result.degraded is False
+    assert [c.page_id for c in result.commitments] == ["page-1", "page-2"]
+    assert registry.seen_meeting(transcript_fingerprint(TRANSCRIPT)) is True
+
+
+def test_missing_project_option_is_reported_but_costs_no_task(cfg, registry, errlog):
+    from meetings.notion import NotionClient
+
+    registry.add("Саша", 111)
+    registry.add("Марія", 222)
+    session = FakeSession([
+        db_schema([]),                                    # опції «Продажі» немає
+        FakeResponse(403, {"message": "no update capability"}),   # завести не дали
+        FakeResponse(200, {"id": "page-1"}),
+        FakeResponse(200, {"id": "page-2"}),
+    ])
+    notion = NotionClient("secret_x", "db-1", session=session)
+
+    result = run(cfg, registry, errlog, notion=notion, telegram=FakeTelegram())
+
+    # Задачі на місці й розіслані — попри те, що проєкт не проставився.
+    assert result.created_in_notion == 2
+    assert sum(d.sent for d in result.deliveries) == 2
+    assert "записано з поправками" in result.degraded_reason
+    entries = [json.loads(line) for line in open(errlog.path, encoding="utf-8")]
+    assert any("Проєкт" in e["message"] for e in entries)

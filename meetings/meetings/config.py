@@ -11,11 +11,11 @@ from pathlib import Path
 
 import yaml
 
+from .models import MEDIUM, PRIORITIES
+
 # Версія Notion API. Notion вимагає її в кожному запиті й ламає сумісність
 # без неї, тому дата зафіксована тут, а не береться «найсвіжіша».
 NOTION_VERSION = "2022-06-28"
-
-PRIORITIES = ("Высокий", "Средний", "Низкий")
 
 
 class ConfigError(RuntimeError):
@@ -35,7 +35,11 @@ class Config:
     max_transcript_chars: int = 120_000
     max_output_tokens: int = 16_000
 
-    default_priority: str = "Средний"
+    # Скільки задач максимум узяти з однієї наради. Захист від того, що модель
+    # нафантазує сто пунктів із півгодинної розмови й завалить ними людей.
+    max_commitments: int = 30
+
+    default_priority: str = MEDIUM
     ask_before_guessing_deadline: bool = False
 
     registry_db: str = "data/registry.db"
@@ -61,6 +65,8 @@ class Config:
             raise ConfigError("effort має бути одним із: low, medium, high, xhigh, max.")
         if self.max_transcript_chars < 1000:
             raise ConfigError("max_transcript_chars менший за 1000 — це не транскрипція.")
+        if self.max_commitments < 1:
+            raise ConfigError("max_commitments має бути щонайменше 1.")
         if not self.safe_mode:
             raise ConfigError(
                 "safe_mode: false заблоковано. Ця версія вміє лише створювати задачі "

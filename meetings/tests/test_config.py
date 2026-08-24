@@ -67,3 +67,19 @@ def test_dotenv_does_not_overwrite_real_environment(tmp_path, monkeypatch):
 
     assert os.environ["NOTION_API_KEY"] == "справжній"
     assert os.environ["TELEGRAM_BOT_TOKEN"] == "123:abc"
+
+
+def test_zero_max_commitments_is_refused(tmp_path):
+    with pytest.raises(ConfigError, match="max_commitments"):
+        Config.load(_write(tmp_path, GOOD + "\nmax_commitments: 0\n"))
+
+
+def test_example_config_is_loadable():
+    # Перше, що робить власник, — копіює приклад. Якщо приклад не вантажиться,
+    # він упреться в помилку ще до першого запуску.
+    from pathlib import Path
+
+    example = Path(__file__).resolve().parents[1] / "config.example.yaml"
+    cfg = Config.load(example)
+    assert cfg.team_context.strip()
+    assert cfg.default_priority in ("Високий", "Середній", "Низький")

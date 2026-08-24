@@ -12,7 +12,9 @@ from collections import defaultdict
 
 import requests
 
-from .models import CANCELLED, DONE, POSTPONED, Commitment, Delivery, Employee
+from .models import (
+    CANCELLED, DONE, HIGH, LOW, MEDIUM, POSTPONED, Commitment, Delivery, Employee,
+)
 
 API = "https://api.telegram.org"
 
@@ -22,7 +24,7 @@ MAX_TEXT = 4096
 # і page_id без дефісів: 1 + 1 + 32 = 34 байти, із запасом.
 ACTIONS = {"d": DONE, "p": POSTPONED, "x": CANCELLED}
 
-PRIORITY_MARK = {"Высокий": "🔴", "Средний": "🟡", "Низкий": "⚪"}
+PRIORITY_MARK = {HIGH: "🔴", MEDIUM: "🟡", LOW: "⚪"}
 
 
 class TelegramError(RuntimeError):

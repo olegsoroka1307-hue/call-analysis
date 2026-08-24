@@ -16,7 +16,7 @@ import anthropic
 from pydantic import BaseModel, Field
 
 from .config import Config
-from .models import Commitment
+from .models import HIGH, LOW, MEDIUM, Commitment
 
 
 class ExtractorError(RuntimeError):
@@ -27,7 +27,9 @@ class _CommitmentSchema(BaseModel):
     responsible: str
     task: str
     deadline: str
-    priority: Literal["Высокий", "Средний", "Низкий"]
+    # Значення мають збігатися з опціями поля «Пріоритет» у Notion, тому
+    # беремо їх із models.py, а не пишемо тут окремим списком.
+    priority: Literal[HIGH, MEDIUM, LOW]
     project: str
     quote: str
 
@@ -67,9 +69,9 @@ Write `task`, `project` and `meeting_title` in {language}. Keep `responsible` an
   wording ("by Friday", "next week", "in three days") against that date. If no \
   deadline was named at all, return an empty string. Never invent a date that \
   the transcript does not support.
-- priority — Высокий when other people's work is blocked by it or money or a \
-  deadline outside the company depends on it; Низкий when it was named as \
-  "sometime, when there's a gap"; Средний otherwise.
+- priority — {high} when other people's work is blocked by it or money or a \
+  deadline outside the company depends on it; {low} when it was named as \
+  "sometime, when there's a gap"; {medium} otherwise.
 - project — the area or client the task belongs to, in a couple of words. Empty \
   string when the transcript does not place it.
 - quote — the exact fragment of the transcript where the obligation was taken, \
@@ -166,6 +168,9 @@ class Extractor:
             language=self._language,
             today=today.isoformat(),
             team_context=self._team_context,
+            high=HIGH,
+            medium=MEDIUM,
+            low=LOW,
         )
 
     def extract(
@@ -210,7 +215,16 @@ class Extractor:
         unclear = list(parsed.unclear)
 
         commitments: list[Commitment] = []
-        for item in parsed.commitments:
+        extra = len(parsed.commitments) - self.cfg.max_commitments
+        if extra > 0:
+            # Мовчки відрізати не можна: власник має знати, що частина розмови
+            # лишилася нерозібраною, і подивитися запис сам.
+            unclear.append(
+                f"З наради вийшло {len(parsed.commitments)} задач — це більше за "
+                f"max_commitments ({self.cfg.max_commitments}). Записано перші "
+                f"{self.cfg.max_commitments}, решту ({extra}) перегляньте вручну."
+            )
+        for item in parsed.commitments[: self.cfg.max_commitments]:
             task = item.task.strip()
             if not task:
                 continue

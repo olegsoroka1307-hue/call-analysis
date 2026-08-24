@@ -20,7 +20,7 @@ def client(responses=None) -> tuple[TelegramClient, FakeSession]:
 def commitment(**kwargs) -> Commitment:
     base = dict(
         responsible="Саша", task="Надіслати КП", deadline="2026-08-28",
-        priority="Высокий", project="Продажі", quote="Скину до четверга.",
+        priority="Високий", project="Продажі", quote="Скину до четверга.",
         page_id=PAGE_ID,
     )
     base.update(kwargs)

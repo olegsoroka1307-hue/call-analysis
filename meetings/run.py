@@ -4,6 +4,7 @@
   python run.py analyze narada.txt --name "Планірка 24.08"
   python run.py report
   python run.py listen
+  python run.py register
 """
 from __future__ import annotations
 
@@ -116,7 +117,28 @@ def cmd_listen(cfg: Config, args) -> int:
         return 0
 
 
-def cmd_contacts(cfg: Config, args) -> int:
+def cmd_register(cfg: Config, args) -> int:
+    """Без імені — показує, хто написав боту. З іменем — заносить у реєстр.
+
+    Розсилка можлива лише за chat_id, а він зʼявляється тільки після того, як
+    людина сама надішле боту /start. Тому реєстрація — це два кроки, і перший
+    робить не програма, а сама людина.
+    """
+    if args.name:
+        if args.chat_id is None:
+            print(
+                "\n❌ Потрібен --chat-id. Подивіться його: python run.py register\n",
+                file=sys.stderr,
+            )
+            return 2
+        registry = Registry(cfg.registry_db)
+        try:
+            employee = registry.add(args.name, args.chat_id, args.username or "")
+        finally:
+            registry.close()
+        print(f"✅ Додано: {employee.name} (chat_id={employee.chat_id})")
+        return 0
+
     try:
         contacts = _telegram(cfg).collect_contacts()
     except TelegramError as exc:
@@ -132,17 +154,10 @@ def cmd_contacts(cfg: Config, args) -> int:
     for contact in contacts:
         username = f"@{contact['username']}" if contact["username"] else "—"
         print(f"  {contact['name']:<24} {username:<20} chat_id={contact['chat_id']}")
-    print("\nДодати в реєстр:  python run.py add \"Імʼя\" --chat-id 12345\n")
-    return 0
-
-
-def cmd_add(cfg: Config, args) -> int:
-    registry = Registry(cfg.registry_db)
-    try:
-        employee = registry.add(args.name, args.chat_id, args.username or "")
-    finally:
-        registry.close()
-    print(f"✅ Додано: {employee.name} (chat_id={employee.chat_id})")
+    print(
+        "\nДодати в реєстр:\n"
+        "  python run.py register \"Саша Петренко\" --chat-id 12345\n"
+    )
     return 0
 
 
@@ -153,7 +168,7 @@ def cmd_people(cfg: Config, args) -> int:
     finally:
         registry.close()
     if not people:
-        print("\nРеєстр порожній. Спершу: python run.py contacts\n")
+        print("\nРеєстр порожній. Спершу: python run.py register\n")
         return 0
     print("\nУ реєстрі:\n")
     for person in people:
@@ -199,14 +214,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--once", action="store_true", help="один прохід і вихід")
     p.set_defaults(func=cmd_listen)
 
-    p = sub.add_parser("contacts", help="хто написав боту /start")
-    p.set_defaults(func=cmd_contacts)
-
-    p = sub.add_parser("add", help="додати співробітника в реєстр")
-    p.add_argument("name")
-    p.add_argument("--chat-id", type=int, required=True)
+    p = sub.add_parser(
+        "register",
+        help="реєстр співробітників: без імені — хто написав боту, з іменем — додати",
+    )
+    p.add_argument("name", nargs="?", default="", help="імʼя співробітника")
+    p.add_argument("--chat-id", type=int, default=None)
     p.add_argument("--username", default="")
-    p.set_defaults(func=cmd_add)
+    p.set_defaults(func=cmd_register)
 
     p = sub.add_parser("people", help="показати реєстр")
     p.set_defaults(func=cmd_people)
