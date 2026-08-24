@@ -466,16 +466,16 @@
         </div>
 
         <div class="card">
-          <h3><span class="de">Verwaltung der Mietobjekte</span><span class="uk">Адміністрування орендних об'єктів</span></h3>
-          <p class="sub"><span class="de">Mieteranfragen, Rechnungen, Termine mit Handwerkern: aufnehmen, zuordnen, weiterleiten.</span><span class="uk">Звернення орендарів, рахунки, домовленості з майстрами: прийняти, віднести до об'єкта, передати далі.</span></p>
+          <h3><span class="de">Belege zuordnen</span><span class="uk">Рознесення документів</span></h3>
+          <p class="sub"><span class="de">Rechnungen, Angebote, Lieferscheine: aufmachen, lesen, dem richtigen Bauvorhaben und Ansprechpartner zuordnen.</span><span class="uk">Рахунки, кошториси, накладні: відкрити, прочитати, віднести до потрібного об'єкта та відповідальної людини.</span></p>
           <div class="fields">
             <div class="field">
-              <label for="c1"><span class="de">Vorgänge pro Woche</span><span class="uk">Звернень на тиждень</span></label>
-              <div class="inp"><input id="c1" type="number" inputmode="numeric" min="0" step="5" value="60"><span class="unit"><span class="de">Stück</span><span class="uk">шт.</span></span></div>
+              <label for="c1"><span class="de">Belege pro Woche</span><span class="uk">Документів на тиждень</span></label>
+              <div class="inp"><input id="c1" type="number" inputmode="numeric" min="0" step="10" value="100"><span class="unit"><span class="de">Stück</span><span class="uk">шт.</span></span></div>
             </div>
             <div class="field">
-              <label for="c2"><span class="de">Minuten je Vorgang</span><span class="uk">Хвилин на одне звернення</span></label>
-              <div class="inp"><input id="c2" type="number" inputmode="decimal" min="0" step="1" value="4"><span class="unit">min</span></div>
+              <label for="c2"><span class="de">Minuten je Beleg</span><span class="uk">Хвилин на один документ</span></label>
+              <div class="inp"><input id="c2" type="number" inputmode="decimal" min="0" step="1" value="3"><span class="unit">min</span></div>
             </div>
           </div>
           <div class="slider">
@@ -553,7 +553,7 @@
                 <td id="t-b-now">–</td><td id="t-b-pct">–</td><td id="t-b-h">–</td><td id="t-b-e">–</td>
               </tr>
               <tr>
-                <td><span class="de">Mietobjekte</span><span class="uk">Оренда</span></td>
+                <td><span class="de">Belege</span><span class="uk">Документи</span></td>
                 <td id="t-c-now">–</td><td id="t-c-pct">–</td><td id="t-c-h">–</td><td id="t-c-e">–</td>
               </tr>
             </tbody>
@@ -584,8 +584,8 @@
           </div>
           <div class="limit">
             <span class="k"><span class="de">Stunden, keine Stellen</span><span class="uk">Години, а не посади</span></span>
-            <p><span class="de">Gerechnet werden <b>frei werdende Stunden</b>. Ob daraus weniger Personal wird oder mehr Zeit für Baustelle, Angebote und Mieter, entscheiden Sie — der Rechner setzt das nicht voraus.</span>
-               <span class="uk">Рахуються <b>звільнені години</b>. Чи стане це скороченням людей, чи часом на будівництво, кошториси й орендарів — вирішує він. Калькулятор цього не закладає.</span></p>
+            <p><span class="de">Gerechnet werden <b>frei werdende Stunden</b>. Ob daraus weniger Personal wird oder mehr Zeit für Baustelle, Angebote und Kunden, entscheiden Sie — der Rechner setzt das nicht voraus.</span>
+               <span class="uk">Рахуються <b>звільнені години</b>. Чи стане це скороченням людей, чи часом на будівництво, кошториси й клієнтів — вирішує він. Калькулятор цього не закладає.</span></p>
           </div>
           <div class="limit mark">
             <span class="k"><span class="de">Keine Leistungskontrolle</span><span class="uk">Без контролю працівників</span></span>
@@ -701,7 +701,7 @@
 <script>
 (function () {
   var WEEKS = 4.33, DAYS = 21;
-  var DEFAULTS = { rate:35, a1:5, a2:30, ap:40, b1:150, b2:1, c1:60, c2:4, cp:35, bp:50, pkg:'2200', care:true };
+  var DEFAULTS = { rate:35, a1:5, a2:30, ap:40, b1:150, b2:1, c1:100, c2:3, cp:35, bp:50, pkg:'2200', care:true };
   var IDS = ['rate','a1','a2','ap','b1','b2','bp','c1','c2','cp'];
   var $ = function (id) { return document.getElementById(id); };
 
