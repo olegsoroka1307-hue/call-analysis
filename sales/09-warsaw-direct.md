@@ -112,28 +112,40 @@
 
 > Dzień dobry,
 >
-> trafiłem na Państwa stronę, szukając pracowni stolarskich w Warszawie.
-> Zwróciło moją uwagę, że każde zamówienie wyceniają Państwo indywidualnie —
-> na podstawie wymiarów i zdjęć przysłanych przez klienta.
+> szukałem pracowni stolarskich w Warszawie i trafiłem na Państwa stronę.
+> Zatrzymałem się na tym, jak wygląda u Państwa wycena: klient przysyła
+> wymiary i zdjęcia, a ktoś to potem czyta i liczy.
 >
-> Robię automatyzacje dla małych firm. Mogę zrobić tak, żeby wstępna wycena
-> powstawała sama: z maila wyciągane są wymiary i rodzaj pracy, zestawiane
-> z Państwa cennikiem, a Państwo tylko sprawdzają i poprawiają.
+> Robię automatyzacje dla małych firm i mogę zdjąć z Państwa właśnie tę część.
+> System czyta maila, wyciąga wymiary i rodzaj pracy, zestawia je z Państwa
+> cennikiem i przygotowuje wstępną wycenę. Państwo jej nie piszą — tylko
+> sprawdzają i poprawiają.
 >
-> Nie jest to idealne — jeśli klient przyśle zdjęcie odręcznego szkicu,
-> system sobie nie poradzi i oznaczy, że trzeba spojrzeć samemu. Ale
-> większość zapytań jest zwyczajna.
+> Nie zawsze zadziała. Jeśli klient przyśle zdjęcie odręcznego szkicu, system
+> sobie nie poradzi i odłoży taki mail na bok. Ale większość zapytań to
+> zwykłe wymiary.
 >
 > Jeśli to Państwa interesuje, proszę przesłać mi jedno typowe zapytanie,
-> które do Państwa przychodzi. Zobaczę i powiem, czy w ogóle jest co
-> automatyzować. Nic to nie kosztuje, a jeśli powiem, że nie warto — to
-> znaczy, że nie warto.
+> jakie do Państwa trafia. Zobaczę i powiem, czy jest tam co automatyzować.
+> To nic nie kosztuje, a jeśli powiem, że nie warto — to znaczy, że nie warto.
 >
 > Oleh Soroka
 > olegsoroka1307@gmail.com
 
 Друге речення нейтральне навмисно: про «24 години» прямим текстом пише лише
 Verty, і надіслати таке тому, хто цього не писав, — згоріти на першому рядку.
+
+**Що правилось у другій редакції.** Перша версія була написана пасивом
+(«z maila wyciągane są wymiary… zestawiane z cennikiem») — безособово, як
+інструкція, а не як лист. Замінено на активні дієслова: system czyta, wyciąga,
+zestawia, przygotowuje. Прибрані інверсії «Nie jest to idealne» і «Nic to nie
+kosztuje», які видають переклад. Додано рядок «a ktoś to potem czyta i liczy» —
+він єдиний показує, що автор розуміє, як у них влаштована робота.
+
+**Межа, яку треба знати.** Польська тут не рідна. Текст граматично правильний,
+але живість і регістр рідною мовою чути краще. Перед першою розсилкою варто
+дати листа прочитати полякові — це десять хвилин, які можуть врятувати всі
+дев'ять контактів.
 
 ### Один рядок під кожного
 
