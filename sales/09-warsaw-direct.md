@@ -106,6 +106,61 @@
 
 ---
 
+## Лист польською
+
+**Temat:** Wstępne wyceny z maili
+
+> Dzień dobry,
+>
+> trafiłem na Państwa stronę, szukając pracowni stolarskich w Warszawie.
+> Zwróciło moją uwagę, że każde zamówienie wyceniają Państwo indywidualnie —
+> na podstawie wymiarów i zdjęć przysłanych przez klienta.
+>
+> Robię automatyzacje dla małych firm. Mogę zrobić tak, żeby wstępna wycena
+> powstawała sama: z maila wyciągane są wymiary i rodzaj pracy, zestawiane
+> z Państwa cennikiem, a Państwo tylko sprawdzają i poprawiają.
+>
+> Nie jest to idealne — jeśli klient przyśle zdjęcie odręcznego szkicu,
+> system sobie nie poradzi i oznaczy, że trzeba spojrzeć samemu. Ale
+> większość zapytań jest zwyczajna.
+>
+> Jeśli to Państwa interesuje, proszę przesłać mi jedno typowe zapytanie,
+> które do Państwa przychodzi. Zobaczę i powiem, czy w ogóle jest co
+> automatyzować. Nic to nie kosztuje, a jeśli powiem, że nie warto — to
+> znaczy, że nie warto.
+>
+> Oleh Soroka
+> olegsoroka1307@gmail.com
+
+Друге речення нейтральне навмисно: про «24 години» прямим текстом пише лише
+Verty, і надіслати таке тому, хто цього не писав, — згоріти на першому рядку.
+
+### Один рядок під кожного
+
+Друге речення замінюємо на своє. Один рядок персоналізації дає більше, ніж
+уся решта тексту: видно, що лист написали саме їм, а не розіслали ста
+адресатам.
+
+| Кому | Замість «Zwróciło moją uwagę…» |
+|---|---|
+| **Verty Meble** | Piszą Państwo, że wycena jest gotowa w 24 godziny od przysłania wymiarów, zdjęć lub projektu — właśnie o tę część chodzi. |
+| **Kuchnia od Stolarza** | Bezpłatną wycenę zamawia się u Państwa telefonicznie albo przez formularz — czyli ktoś to potem czyta i liczy. |
+| **Warszawa na Wymiar** | Mają Państwo własną pracownię na Zabranieckiej, a każde zamówienie wyceniane jest osobno. |
+| **Pracownia Kogut** | Robią Państwo bezpłatną wycenę na podstawie przysłanego projektu. |
+| **Drewno Squad** | Piszą Państwo, że każdy projekt wyceniają Państwo indywidualnie — pod wymiary, gatunek drewna i wykończenie. |
+| **Meble Stolarczyk** | Dwanaście lat na rynku i prowadzenie klienta od projektu, przez wycenę, po montaż — to sporo powtarzalnej pracy przy każdym zamówieniu. |
+| **Meble Kuchenne Warszawa** | Pracownia jest w Radomsku, a zamówienia z całej Warszawy — czyli sporo ustaleń idzie mailem i telefonem. |
+| **Rozbicki / Wo Meble** | Robią Państwo meble na wymiar, więc każde zapytanie trzeba wycenić osobno. |
+
+**Звір цей рядок на сайті перед відправкою.** Сайти я відкрити не можу, усе
+з пошукової видачі. Якщо напишеш про сторінку, якої там немає, лист згорить
+на першому реченні.
+
+### Реєстр звертання
+
+Скрізь **Państwo**, від початку до кінця. Не змішувати з `Wy` чи `Ty` — навіть
+одне таке слово посеред листа видає шаблон, перекладений абияк.
+
 ### Правила, за якими цей лист написаний
 
 Вони важливіші за сам текст, бо решту листів доведеться писати самому.
