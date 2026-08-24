@@ -117,6 +117,58 @@
 > Олег Сорока
 > olegsoroka1307@gmail.com
 
+## Лист польською — для решти семи
+
+**Temat:** Wstępne wyceny z maili
+
+> Dzień dobry,
+>
+> trafiłem na Państwa stronę, szukając pracowni stolarskich w Warszawie.
+> Zwróciło moją uwagę, że wycenę robią Państwo w 24 godziny na podstawie
+> wymiarów i zdjęć przysłanych przez klienta.
+>
+> Robię automatyzacje dla małych firm. Mogę zrobić tak, żeby wstępna wycena
+> powstawała sama: z maila wyciągane są wymiary i rodzaj pracy, zestawiane
+> z Państwa cennikiem, a Państwo tylko sprawdzają i poprawiają.
+>
+> Nie jest to idealne — jeśli klient przyśle zdjęcie odręcznego szkicu,
+> system sobie nie poradzi i oznaczy, że trzeba spojrzeć samemu. Ale
+> większość zapytań jest zwyczajna.
+>
+> Jeśli to Państwa interesuje, proszę przesłać mi jedno typowe zapytanie,
+> które do Państwa przychodzi. Zobaczę i powiem, czy w ogóle jest co
+> automatyzować. Nic to nie kosztuje, a jeśli powiem, że nie warto — to
+> znaczy, że nie warto.
+>
+> Oleh Soroka
+> olegsoroka1307@gmail.com
+
+### Один рядок під кожного
+
+Друге речення листа замінюємо на своє для кожної компанії. Один рядок
+персоналізації змінює відповідальність більше, ніж уся решта тексту: видно,
+що лист написали саме їм, а не розіслали.
+
+| Компанія | Замість «Zwróciło moją uwagę…» |
+|---|---|
+| Verty Meble | Mają Państwo osobną stronę o wycenie online w 24 godziny — właśnie o tę część chodzi. |
+| Meblum | Piszą Państwo, że wycena jest bezpłatna i gotowa w 24 godziny. |
+| Mario Meble | Zwróciło moją uwagę, że wycenę przygotowują Państwo w 24 godziny na podstawie przysłanych wymiarów. |
+| Komodo | Dwadzieścia lat na rynku to sporo zapytań — a wycena i pomiar nadal są u Państwa bezpłatne i robione ręcznie. |
+| Warszawa na Wymiar | Mają Państwo własną pracownię na Zabranieckiej, a wyceny robione są indywidualnie pod każde zamówienie. |
+| Kuchnia od Stolarza | Bezpłatną wycenę zamawia się u Państwa telefonicznie albo przez formularz — czyli ktoś to potem czyta i liczy. |
+| Pracownia Kogut | Robią Państwo bezpłatną wycenę na podstawie przysłanego projektu. |
+
+**Перед відправкою звір цей рядок на самому сайті.** Я їх не відкривав — усе
+з пошукової видачі. Якщо напишеш «мають Państwo сторінку про виценy», а її
+там немає, лист згорить одразу.
+
+### Реєстр звертання
+
+Скрізь **Państwo**, від початку до кінця. Не змішувати з `Wy` чи `Ty` — навіть
+одне таке слово в середині листа видає шаблон, перекладений абияк. Це вже
+ловилось у наших матеріалах раніше.
+
 ### Правила, за якими цей лист написаний
 
 Вони важливіші за сам текст, бо решту листів доведеться писати самому.
