@@ -1,0 +1,860 @@
+<title>Entlastungsrechner</title>
+<script>
+  (function () {
+    var l = 'de';
+    try { var s = localStorage.getItem('er_lang'); if (s === 'de' || s === 'uk') l = s; } catch (e) {}
+    document.documentElement.setAttribute('data-lang', l);
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#EEEFEA;
+    --surface:#FFFFFF;
+    --surface-2:#F6F7F3;
+    --ink:#15191B;
+    --ink-2:#4B5559;
+    --ink-3:#78848A;
+    --rule:#D6D8D1;
+    --rule-strong:#B9BDB4;
+    --signal:#B87503;
+    --signal-bg:#FBEFD5;
+    --gain:#256B4F;
+    --gain-bg:#DEEBE4;
+    --cost:#6E7A80;
+    --shadow:0 1px 2px rgba(21,25,27,.05), 0 8px 24px -18px rgba(21,25,27,.35);
+    --panel-bg:#15191B;
+    --panel-fg:#EEEFEA;
+    --panel-accent:#E8A93A;
+    --panel-line:rgba(255,255,255,.14);
+    --panel-border:transparent;
+    --r:4px;
+    color-scheme:light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#131719;
+      --surface:#1C2124;
+      --surface-2:#232A2D;
+      --ink:#E9EBE6;
+      --ink-2:#AEB7BA;
+      --ink-3:#7E888D;
+      --rule:#2E3538;
+      --rule-strong:#414A4E;
+      --signal:#EDB03C;
+      --signal-bg:#3A2E12;
+      --gain:#5EB08A;
+      --gain-bg:#173327;
+      --cost:#8A9599;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px rgba(0,0,0,.9);
+      --panel-bg:#232A2D;
+      --panel-fg:#E9EBE6;
+      --panel-accent:#EDB03C;
+      --panel-line:rgba(255,255,255,.11);
+      --panel-border:#39423F;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#131719;
+    --surface:#1C2124;
+    --surface-2:#232A2D;
+    --ink:#E9EBE6;
+    --ink-2:#AEB7BA;
+    --ink-3:#7E888D;
+    --rule:#2E3538;
+    --rule-strong:#414A4E;
+    --signal:#EDB03C;
+    --signal-bg:#3A2E12;
+    --gain:#5EB08A;
+    --gain-bg:#173327;
+    --cost:#8A9599;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -20px rgba(0,0,0,.9);
+    --panel-bg:#232A2D;
+    --panel-fg:#E9EBE6;
+    --panel-accent:#EDB03C;
+    --panel-line:rgba(255,255,255,.11);
+    --panel-border:#39423F;
+    color-scheme:dark;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  :root:not([data-lang="uk"]) .uk{ display:none; }
+  :root[data-lang="uk"] .de{ display:none; }
+
+  .wrap{ max-width:1140px; margin:0 auto; padding:0 1.25rem 8rem; }
+
+  /* ---------- header ---------- */
+  header.top{
+    border-bottom:1px solid var(--rule);
+    background:var(--surface);
+  }
+  .top-in{
+    max-width:1140px; margin:0 auto; padding:.85rem 1.25rem;
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  }
+  @media (max-width:560px){ .top-in{ padding:.7rem 1.25rem; gap:.6rem; } }
+  .mark{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+    min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .langs{ display:flex; flex:none; border:1px solid var(--rule-strong); border-radius:var(--r); overflow:hidden; }
+  .langs button{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+    padding:.4rem .7rem; border:0; background:transparent; color:var(--ink-2); cursor:pointer;
+  }
+  .langs button + button{ border-left:1px solid var(--rule-strong); }
+  .langs button[aria-pressed="true"]{ background:var(--ink); color:var(--surface); }
+
+  /* ---------- hero ---------- */
+  .hero{ padding:3.2rem 0 2.2rem; border-bottom:1px solid var(--rule); }
+  .eyebrow{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+    color:var(--signal); margin:0 0 1rem;
+  }
+  h1{
+    font-family:"Archivo", system-ui, sans-serif; font-weight:800;
+    font-size:clamp(2.1rem, 5.2vw, 3.6rem); line-height:1.03; letter-spacing:-.028em;
+    margin:0 0 1.1rem; max-width:19ch; text-wrap:balance;
+  }
+  .lede{ font-size:1.08rem; color:var(--ink-2); max-width:60ch; margin:0; }
+  .lede strong{ color:var(--ink); font-weight:600; }
+
+  /* ---------- layout ---------- */
+  .cols{ display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:2.5rem; align-items:start; padding-top:2.4rem; }
+  .cols > *{ min-width:0; }
+  @media (max-width:940px){ .cols{ grid-template-columns:minmax(0,1fr); gap:1.75rem; } }
+
+  section + section{ margin-top:2.2rem; }
+  h2{
+    font-family:"Archivo", system-ui, sans-serif; font-weight:600;
+    font-size:1.02rem; letter-spacing:.01em; margin:0 0 1rem;
+    display:flex; align-items:baseline; gap:.7rem;
+  }
+  h2 .num{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.72rem;
+    color:var(--ink-3); letter-spacing:.1em;
+  }
+
+  .card{
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r);
+    padding:1.15rem 1.25rem 1.25rem; box-shadow:var(--shadow);
+  }
+  .card + .card{ margin-top:.85rem; }
+  .card h3{
+    font-family:"Archivo", system-ui, sans-serif; font-weight:600; font-size:1.02rem;
+    margin:0 0 .2rem;
+  }
+  .card .sub{ font-size:.87rem; color:var(--ink-3); margin:0 0 1rem; }
+
+  .fields{ display:grid; grid-template-columns:1fr 1fr; gap:.85rem; }
+  @media (max-width:520px){ .fields{ grid-template-columns:1fr; } }
+  .field label{
+    display:block; font-size:.8rem; color:var(--ink-2); font-weight:500; margin-bottom:.3rem;
+  }
+  .inp{
+    display:flex; align-items:stretch; border:1px solid var(--rule-strong); border-radius:var(--r);
+    background:var(--surface-2); overflow:hidden;
+  }
+  .inp:focus-within{ border-color:var(--signal); box-shadow:0 0 0 3px var(--signal-bg); }
+  .inp input{
+    flex:1; min-width:0; border:0; background:transparent; color:var(--ink);
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:1rem; font-variant-numeric:tabular-nums;
+    padding:.55rem .65rem; outline:none; -moz-appearance:textfield;
+  }
+  .inp input::-webkit-outer-spin-button,.inp input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  .inp .unit{
+    display:flex; align-items:center; padding:0 .65rem; font-size:.78rem; color:var(--ink-3);
+    background:transparent; border-left:1px solid var(--rule); white-space:nowrap;
+  }
+
+  .slider{ margin-top:1.05rem; padding-top:.95rem; border-top:1px dashed var(--rule); }
+  .slider .row{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin-bottom:.45rem; }
+  .slider .row label{ font-size:.8rem; color:var(--ink-2); font-weight:500; }
+  .slider .val{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:1.05rem; font-weight:500;
+    color:var(--signal); font-variant-numeric:tabular-nums;
+  }
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:100%; height:22px; background:transparent; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{ height:3px; background:var(--rule-strong); border-radius:2px; }
+  input[type=range]::-moz-range-track{ height:3px; background:var(--rule-strong); border-radius:2px; }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:18px; height:18px; margin-top:-7.5px; border-radius:50%;
+    background:var(--signal); border:3px solid var(--surface); box-shadow:0 0 0 1px var(--signal);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:12px; height:12px; border-radius:50%; background:var(--signal);
+    border:3px solid var(--surface); box-shadow:0 0 0 1px var(--signal);
+  }
+  input[type=range]:focus-visible{ outline:2px solid var(--signal); outline-offset:4px; }
+  .hint{ font-size:.78rem; color:var(--ink-3); margin:.5rem 0 0; }
+
+  /* rate card */
+  .rate{ background:var(--surface); border:1px solid var(--rule); border-left:3px solid var(--signal); border-radius:var(--r); padding:1.15rem 1.25rem; box-shadow:var(--shadow); }
+  .rate .fields{ grid-template-columns:minmax(0,200px); }
+
+  /* packages */
+  .pkgs{ display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; }
+  @media (max-width:760px){ .pkgs{ grid-template-columns:1fr; } }
+  .pkg{
+    display:block; position:relative; cursor:pointer;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r);
+    padding:.9rem 1rem 1rem;
+  }
+  .pkg input{ position:absolute; opacity:0; pointer-events:none; }
+  .pkg:has(input:checked), .pkg.on{ border-color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+  .pkg:has(input:focus-visible){ outline:2px solid var(--signal); outline-offset:2px; }
+  .pkg .nm{ font-family:"Archivo",system-ui,sans-serif; font-weight:600; font-size:.95rem; }
+  .pkg .pr{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:1.15rem; font-variant-numeric:tabular-nums;
+    margin:.15rem 0 .4rem;
+  }
+  .pkg .ds{ font-size:.8rem; color:var(--ink-3); line-height:1.4; }
+
+  .care{
+    margin-top:.6rem; display:flex; align-items:flex-start; gap:.7rem;
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r); padding:.85rem 1rem;
+  }
+  .care input{ margin-top:.25rem; accent-color:var(--signal); width:16px; height:16px; }
+  .care .t{ font-size:.87rem; }
+  .care .t b{ font-weight:600; }
+
+  /* ---------- results ---------- */
+  .panel{ position:sticky; top:1.25rem; }
+  @media (max-width:940px){ .panel{ position:static; } }
+  .result{
+    background:var(--panel-bg); color:var(--panel-fg); border:1px solid var(--panel-border);
+    border-radius:var(--r); padding:1.4rem 1.4rem 1.2rem; box-shadow:var(--shadow);
+  }
+  .result .cap{
+    font-family:"IBM Plex Mono", ui-monospace, monospace; font-size:.68rem; letter-spacing:.16em;
+    text-transform:uppercase; opacity:.6; margin:0 0 .8rem;
+  }
+  .big{
+    font-family:"Archivo",system-ui,sans-serif; font-weight:800; letter-spacing:-.03em;
+    font-size:2.55rem; line-height:1; font-variant-numeric:tabular-nums;
+  }
+  .big.gain{ color:var(--panel-accent); }
+  .big .u{ font-size:1rem; font-weight:600; letter-spacing:0; opacity:.75; margin-left:.25rem; }
+  .result .lbl{ font-size:.83rem; opacity:.7; margin:.2rem 0 0; }
+  .result hr{ border:0; border-top:1px solid var(--panel-line); margin:1.15rem 0; }
+  .rrow{ display:flex; align-items:baseline; justify-content:space-between; gap:1rem; padding:.3rem 0; font-size:.9rem; }
+  .rrow .k{ opacity:.7; }
+  .rrow .v{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-variant-numeric:tabular-nums; font-weight:500; }
+  .rrow.hl .v{ color:var(--panel-accent); font-size:1.05rem; }
+  .warn{
+    margin-top:.9rem; font-size:.83rem; background:rgba(255,255,255,.08); border-radius:var(--r);
+    padding:.6rem .7rem; line-height:1.4;
+  }
+
+  .bars{ margin-top:.9rem; }
+  .bar-l{ display:flex; justify-content:space-between; font-size:.78rem; opacity:.7; margin-bottom:.25rem; }
+  .bar-l .v{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  .bar{ height:8px; border-radius:2px; background:rgba(255,255,255,.12); overflow:hidden; margin-bottom:.75rem; }
+  .bar span{ display:block; height:100%; border-radius:2px; transition:width .28s ease; }
+  .bar.g span{ background:var(--panel-accent); }
+  .bar.c span{ background:rgba(255,255,255,.42); }
+
+  .reset{
+    margin-top:1rem; width:100%; background:transparent; color:var(--ink-2);
+    border:1px solid var(--rule-strong); border-radius:var(--r); padding:.55rem;
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.72rem; letter-spacing:.1em;
+    text-transform:uppercase; cursor:pointer;
+  }
+  .reset:hover{ border-color:var(--ink-3); color:var(--ink); }
+
+  /* ---------- table ---------- */
+  .tablewrap{ max-width:100%; overflow-x:auto; background:var(--surface); border:1px solid var(--rule); border-radius:var(--r); box-shadow:var(--shadow); }
+  table{ border-collapse:collapse; width:100%; min-width:560px; font-size:.88rem; }
+  th,td{ padding:.65rem .9rem; text-align:right; border-bottom:1px solid var(--rule); }
+  th:first-child,td:first-child{ text-align:left; }
+  thead th{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-weight:400; font-size:.7rem;
+    letter-spacing:.09em; text-transform:uppercase; color:var(--ink-3); background:var(--surface-2);
+  }
+  tbody td{ font-variant-numeric:tabular-nums; }
+  tbody td:not(:first-child){ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+  tfoot td{ font-weight:600; font-variant-numeric:tabular-nums; border-bottom:0; background:var(--surface-2); }
+  tfoot td:not(:first-child){ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+  tbody tr:last-child td{ border-bottom:1px solid var(--rule); }
+
+  /* ---------- limits ---------- */
+  .limits{ display:grid; grid-template-columns:1fr 1fr; gap:.85rem; }
+  @media (max-width:760px){ .limits{ grid-template-columns:1fr; } }
+  .limit{
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r); padding:1rem 1.1rem;
+  }
+  .limit .k{
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.68rem; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:.4rem;
+  }
+  .limit p{ margin:0; font-size:.9rem; color:var(--ink-2); }
+  .limit p b{ color:var(--ink); font-weight:600; }
+  .limit.mark{ border-left:3px solid var(--gain); }
+
+  /* ---------- next ---------- */
+  .next{
+    background:var(--surface); border:1px solid var(--rule); border-radius:var(--r);
+    padding:1.6rem 1.6rem 1.4rem; box-shadow:var(--shadow);
+  }
+  .next h2{ font-size:1.5rem; font-weight:800; display:block; margin-bottom:.6rem; letter-spacing:-.02em; }
+  .steps{ list-style:none; margin:1.2rem 0 0; padding:0; counter-reset:s; }
+  .steps li{
+    counter-increment:s; position:relative; padding-left:2.3rem; margin-bottom:.85rem; font-size:.94rem; color:var(--ink-2);
+  }
+  .steps li::before{
+    content:counter(s); position:absolute; left:0; top:.05rem;
+    width:1.55rem; height:1.55rem; border-radius:50%; border:1px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:center;
+    font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:.74rem; color:var(--ink-3);
+  }
+  .steps li b{ color:var(--ink); font-weight:600; }
+  .contacts{ display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1.4rem; }
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem; text-decoration:none;
+    padding:.6rem 1rem; border-radius:var(--r); font-size:.9rem; font-weight:500;
+    border:1px solid var(--rule-strong); color:var(--ink); background:var(--surface-2);
+  }
+  .btn.primary{ background:var(--ink); color:var(--ground); border-color:var(--ink); }
+  .btn:hover{ border-color:var(--signal); }
+
+  footer.end{
+    margin-top:2.5rem; padding-top:1.2rem; border-top:1px solid var(--rule);
+    font-size:.8rem; color:var(--ink-3);
+  }
+
+  /* mobile sticky summary */
+  .mobar{
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:20;
+    background:var(--panel-bg); color:var(--panel-fg); border-top:1px solid var(--panel-border);
+    padding:.6rem 1.25rem;
+    box-shadow:0 -6px 20px -12px rgba(0,0,0,.6);
+  }
+  .mobar .in{ max-width:1140px; margin:0 auto; display:flex; align-items:baseline; justify-content:space-between; gap:1rem; }
+  .mobar .n{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-weight:500; font-variant-numeric:tabular-nums; }
+  .mobar .n.g{ color:var(--panel-accent); font-size:1.15rem; }
+  .mobar .t{ font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; opacity:.6; font-family:"IBM Plex Mono",ui-monospace,monospace; }
+  @media (max-width:940px){ .mobar{ display:block; } .wrap{ padding-bottom:5.5rem; } }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; animation:none !important; }
+  }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <span class="mark">Oleh Soroka · Prozessautomatisierung</span>
+    <div class="langs" role="group" aria-label="Sprache / Мова">
+      <button type="button" id="l-de" aria-pressed="true">Deutsch</button>
+      <button type="button" id="l-uk" aria-pressed="false">Українська</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="eyebrow">
+      <span class="de">Rechnen Sie mit Ihren eigenen Zahlen</span>
+      <span class="uk">Рахунок ведеться тільки вашими цифрами</span>
+    </p>
+    <h1>
+      <span class="de">Wo im Büro die Stunden verschwinden</span>
+      <span class="uk">Де в офісі зникають години</span>
+    </h1>
+    <p class="lede">
+      <span class="de">Diese Seite enthält <strong>keine einzige Zahl über Ihr Unternehmen</strong>. Alles, was Sie unten sehen, tragen Sie selbst ein — und sehen sofort, wie viele Bürostunden pro Monat dahinterstecken, was diese Stunden kosten und ab wann sich eine Einführung trägt.</span>
+      <span class="uk">На цій сторінці <strong>немає жодної цифри про компанію</strong>. Усе, що нижче, власник вписує сам — і одразу бачить, скільки офісних годин на місяць за цим стоїть, скільки ці години коштують і з якого місяця впровадження окупається.</span>
+    </p>
+  </div>
+
+  <div class="cols">
+
+    <!-- ================= INPUTS ================= -->
+    <div>
+
+      <section>
+        <h2><span class="num">01</span>
+          <span class="de">Was eine Bürostunde bei Ihnen kostet</span>
+          <span class="uk">Скільки коштує година офісної роботи</span>
+        </h2>
+        <div class="rate">
+          <div class="fields">
+            <div class="field">
+              <label for="rate">
+                <span class="de">Vollkosten je Stunde</span>
+                <span class="uk">Повна вартість години</span>
+              </label>
+              <div class="inp">
+                <input id="rate" type="number" inputmode="decimal" min="0" step="1" value="35">
+                <span class="unit">€ / h</span>
+              </div>
+            </div>
+          </div>
+          <p class="hint">
+            <span class="de">Diesen Wert kennen nur Sie. Falls er gerade nicht zur Hand ist: Monatsbrutto ÷ ca. 160 Arbeitsstunden, dann Ihren Arbeitgeberanteil aufschlagen. Der voreingestellte Wert ist ein Platzhalter — bitte überschreiben.</span>
+            <span class="uk">Це значення знає тільки він. Якщо під рукою немає: місячний брутто ÷ ~160 робочих годин, плюс внески роботодавця. Те, що стоїть зараз, — просто заглушка, її треба перебити своєю цифрою.</span>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2><span class="num">02</span>
+          <span class="de">Drei Bereiche, in denen die Zeit liegt</span>
+          <span class="uk">Три ділянки, де лежить час</span>
+        </h2>
+
+        <div class="card">
+          <h3><span class="de">Besprechungen und Nacharbeit</span><span class="uk">Наради та робота після них</span></h3>
+          <p class="sub"><span class="de">Protokoll schreiben, Aufgaben verteilen, später nachfassen, wer was zugesagt hat.</span><span class="uk">Написати протокол, роздати задачі, потім нагадувати, хто що обіцяв.</span></p>
+          <div class="fields">
+            <div class="field">
+              <label for="a1"><span class="de">Besprechungen pro Woche</span><span class="uk">Нарад на тиждень</span></label>
+              <div class="inp"><input id="a1" type="number" inputmode="numeric" min="0" step="1" value="5"><span class="unit"><span class="de">Stück</span><span class="uk">шт.</span></span></div>
+            </div>
+            <div class="field">
+              <label for="a2"><span class="de">Minuten Nacharbeit je Besprechung</span><span class="uk">Хвилин після кожної наради</span></label>
+              <div class="inp"><input id="a2" type="number" inputmode="numeric" min="0" step="5" value="30"><span class="unit">min</span></div>
+            </div>
+          </div>
+          <div class="slider">
+            <div class="row">
+              <label for="ap"><span class="de">Anteil, der wegfallen könnte</span><span class="uk">Частка, яка може відпасти</span></label>
+              <span class="val" id="apv">40 %</span>
+            </div>
+            <input id="ap" type="range" min="0" max="80" step="5" value="40">
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><span class="de">Posteingang sichten</span><span class="uk">Розбір пошти</span></h3>
+          <p class="sub"><span class="de">Nur das Sortieren: wichtig oder nicht, wer bearbeitet das, was hat eine Frist. Nicht das Beantworten.</span><span class="uk">Тільки сортування: важливо чи ні, хто цим займеться, де є термін. Не написання відповідей.</span></p>
+          <div class="fields">
+            <div class="field">
+              <label for="b1"><span class="de">E-Mails pro Tag, alle Postfächer</span><span class="uk">Листів на день, усі скриньки</span></label>
+              <div class="inp"><input id="b1" type="number" inputmode="numeric" min="0" step="10" value="150"><span class="unit"><span class="de">Stück</span><span class="uk">шт.</span></span></div>
+            </div>
+            <div class="field">
+              <label for="b2"><span class="de">Minuten je E-Mail fürs Sichten</span><span class="uk">Хвилин на розбір одного листа</span></label>
+              <div class="inp"><input id="b2" type="number" inputmode="decimal" min="0" step="0.5" value="1"><span class="unit">min</span></div>
+            </div>
+          </div>
+          <div class="slider">
+            <div class="row">
+              <label for="bp"><span class="de">Anteil, der wegfallen könnte</span><span class="uk">Частка, яка може відпасти</span></label>
+              <span class="val" id="bpv">50 %</span>
+            </div>
+            <input id="bp" type="range" min="0" max="80" step="5" value="50">
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><span class="de">Verwaltung der Mietobjekte</span><span class="uk">Адміністрування орендних об'єктів</span></h3>
+          <p class="sub"><span class="de">Mieteranfragen, Rechnungen, Termine mit Handwerkern: aufnehmen, zuordnen, weiterleiten.</span><span class="uk">Звернення орендарів, рахунки, домовленості з майстрами: прийняти, віднести до об'єкта, передати далі.</span></p>
+          <div class="fields">
+            <div class="field">
+              <label for="c1"><span class="de">Vorgänge pro Woche</span><span class="uk">Звернень на тиждень</span></label>
+              <div class="inp"><input id="c1" type="number" inputmode="numeric" min="0" step="5" value="60"><span class="unit"><span class="de">Stück</span><span class="uk">шт.</span></span></div>
+            </div>
+            <div class="field">
+              <label for="c2"><span class="de">Minuten je Vorgang</span><span class="uk">Хвилин на одне звернення</span></label>
+              <div class="inp"><input id="c2" type="number" inputmode="decimal" min="0" step="1" value="4"><span class="unit">min</span></div>
+            </div>
+          </div>
+          <div class="slider">
+            <div class="row">
+              <label for="cp"><span class="de">Anteil, der wegfallen könnte</span><span class="uk">Частка, яка може відпасти</span></label>
+              <span class="val" id="cpv">35 %</span>
+            </div>
+            <input id="cp" type="range" min="0" max="80" step="5" value="35">
+          </div>
+        </div>
+
+        <p class="hint" style="margin-top:.9rem">
+          <span class="de">Diese drei Prozentsätze sind <b>Ihre Annahme, keine Zusage von mir</b>. Stellen Sie sie so ein, wie Sie es für Ihr Haus für realistisch halten — oder auf null, wenn Sie einem Bereich nicht trauen.</span>
+          <span class="uk">Ці три відсотки — <b>його припущення, а не наша обіцянка</b>. Хай виставить так, як вважає реальним для свого підприємства, або на нуль там, де не вірить.</span>
+        </p>
+      </section>
+
+      <section>
+        <h2><span class="num">03</span>
+          <span class="de">Was die Einführung kostet</span>
+          <span class="uk">Скільки коштує впровадження</span>
+        </h2>
+        <div class="pkgs">
+          <label class="pkg">
+            <input type="radio" name="pkg" value="900">
+            <span class="nm">Start</span>
+            <div class="pr">900 €</div>
+            <div class="ds"><span class="de">Ein Bereich, Standardeinrichtung, Test an Ihren echten Daten.</span><span class="uk">Одна ділянка, стандартне налаштування, тест на реальних даних.</span></div>
+          </label>
+          <label class="pkg">
+            <input type="radio" name="pkg" value="2200" checked>
+            <span class="nm">Standard</span>
+            <div class="pr">2 200 €</div>
+            <div class="ds"><span class="de">Ein Bereich vollständig auf Ihre Abläufe angepasst, Anbindung an Postfach oder Aufgabensystem, Einweisung.</span><span class="uk">Одна ділянка повністю під їхні процеси, підключення до пошти або до системи задач, навчання.</span></div>
+          </label>
+          <label class="pkg">
+            <input type="radio" name="pkg" value="4500">
+            <span class="nm">Pro</span>
+            <div class="pr">4 500 €</div>
+            <div class="ds"><span class="de">Mehrere Bereiche, Anbindung an bestehende Systeme, Abnahme in Schritten.</span><span class="uk">Кілька ділянок, підключення до наявних систем, приймання етапами.</span></div>
+          </label>
+        </div>
+        <label class="care">
+          <input id="care" type="checkbox" checked>
+          <span class="t">
+            <span class="de"><b>Laufende Betreuung — 450 € im Monat.</b> Änderungen an Regeln und Feldern, neue Mitarbeiter aufnehmen, Störungen beheben. Ohne Betreuung läuft das System weiter, Änderungen machen Sie dann selbst.</span>
+            <span class="uk"><b>Супровід — 450 € на місяць.</b> Зміни правил і полів, додавання нових працівників, усунення збоїв. Без супроводу система працює далі, але зміни вони роблять самі.</span>
+          </span>
+        </label>
+      </section>
+
+      <section>
+        <h2><span class="num">04</span>
+          <span class="de">Der Rechenweg, Zeile für Zeile</span>
+          <span class="uk">Розрахунок, рядок за рядком</span>
+        </h2>
+        <div class="tablewrap">
+          <table>
+            <thead>
+              <tr>
+                <th><span class="de">Bereich</span><span class="uk">Ділянка</span></th>
+                <th><span class="de">Stunden / Monat heute</span><span class="uk">Годин / місяць зараз</span></th>
+                <th><span class="de">Anteil</span><span class="uk">Частка</span></th>
+                <th><span class="de">frei werdende Stunden</span><span class="uk">Звільнені години</span></th>
+                <th><span class="de">€ / Monat</span><span class="uk">€ / місяць</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="de">Besprechungen</span><span class="uk">Наради</span></td>
+                <td id="t-a-now">–</td><td id="t-a-pct">–</td><td id="t-a-h">–</td><td id="t-a-e">–</td>
+              </tr>
+              <tr>
+                <td><span class="de">Posteingang</span><span class="uk">Пошта</span></td>
+                <td id="t-b-now">–</td><td id="t-b-pct">–</td><td id="t-b-h">–</td><td id="t-b-e">–</td>
+              </tr>
+              <tr>
+                <td><span class="de">Mietobjekte</span><span class="uk">Оренда</span></td>
+                <td id="t-c-now">–</td><td id="t-c-pct">–</td><td id="t-c-h">–</td><td id="t-c-e">–</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td><span class="de">Zusammen</span><span class="uk">Разом</span></td>
+                <td id="t-s-now">–</td><td></td><td id="t-s-h">–</td><td id="t-s-e">–</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <p class="hint">
+          <span class="de">Umrechnung: 4,33 Wochen und 21 Arbeitstage je Monat. Sonst steckt in der Rechnung nichts, was Sie nicht selbst eingetragen haben.</span>
+          <span class="uk">Перерахунок: 4,33 тижня і 21 робочий день на місяць. Більше в розрахунку немає нічого, чого власник не вписав сам.</span>
+        </p>
+      </section>
+
+      <section>
+        <h2><span class="num">05</span>
+          <span class="de">Was dieser Rechner ausdrücklich nicht behauptet</span>
+          <span class="uk">Чого цей калькулятор навмисно не стверджує</span>
+        </h2>
+        <div class="limits">
+          <div class="limit">
+            <span class="k"><span class="de">Keine Zusage</span><span class="uk">Не обіцянка</span></span>
+            <p><span class="de">Die Prozentsätze sind <b>Ihre Schätzung</b>. Belastbar werden sie erst, wenn ein Bereich zwei Wochen lang gemessen wurde. Vorher ist jede Zahl hier eine Rechenübung, keine Prognose.</span>
+               <span class="uk">Відсотки — <b>його оцінка</b>. Достовірними вони стануть лише після двох тижнів реального заміру на одній ділянці. До того це арифметика, а не прогноз.</span></p>
+          </div>
+          <div class="limit">
+            <span class="k"><span class="de">Stunden, keine Stellen</span><span class="uk">Години, а не посади</span></span>
+            <p><span class="de">Gerechnet werden <b>frei werdende Stunden</b>. Ob daraus weniger Personal wird oder mehr Zeit für Baustelle, Angebote und Mieter, entscheiden Sie — der Rechner setzt das nicht voraus.</span>
+               <span class="uk">Рахуються <b>звільнені години</b>. Чи стане це скороченням людей, чи часом на будівництво, кошториси й орендарів — вирішує він. Калькулятор цього не закладає.</span></p>
+          </div>
+          <div class="limit mark">
+            <span class="k"><span class="de">Keine Leistungskontrolle</span><span class="uk">Без контролю працівників</span></span>
+            <p><span class="de">Das System <b>ordnet Vorgänge zu und erinnert an offene Punkte</b>. Es bewertet keine Personen, misst keine Arbeitsgeschwindigkeit und legt keine Personenprofile an. Alles, was der Betriebsrat sehen möchte, sehe ich mit ihm vor der Einführung durch.</span>
+               <span class="uk">Система <b>розподіляє звернення й нагадує про відкриті пункти</b>. Вона не оцінює людей, не міряє швидкість роботи й не будує профілі працівників. Усе, що захоче побачити Betriebsrat, ми проходимо з ним до впровадження.</span></p>
+          </div>
+          <div class="limit mark">
+            <span class="k"><span class="de">Nur lesen</span><span class="uk">Тільки читання</span></span>
+            <p><span class="de">Im Posteingang wird <b>nichts gelöscht und nichts in Ihrem Namen beantwortet</b>. Gelesen und sortiert — mehr nicht. Zugänge laufen über eingeschränkte Tokens mit minimalen Rechten, nicht über Ihre Passwörter.</span>
+               <span class="uk">У пошті <b>нічого не видаляється і нічого не відповідається від їхнього імені</b>. Читання й сортування — і все. Доступи — через обмежені токени з мінімальними правами, не через паролі.</span></p>
+          </div>
+          <div class="limit">
+            <span class="k"><span class="de">Ihre Daten bleiben hier</span><span class="uk">Дані нікуди не йдуть</span></span>
+            <p><span class="de">Diese Seite sendet nichts. Ihre Eingaben bleiben <b>in Ihrem Browser</b> — ich sehe sie nicht und bekomme sie nicht.</span>
+               <span class="uk">Сторінка нічого не надсилає. Введені цифри лишаються <b>в його браузері</b> — ми їх не бачимо й не отримуємо.</span></p>
+          </div>
+          <div class="limit">
+            <span class="k"><span class="de">Grenzen der Rechnung</span><span class="uk">Межі розрахунку</span></span>
+            <p><span class="de">Nicht enthalten: die Zeit, die <b>Ihre Leute</b> in Einführung und Einweisung stecken, und die ersten Wochen, in denen parallel geprüft wird. Rechnen Sie das gegen — die Zahl bleibt trotzdem stehen oder sie fällt, und dann ist auch das eine ehrliche Antwort.</span>
+               <span class="uk">Не враховано: час <b>їхніх людей</b> на впровадження й навчання та перші тижні, коли все перевіряють паралельно. Це треба відняти — і якщо після цього цифра не тримається, це теж чесна відповідь.</span></p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="next">
+          <h2><span class="de">Der nächste Schritt kostet nichts</span><span class="uk">Наступний крок нічого не коштує</span></h2>
+          <p class="lede" style="font-size:.98rem">
+            <span class="de">Wenn die Zahl oben interessant aussieht, ist der vernünftige Weg nicht ein Vertrag, sondern eine Messung.</span>
+            <span class="uk">Якщо цифра вгорі виглядає цікаво, розумний шлях — не договір, а замір.</span>
+          </p>
+          <ol class="steps">
+            <li><b><span class="de">20 Minuten Gespräch.</span><span class="uk">20 хвилин розмови.</span></b>
+              <span class="de">Sie beschreiben einen Bereich, ich sage Ihnen ehrlich, ob sich das lohnt. Wenn nicht, sage ich auch das.</span>
+              <span class="uk">Він описує одну ділянку, ми чесно кажемо, чи є там сенс. Якщо немає — так і кажемо.</span></li>
+            <li><b><span class="de">Zwei Wochen messen.</span><span class="uk">Два тижні заміру.</span></b>
+              <span class="de">Ein Bereich, echte Zahlen statt Schätzung. Danach tragen Sie den echten Wert oben ein.</span>
+              <span class="uk">Одна ділянка, реальні цифри замість оцінки. Після цього він вписує сюди справжнє число.</span></li>
+            <li><b><span class="de">Erst dann entscheiden.</span><span class="uk">І тільки тоді рішення.</span></b>
+              <span class="de">Mit einer Zahl, die aus Ihrem Haus kommt, nicht aus einer Präsentation.</span>
+              <span class="uk">З цифрою, яка прийшла з їхнього підприємства, а не з презентації.</span></li>
+          </ol>
+          <p class="hint">
+            <span class="de">Die Arbeit läuft aus Polen, per Fernzugriff — Einweisung und Abnahme per Videogespräch, auf Deutsch oder Englisch schriftlich.</span>
+            <span class="uk">Робота ведеться з Польщі, віддалено — навчання й приймання через відеозв'язок, листування німецькою або англійською.</span>
+          </p>
+          <div class="contacts">
+            <a class="btn primary" href="mailto:olegsoroka1307@gmail.com">✉️ olegsoroka1307@gmail.com</a>
+            <a class="btn" href="https://t.me/olesor72">✈️ Telegram: olesor72</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="end">
+        <span class="de">Alle Beträge netto. Die Preise für Einführung und Betreuung stehen fest; alle übrigen Zahlen auf dieser Seite stammen aus Ihren Eingaben.</span>
+        <span class="uk">Усі суми — нетто. Ціни впровадження й супроводу фіксовані; решта цифр на цій сторінці — з полів, які власник заповнив сам.</span>
+      </footer>
+
+    </div>
+
+    <!-- ================= RESULT ================= -->
+    <div class="panel">
+      <div class="result">
+        <p class="cap"><span class="de">Ergebnis</span><span class="uk">Результат</span></p>
+
+        <div class="big gain"><span id="r-h">–</span><span class="u"><span class="de">Std./Monat</span><span class="uk">год./міс.</span></span></div>
+        <p class="lbl"><span class="de">Bürozeit, die frei werden könnte</span><span class="uk">офісного часу може звільнитися</span></p>
+
+        <hr>
+
+        <div class="big"><span id="r-m">–</span><span class="u">€ / <span class="de">Monat</span><span class="uk">міс.</span></span></div>
+        <p class="lbl"><span class="de">zu Ihrem eingetragenen Stundensatz</span><span class="uk">за вписаною вартістю години</span></p>
+
+        <hr>
+
+        <div class="rrow"><span class="k"><span class="de">im Jahr</span><span class="uk">на рік</span></span><span class="v" id="r-y">–</span></div>
+        <div class="rrow"><span class="k"><span class="de">Einführung, einmalig</span><span class="uk">впровадження, разово</span></span><span class="v" id="r-once">–</span></div>
+        <div class="rrow"><span class="k"><span class="de">Betreuung, im Jahr</span><span class="uk">супровід, за рік</span></span><span class="v" id="r-care">–</span></div>
+        <div class="rrow hl"><span class="k"><span class="de">Amortisation</span><span class="uk">окупність</span></span><span class="v" id="r-pay">–</span></div>
+        <div class="rrow hl"><span class="k"><span class="de">Ergebnis 1. Jahr</span><span class="uk">результат 1-го року</span></span><span class="v" id="r-net">–</span></div>
+
+        <div class="bars">
+          <div class="bar-l"><span><span class="de">Ersparnis, 1. Jahr</span><span class="uk">економія, 1-й рік</span></span><span class="v" id="bar-gv">–</span></div>
+          <div class="bar g"><span id="bar-g" style="width:0%"></span></div>
+          <div class="bar-l"><span><span class="de">Kosten, 1. Jahr</span><span class="uk">витрати, 1-й рік</span></span><span class="v" id="bar-cv">–</span></div>
+          <div class="bar c"><span id="bar-c" style="width:0%"></span></div>
+        </div>
+
+        <div class="warn" id="warn" hidden></div>
+      </div>
+
+      <button type="button" class="reset" id="reset">
+        <span class="de">Werte zurücksetzen</span><span class="uk">Скинути значення</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div class="mobar" aria-hidden="true">
+  <div class="in">
+    <div>
+      <div class="t"><span class="de">€ / Monat</span><span class="uk">€ / міс.</span></div>
+      <div class="n g" id="m-m">–</div>
+    </div>
+    <div style="text-align:right">
+      <div class="t"><span class="de">Amortisation</span><span class="uk">окупність</span></div>
+      <div class="n" id="m-p">–</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var WEEKS = 4.33, DAYS = 21;
+  var DEFAULTS = { rate:35, a1:5, a2:30, ap:40, b1:150, b2:1, c1:60, c2:4, cp:35, bp:50, pkg:'2200', care:true };
+  var IDS = ['rate','a1','a2','ap','b1','b2','bp','c1','c2','cp'];
+  var $ = function (id) { return document.getElementById(id); };
+
+  var TXT = {
+    de: {
+      title: 'Entlastungsrechner',
+      months: function (n) { return n + (n === 1 ? ' Monat' : ' Monate'); },
+      never: 'Rechnet sich so nicht',
+      warnNever: 'Mit diesen Zahlen liegt die monatliche Ersparnis unter der Betreuung von 450 €. Entweder ist ein Bereich zu klein angesetzt, oder das Vorhaben lohnt sich in dieser Form nicht — dann sage ich das lieber jetzt als nach der Rechnung.',
+      warnZero: 'Alle drei Regler stehen auf null. Stellen Sie mindestens einen auf den Wert, den Sie für realistisch halten.',
+      warnRate: 'Ohne Stundensatz gibt es nur Stunden, keine Euro. Tragen Sie oben ein, was eine Bürostunde bei Ihnen kostet.',
+      hrs: ' h'
+    },
+    uk: {
+      title: 'Калькулятор розвантаження',
+      months: function (n) { return n + (n === 1 ? ' місяць' : (n >= 2 && n <= 4 ? ' місяці' : ' місяців')); },
+      never: 'Так не окупається',
+      warnNever: 'З цими цифрами місячна економія менша за супровід 450 €. Або якусь ділянку занижено, або в такому вигляді проєкт не має сенсу — і краще сказати це зараз, ніж після рахунку.',
+      warnZero: 'Усі три повзунки на нулі. Треба поставити хоча б один на значення, яке власник вважає реальним.',
+      warnRate: 'Без вартості години будуть лише години, без євро. Угорі треба вписати, скільки коштує година офісної роботи.',
+      hrs: ' год'
+    }
+  };
+
+  function lang() { return document.documentElement.getAttribute('data-lang') === 'uk' ? 'uk' : 'de'; }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) && v > 0 ? v : 0; }
+  function fmt(n, d) {
+    d = d || 0;
+    return new Intl.NumberFormat('de-DE', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+  }
+  function eur(n) { return fmt(Math.round(n)) + ' €'; }
+
+  function save() {
+    try {
+      var o = {};
+      IDS.forEach(function (k) { o[k] = $(k).value; });
+      o.pkg = document.querySelector('input[name=pkg]:checked').value;
+      o.care = $('care').checked;
+      localStorage.setItem('er_vals', JSON.stringify(o));
+    } catch (e) {}
+  }
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem('er_vals') || 'null');
+      if (!o) return;
+      IDS.forEach(function (k) { if (o[k] !== undefined) $(k).value = o[k]; });
+      if (o.pkg) {
+        var r = document.querySelector('input[name=pkg][value="' + o.pkg + '"]');
+        if (r) r.checked = true;
+      }
+      if (typeof o.care === 'boolean') $('care').checked = o.care;
+    } catch (e) {}
+  }
+
+  function calc() {
+    var T = TXT[lang()];
+    var rate = num('rate');
+
+    var aNow = num('a1') * num('a2') / 60 * WEEKS;
+    var bNow = num('b1') * num('b2') / 60 * DAYS;
+    var cNow = num('c1') * num('c2') / 60 * WEEKS;
+
+    var ap = num('ap') / 100, bp = num('bp') / 100, cp = num('cp') / 100;
+    var aH = aNow * ap, bH = bNow * bp, cH = cNow * cp;
+    var sumNow = aNow + bNow + cNow, sumH = aH + bH + cH;
+
+    $('apv').textContent = fmt(num('ap')) + ' %';
+    $('bpv').textContent = fmt(num('bp')) + ' %';
+    $('cpv').textContent = fmt(num('cp')) + ' %';
+
+    var rows = [['a', aNow, ap, aH], ['b', bNow, bp, bH], ['c', cNow, cp, cH]];
+    rows.forEach(function (r) {
+      $('t-' + r[0] + '-now').textContent = fmt(r[1], 1);
+      $('t-' + r[0] + '-pct').textContent = fmt(r[2] * 100) + ' %';
+      $('t-' + r[0] + '-h').textContent = fmt(r[3], 1);
+      $('t-' + r[0] + '-e').textContent = eur(r[3] * rate);
+    });
+    $('t-s-now').textContent = fmt(sumNow, 1);
+    $('t-s-h').textContent = fmt(sumH, 1);
+    $('t-s-e').textContent = eur(sumH * rate);
+
+    var perMonth = sumH * rate, perYear = perMonth * 12;
+    var once = parseFloat(document.querySelector('input[name=pkg]:checked').value);
+    var careM = $('care').checked ? 450 : 0;
+    var careY = careM * 12;
+    var netM = perMonth - careM;
+    var costY = once + careY;
+    var netY1 = perYear - costY;
+
+    $('r-h').textContent = fmt(sumH, 1);
+    $('r-m').textContent = fmt(Math.round(perMonth));
+    $('r-y').textContent = eur(perYear);
+    $('r-once').textContent = eur(once);
+    $('r-care').textContent = careM ? eur(careY) : '—';
+    $('r-net').textContent = (netY1 >= 0 ? '+' : '−') + eur(Math.abs(netY1));
+
+    var payTxt;
+    if (netM > 0) {
+      var m = Math.ceil(once / netM);
+      payTxt = T.months(m);
+    } else {
+      payTxt = T.never;
+    }
+    $('r-pay').textContent = payTxt;
+    $('m-m').textContent = fmt(Math.round(perMonth)) + ' €';
+    $('m-p').textContent = payTxt;
+
+    var max = Math.max(perYear, costY, 1);
+    $('bar-g').style.width = (perYear / max * 100) + '%';
+    $('bar-c').style.width = (costY / max * 100) + '%';
+    $('bar-gv').textContent = eur(perYear);
+    $('bar-cv').textContent = eur(costY);
+
+    Array.prototype.forEach.call(document.querySelectorAll('.pkg'), function (p) {
+      p.classList.toggle('on', p.querySelector('input').checked);
+    });
+
+    var w = $('warn'), msg = '';
+    if (num('ap') === 0 && num('bp') === 0 && num('cp') === 0) msg = T.warnZero;
+    else if (rate === 0) msg = T.warnRate;
+    else if (netM <= 0) msg = T.warnNever;
+    if (msg) { w.textContent = msg; w.hidden = false; } else { w.hidden = true; }
+
+    save();
+  }
+
+  function setLang(l) {
+    document.documentElement.setAttribute('data-lang', l);
+    try { localStorage.setItem('er_lang', l); } catch (e) {}
+    $('l-de').setAttribute('aria-pressed', String(l === 'de'));
+    $('l-uk').setAttribute('aria-pressed', String(l === 'uk'));
+    document.title = TXT[l].title;
+    document.documentElement.lang = l === 'uk' ? 'uk' : 'de';
+    calc();
+  }
+
+  $('l-de').addEventListener('click', function () { setLang('de'); });
+  $('l-uk').addEventListener('click', function () { setLang('uk'); });
+
+  IDS.forEach(function (k) { $(k).addEventListener('input', calc); });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=pkg]'), function (r) {
+    r.addEventListener('change', calc);
+  });
+  $('care').addEventListener('change', calc);
+
+  $('reset').addEventListener('click', function () {
+    IDS.forEach(function (k) { $(k).value = DEFAULTS[k]; });
+    document.querySelector('input[name=pkg][value="' + DEFAULTS.pkg + '"]').checked = true;
+    $('care').checked = DEFAULTS.care;
+    calc();
+  });
+
+  load();
+  setLang(lang());
+})();
+</script>
