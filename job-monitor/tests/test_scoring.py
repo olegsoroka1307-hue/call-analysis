@@ -59,6 +59,58 @@ class TestRelevance:
         assert "notion" in s.matched
 
 
+class TestManualWorkLeads:
+    """Замовлення від тих, хто ще не знає слова «автоматизація».
+
+    Клієнт пише «щодня зводимо Excel від пʼяти постачальників», а не «потрібен
+    n8n». Саме там найменше конкурентів, тому такі замовлення мають доходити
+    до нас, а не відсіюватись разом із дизайном.
+    """
+
+    def test_excel_consolidation_is_found(self, cfg):
+        s = score(cfg, name="Зведення Excel від постачальників",
+                  desc="Щодня отримуємо Excel від 5 постачальників, "
+                       "треба зводити їх в один файл вручну")
+        assert s.passed
+        assert s.product == "automation"
+
+    def test_data_entry_is_found(self, cfg):
+        s = score(cfg, name="Потрібна людина для внесення даних",
+                  desc="Кожен день переносимо замовлення з пошти в Google "
+                       "таблицю руками, це займає 2 години")
+        assert s.passed
+
+    def test_invoice_processing_is_found(self, cfg):
+        s = score(cfg, name="Обробка рахунків",
+                  desc="Отримуємо накладні у PDF, треба витягувати суми "
+                       "і заносити в таблицю")
+        assert s.passed
+
+    def test_english_data_entry_is_found(self, cfg):
+        s = score(cfg, name="Data entry specialist",
+                  desc="We need someone to copy paste orders from emails "
+                       "into a spreadsheet daily")
+        assert s.passed
+
+    def test_routine_after_calls_is_found(self, cfg):
+        s = score(cfg, name="Ведення клієнтської бази",
+                  desc="Після кожного дзвінка вручну заповнюємо картку "
+                       "клієнта, багато рутини")
+        assert s.passed
+
+    def test_one_manual_word_alone_is_not_enough(self, cfg):
+        # Інакше «зробіть банер вручну» приходило б як лід.
+        s = score(cfg, name="Дизайн", desc="Намалювати вручну ілюстрацію")
+        assert not s.passed
+
+    def test_typing_work_is_still_filtered_out(self, cfg):
+        # Слова ручної роботи тут є, але це набір тексту, а не автоматизація:
+        # стоп-слова мають перебивати збіг.
+        s = score(cfg, name="Набір тексту",
+                  desc="Треба набрати текст із фото в таблицю вручну")
+        assert not s.passed
+
+
 class TestGates:
     def test_too_many_bids_is_too_late(self, cfg):
         cfg.max_bids = 5
