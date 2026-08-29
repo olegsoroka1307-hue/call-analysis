@@ -138,6 +138,93 @@ def _current_lines(
     return {key: value[2] for key, value in newest.items()}
 
 
+
+def _price_group(
+    *,
+    bookmaker_key: str,
+    market_code: str,
+    scope: str,
+    line: float,
+    sides: dict[str, "_Usable"],
+    score_matrix,
+    now: datetime,
+    thresholds: dict[str, float],
+    selection_spec: dict[str, tuple[Side, str, str]],
+) -> list[PricedMarket]:
+    """Оцінка однієї групи (букмекер, ринок, scope) на одній лінії.
+
+    Виділено окремо навмисно: `price_fixture` і `recompute_from_inputs`
+    мусять рахувати ОДНИМ кодом. Паралельна реалізація для перерахунку
+    перевіряла б саму себе, а не двигун.
+    """
+    out: list[PricedMarket] = []
+    for selection, item in sorted(sides.items()):
+        snapshot = item.snapshot
+        side, _scope, opposite_selection = selection_spec[selection]
+        opposite_item = sides.get(opposite_selection)
+        opposite = opposite_item.snapshot if opposite_item else None
+
+        # ТЗ §1: без протилежної ціни no-vig не рахується, а не вигадується.
+        market_probability = None
+        reason_codes: list[str] = []
+        if opposite is None:
+            reason_codes.append("NO_VIG_UNAVAILABLE_MISSING_OPPOSITE_SIDE")
+        else:
+            two_way = no_vig_two_way(
+                snapshot.odds if side is Side.OVER else opposite.odds,
+                opposite.odds if side is Side.OVER else snapshot.odds,
+            )
+            market_probability = two_way.p_over if side is Side.OVER else two_way.p_under
+            reason_codes.append(f"MARKET_MARGIN_{two_way.margin_pct:.2f}PCT")
+
+        distribution = outcome_distribution(score_matrix, side, line, scope)
+        valuation = evaluate(distribution, snapshot.odds, market_probability)
+        disagreement = market_disagreement(valuation.model_probability, market_probability)
+
+        age = (now - snapshot.source_timestamp).total_seconds()
+        guard = evaluate_data_guard(
+            market_probability=market_probability,
+            odds_age_seconds=age,
+            snapshot_after_kickoff=item.after_kickoff,
+            thresholds=thresholds,
+        )
+        decision = decide(valuation.expected_value, disagreement, guard, thresholds)
+        reason_codes.extend(disagreement_reason_codes(disagreement, thresholds))
+        reason_codes.extend(guard.reason_codes)
+
+        if any(f in (0.5, -0.5) for f, p in distribution.items() if p > 0):
+            reason_codes.append("ASIAN_SPLIT_STAKE_EV")
+        if distribution.get(0.0, 0.0) > 0:
+            reason_codes.append("PUSH_POSSIBLE")
+
+        out.append(
+            PricedMarket(
+                bookmaker=bookmaker_key,
+                market_code=market_code,
+                selection=selection,
+                line=line,
+                bookmaker_odds=snapshot.odds,
+                market_probability=market_probability,
+                model_probability=valuation.model_probability,
+                fair_odds=valuation.fair_odds,
+                expected_value=valuation.expected_value,
+                edge=valuation.edge,
+                decision=decision.value,
+                strong_candidate=is_strong_candidate(valuation.expected_value, thresholds),
+                market_disagreement=disagreement,
+                outcome_distribution={
+                    str(f): round(p, 6) for f, p in distribution.items() if p > 0
+                },
+                odds_age_seconds=age,
+                reason_codes=reason_codes,
+                data_source=snapshot.data_source,
+                snapshot_id=snapshot.id,
+                opposite_snapshot_id=opposite.id if opposite else None,
+            )
+        )
+    return out
+
+
 def price_fixture(
     session: Session,
     fixture: Fixture,
@@ -165,79 +252,25 @@ def price_fixture(
 
     priced: list[PricedMarket] = []
     used_snapshot_ids: list[int] = []
+    thresholds = decision_thresholds()
 
     for (bookmaker_id, market_code, scope), sides in sorted(
         grouped.items(), key=lambda kv: (kv[0][1], kv[0][2], kv[0][0])
     ):
         line = current_line[(bookmaker_id, market_code, scope)]
-        for selection, item in sorted(sides.items()):
-            snapshot = item.snapshot
-            side, _scope, opposite_selection = SELECTION_SPEC[selection]
-            opposite_item = sides.get(opposite_selection)
-            opposite = opposite_item.snapshot if opposite_item else None
-
-            # ТЗ §1: без протилежної ціни no-vig не рахується, а не вигадується.
-            market_probability = None
-            reason_codes: list[str] = []
-            if opposite is None:
-                reason_codes.append("NO_VIG_UNAVAILABLE_MISSING_OPPOSITE_SIDE")
-            else:
-                two_way = no_vig_two_way(
-                    snapshot.odds if side is Side.OVER else opposite.odds,
-                    opposite.odds if side is Side.OVER else snapshot.odds,
-                )
-                market_probability = (
-                    two_way.p_over if side is Side.OVER else two_way.p_under
-                )
-                reason_codes.append(f"MARKET_MARGIN_{two_way.margin_pct:.2f}PCT")
-
-            distribution = outcome_distribution(score_matrix, side, line, scope)
-            valuation = evaluate(distribution, snapshot.odds, market_probability)
-            disagreement = market_disagreement(
-                valuation.model_probability, market_probability
-            )
-
-            age = (now - snapshot.source_timestamp).total_seconds()
-            guard = evaluate_data_guard(
-                market_probability=market_probability,
-                odds_age_seconds=age,
-                snapshot_after_kickoff=item.after_kickoff,
-            )
-            decision = decide(valuation.expected_value, disagreement, guard)
-            reason_codes.extend(disagreement_reason_codes(disagreement))
-            reason_codes.extend(guard.reason_codes)
-
-            if any(f in (0.5, -0.5) for f, p in distribution.items() if p > 0):
-                reason_codes.append("ASIAN_SPLIT_STAKE_EV")
-            if distribution.get(0.0, 0.0) > 0:
-                reason_codes.append("PUSH_POSSIBLE")
-
-            priced.append(
-                PricedMarket(
-                    bookmaker=bookmakers[bookmaker_id].key,
-                    market_code=market_code,
-                    selection=selection,
-                    line=line,
-                    bookmaker_odds=snapshot.odds,
-                    market_probability=market_probability,
-                    model_probability=valuation.model_probability,
-                    fair_odds=valuation.fair_odds,
-                    expected_value=valuation.expected_value,
-                    edge=valuation.edge,
-                    decision=decision.value,
-                    strong_candidate=is_strong_candidate(valuation.expected_value),
-                    market_disagreement=disagreement,
-                    outcome_distribution={
-                        str(f): round(p, 6) for f, p in distribution.items() if p > 0
-                    },
-                    odds_age_seconds=age,
-                    reason_codes=reason_codes,
-                    data_source=snapshot.data_source,
-                    snapshot_id=snapshot.id,
-                    opposite_snapshot_id=opposite.id if opposite else None,
-                )
-            )
-            used_snapshot_ids.append(snapshot.id)
+        group = _price_group(
+            bookmaker_key=bookmakers[bookmaker_id].key,
+            market_code=market_code,
+            scope=scope,
+            line=line,
+            sides=sides,
+            score_matrix=score_matrix,
+            now=now,
+            thresholds=thresholds,
+            selection_spec=SELECTION_SPEC,
+        )
+        priced.extend(group)
+        used_snapshot_ids.extend(item.snapshot_id for item in group if item.snapshot_id)
 
     if not persist:
         return None, priced
@@ -366,3 +399,66 @@ def priced_market_to_dict(item: PricedMarket) -> dict:
     if item.fair_odds is not None:
         payload["fair_odds"] = round(item.fair_odds, 4)
     return payload
+
+
+def recompute_from_inputs(session: Session, inputs: dict) -> list[PricedMarket]:
+    """Повний перерахунок prediction ЛИШЕ з `model_runs.inputs_json` (ТЗ §51).
+
+    Функція навмисно не приймає ні fixture, ні model_run, ні збережені
+    predictions: єдиний вхід — записаний JSON і снапшоти, на які він
+    посилається. Снапшоти append-only, тому вони не могли змінитися
+    заднім числом.
+
+    Пороги, мапа ринків і момент зрізу беруться з `inputs`, а не з поточних
+    констант модуля. Інакше зміна порогу перепризначала б рішення старих
+    прогонів, і «відтворюваність» означала б лише «числа збігаються, поки
+    конфіг не чіпали».
+    """
+    snapshot_ids = inputs["snapshot_ids"]
+    if not snapshot_ids:
+        return []
+
+    thresholds = inputs["decision_thresholds"]
+    now = datetime.fromisoformat(inputs["prediction_cutoff"])
+    selection_spec = {
+        selection: (Side(spec["side"]), spec["scope"], spec["opposite"])
+        for selection, spec in inputs["market_mapping"].items()
+    }
+    score_matrix = build_score_matrix(
+        inputs["lambda_home"], inputs["lambda_away"], inputs["max_goals"]
+    )
+
+    snapshots = list(
+        session.scalars(select(OddsSnapshot).where(OddsSnapshot.id.in_(snapshot_ids)))
+    )
+    bookmakers = {b.id: b.key for b in session.scalars(select(Bookmaker))}
+
+    grouped: dict[tuple, dict[str, _Usable]] = {}
+    for snapshot in snapshots:
+        spec = selection_spec.get(snapshot.selection)
+        if spec is None or snapshot.line is None:
+            continue
+        _side, scope, _opposite = spec
+        after_kickoff = snapshot.source_timestamp > snapshot.fixture.kickoff_at
+        grouped.setdefault(
+            (snapshot.bookmaker_id, snapshot.market_code, scope, snapshot.line), {}
+        )[snapshot.selection] = _Usable(snapshot=snapshot, after_kickoff=after_kickoff)
+
+    priced: list[PricedMarket] = []
+    for (bookmaker_id, market_code, scope, line), sides in sorted(
+        grouped.items(), key=lambda kv: (kv[0][1], kv[0][2], kv[0][0])
+    ):
+        priced.extend(
+            _price_group(
+                bookmaker_key=bookmakers[bookmaker_id],
+                market_code=market_code,
+                scope=scope,
+                line=line,
+                sides=sides,
+                score_matrix=score_matrix,
+                now=now,
+                thresholds=thresholds,
+                selection_spec=selection_spec,
+            )
+        )
+    return priced
