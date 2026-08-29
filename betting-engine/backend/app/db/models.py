@@ -30,6 +30,8 @@ class League(Base):
     __tablename__ = "leagues"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    #: Провайдер, у чиєму просторі імен унікальний provider_id (ТЗ §6).
+    provider: Mapped[str] = mapped_column(String(32), default="the_odds_api")
     provider_id: Mapped[str] = mapped_column(String(64))
     name: Mapped[str] = mapped_column(String(128))
     country: Mapped[str | None] = mapped_column(String(64))
@@ -39,24 +41,32 @@ class League(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
-    __table_args__ = (UniqueConstraint("provider_id", name="uq_leagues_provider_id"),)
+    __table_args__ = (
+        UniqueConstraint("provider", "provider_id", name="uq_leagues_provider_provider_id"),
+    )
 
 
 class Team(Base):
     __tablename__ = "teams"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    #: Імена команд у різних провайдерів не збігаються — глобальна
+    #: унікальність по name зліпила б дві різні команди в одну (ТЗ §6).
+    provider: Mapped[str] = mapped_column(String(32), default="the_odds_api")
     name: Mapped[str] = mapped_column(String(128))
     league_id: Mapped[int | None] = mapped_column(ForeignKey("leagues.id"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    __table_args__ = (UniqueConstraint("name", name="uq_teams_name"),)
+    __table_args__ = (
+        UniqueConstraint("provider", "name", name="uq_teams_provider_name"),
+    )
 
 
 class Fixture(Base):
     __tablename__ = "fixtures"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    provider: Mapped[str] = mapped_column(String(32), default="the_odds_api")
     provider_fixture_id: Mapped[str] = mapped_column(String(128))
     league_id: Mapped[int | None] = mapped_column(ForeignKey("leagues.id"))
     home_team_id: Mapped[int] = mapped_column(ForeignKey("teams.id"))
@@ -78,7 +88,9 @@ class Fixture(Base):
     league: Mapped[League | None] = relationship(lazy="joined")
 
     __table_args__ = (
-        UniqueConstraint("provider_fixture_id", name="uq_fixtures_provider_fixture_id"),
+        UniqueConstraint(
+            "provider", "provider_fixture_id", name="uq_fixtures_provider_fixture_id"
+        ),
         Index("ix_fixtures_kickoff_at", "kickoff_at"),
     )
 
@@ -111,6 +123,9 @@ class OddsSnapshot(Base):
     selection: Mapped[str] = mapped_column(String(32))     # OVER | UNDER
     line: Mapped[float | None] = mapped_column(Float)
     odds: Mapped[float] = mapped_column(Float)
+    #: Походження саме цього рядка. Глобального прапорця «база синтетична»
+    #: недостатньо: у змішаній live/replay базі він бреше (ТЗ §1).
+    data_source: Mapped[str] = mapped_column(String(32), default="LIVE")
     source_timestamp: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
@@ -137,6 +152,8 @@ class ModelRun(Base):
     lambda_total: Mapped[float] = mapped_column(Float)
     market_baseline_used: Mapped[bool] = mapped_column(Boolean, default=False)
     data_quality_score: Mapped[float | None] = mapped_column(Float)
+    #: Походження даних, на яких порахований прогін: LIVE | SYNTHETIC_REPLAY | MIXED.
+    data_source: Mapped[str] = mapped_column(String(32), default="LIVE")
     #: Повний snapshot входів — prediction має бути відтворюваною (ТЗ §51).
     inputs_json: Mapped[dict] = mapped_column(JSONB, default=dict)
 

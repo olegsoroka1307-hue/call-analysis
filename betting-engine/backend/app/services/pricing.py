@@ -2,10 +2,21 @@
 
 Ланцюг: ринкові ціни -> no-vig (§15) -> Poisson score matrix (§12) ->
 ймовірність ринку (§13-14) -> fair odds / EV (§16) -> рішення (§25).
+
+Дві речі, які тут навмисно зроблені жорстко:
+
+1. **Оцінюється лише актуальна лінія.** Після руху O2.5 -> O2.75 стара 2.5
+   більше не існує як ринок. Раніше latest-снапшот брався окремо для кожної
+   лінії, тому знята лінія лишалась «доступною» і могла дати сигнал на ставку.
+2. **Дані спершу перевіряються, потім оцінюються.** Прострочена ціна,
+   відсутня протилежна сторона або снапшот після початку матчу не стають BET
+   за жодного EV (ТЗ §1, §22).
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 
@@ -14,8 +25,11 @@ from sqlalchemy.orm import Session
 
 from ..db.models import Bookmaker, Fixture, MarketPrediction, ModelRun, OddsSnapshot
 from ..models_engine.decision import (
+    DataGuard,
     decide,
+    decision_thresholds,
     disagreement_reason_codes,
+    evaluate_data_guard,
     is_strong_candidate,
     market_disagreement,
 )
@@ -33,6 +47,9 @@ SELECTION_SPEC: dict[str, tuple[Side, str, str]] = {
     "AWAY_OVER": (Side.OVER, "away", "AWAY_UNDER"),
     "AWAY_UNDER": (Side.UNDER, "away", "AWAY_OVER"),
 }
+
+#: Версія формату inputs_json. Змінюється разом зі складом входів (ТЗ §51).
+INPUTS_SCHEMA_VERSION = 2
 
 
 @dataclass
@@ -53,21 +70,72 @@ class PricedMarket:
     outcome_distribution: dict[str, float]
     odds_age_seconds: float
     reason_codes: list[str]
+    data_source: str
+    snapshot_id: int | None = None
+    opposite_snapshot_id: int | None = None
 
 
-def _latest_snapshots(session: Session, fixture_id: int) -> list[OddsSnapshot]:
-    """Останній снапшот для кожної комбінації (букмекер, ринок, селекція, лінія)."""
+@dataclass(frozen=True)
+class _Usable:
+    """Останній придатний снапшот однієї селекції."""
+
+    snapshot: OddsSnapshot
+    after_kickoff: bool
+
+
+def _latest_usable_by_selection(
+    session: Session, fixture: Fixture
+) -> dict[tuple[int, str, str], _Usable]:
+    """Останній снапшот для кожної (букмекер, ринок, селекція) — БЕЗ лінії у ключі.
+
+    Лінія навмисно не входить у ключ: інакше знята лінія лишається в наборі
+    назавжди. Пріоритет — останній снапшот до kickoff; якщо всі снапшоти
+    селекції після kickoff, беремо останній, але позначаємо його, щоб
+    data-guard перевів рішення в PASS, а не щоб рядок тихо зник.
+    """
     rows = list(
         session.scalars(
             select(OddsSnapshot)
-            .where(OddsSnapshot.fixture_id == fixture_id)
+            .where(OddsSnapshot.fixture_id == fixture.id)
             .order_by(OddsSnapshot.source_timestamp.asc(), OddsSnapshot.id.asc())
         )
     )
-    latest: dict[tuple, OddsSnapshot] = {}
+
+    pre_kickoff: dict[tuple[int, str, str], OddsSnapshot] = {}
+    any_snapshot: dict[tuple[int, str, str], OddsSnapshot] = {}
     for row in rows:
-        latest[(row.bookmaker_id, row.market_code, row.selection, row.line)] = row
-    return list(latest.values())
+        if row.selection not in SELECTION_SPEC or row.line is None:
+            continue
+        key = (row.bookmaker_id, row.market_code, row.selection)
+        any_snapshot[key] = row
+        if row.source_timestamp <= fixture.kickoff_at:
+            pre_kickoff[key] = row
+
+    usable: dict[tuple[int, str, str], _Usable] = {}
+    for key, row in any_snapshot.items():
+        if key in pre_kickoff:
+            usable[key] = _Usable(snapshot=pre_kickoff[key], after_kickoff=False)
+        else:
+            usable[key] = _Usable(snapshot=row, after_kickoff=True)
+    return usable
+
+
+def _current_lines(
+    usable: dict[tuple[int, str, str], _Usable],
+) -> dict[tuple[int, str, str], float]:
+    """Актуальна лінія для кожної (букмекер, ринок, scope).
+
+    Актуальною вважається лінія найсвіжішого снапшоту в межах scope: обидві
+    сторони тотала рухаються разом, тому саме вона описує ринок «зараз».
+    """
+    newest: dict[tuple[int, str, str], tuple[datetime, int, float]] = {}
+    for (bookmaker_id, market_code, selection), item in usable.items():
+        _side, scope, _opposite = SELECTION_SPEC[selection]
+        key = (bookmaker_id, market_code, scope)
+        stamp = (item.snapshot.source_timestamp, item.snapshot.id, item.snapshot.line)
+        if key not in newest or stamp[:2] > newest[key][:2]:
+            newest[key] = stamp
+    return {key: value[2] for key, value in newest.items()}
 
 
 def price_fixture(
@@ -82,31 +150,31 @@ def price_fixture(
 ) -> tuple[ModelRun | None, list[PricedMarket]]:
     now = now or datetime.now(UTC)
     score_matrix = build_score_matrix(lambda_home, lambda_away, max_goals)
-    snapshots = _latest_snapshots(session, fixture.id)
-    bookmakers = {
-        b.id: b for b in session.scalars(select(Bookmaker))
-    }
+    usable = _latest_usable_by_selection(session, fixture)
+    current_line = _current_lines(usable)
+    bookmakers = {b.id: b for b in session.scalars(select(Bookmaker))}
 
-    # Групуємо за (букмекер, ринок, scope, лінія), щоб мати обидві сторони для no-vig.
-    grouped: dict[tuple, dict[str, OddsSnapshot]] = {}
-    for snapshot in snapshots:
-        spec = SELECTION_SPEC.get(snapshot.selection)
-        if spec is None or snapshot.line is None:
-            continue
-        _side, scope, _opposite = spec
-        grouped.setdefault(
-            (snapshot.bookmaker_id, snapshot.market_code, scope, snapshot.line), {}
-        )[snapshot.selection] = snapshot
+    # Групуємо за (букмекер, ринок, scope), лишаючи тільки сторони на актуальній лінії.
+    grouped: dict[tuple, dict[str, _Usable]] = {}
+    for (bookmaker_id, market_code, selection), item in usable.items():
+        _side, scope, _opposite = SELECTION_SPEC[selection]
+        scope_key = (bookmaker_id, market_code, scope)
+        if item.snapshot.line != current_line.get(scope_key):
+            continue  # знята лінія — це вже не ринок
+        grouped.setdefault(scope_key, {})[selection] = item
 
     priced: list[PricedMarket] = []
     used_snapshot_ids: list[int] = []
 
-    for (bookmaker_id, market_code, scope, line), sides in sorted(
-        grouped.items(), key=lambda kv: (kv[0][1], kv[0][3], kv[0][0])
+    for (bookmaker_id, market_code, scope), sides in sorted(
+        grouped.items(), key=lambda kv: (kv[0][1], kv[0][2], kv[0][0])
     ):
-        for selection, snapshot in sorted(sides.items()):
+        line = current_line[(bookmaker_id, market_code, scope)]
+        for selection, item in sorted(sides.items()):
+            snapshot = item.snapshot
             side, _scope, opposite_selection = SELECTION_SPEC[selection]
-            opposite = sides.get(opposite_selection)
+            opposite_item = sides.get(opposite_selection)
+            opposite = opposite_item.snapshot if opposite_item else None
 
             # ТЗ §1: без протилежної ціни no-vig не рахується, а не вигадується.
             market_probability = None
@@ -128,15 +196,22 @@ def price_fixture(
             disagreement = market_disagreement(
                 valuation.model_probability, market_probability
             )
-            decision = decide(valuation.expected_value, disagreement)
+
+            age = (now - snapshot.source_timestamp).total_seconds()
+            guard = evaluate_data_guard(
+                market_probability=market_probability,
+                odds_age_seconds=age,
+                snapshot_after_kickoff=item.after_kickoff,
+            )
+            decision = decide(valuation.expected_value, disagreement, guard)
             reason_codes.extend(disagreement_reason_codes(disagreement))
+            reason_codes.extend(guard.reason_codes)
 
             if any(f in (0.5, -0.5) for f, p in distribution.items() if p > 0):
                 reason_codes.append("ASIAN_SPLIT_STAKE_EV")
             if distribution.get(0.0, 0.0) > 0:
                 reason_codes.append("PUSH_POSSIBLE")
 
-            age = (now - snapshot.source_timestamp).total_seconds()
             priced.append(
                 PricedMarket(
                     bookmaker=bookmakers[bookmaker_id].key,
@@ -157,6 +232,9 @@ def price_fixture(
                     },
                     odds_age_seconds=age,
                     reason_codes=reason_codes,
+                    data_source=snapshot.data_source,
+                    snapshot_id=snapshot.id,
+                    opposite_snapshot_id=opposite.id if opposite else None,
                 )
             )
             used_snapshot_ids.append(snapshot.id)
@@ -164,7 +242,16 @@ def price_fixture(
     if not persist:
         return None, priced
 
-    # ТЗ §51: prediction має бути відтворюваною з model_run.inputs_json.
+    inputs = build_inputs_json(
+        lambda_home=lambda_home,
+        lambda_away=lambda_away,
+        max_goals=max_goals,
+        model_version=model_version,
+        snapshot_ids=used_snapshot_ids,
+        prediction_cutoff=now,
+        data_source=fixture.data_source,
+    )
+
     model_run = ModelRun(
         fixture_id=fixture.id,
         model_version=model_version,
@@ -173,14 +260,8 @@ def price_fixture(
         lambda_total=lambda_home + lambda_away,
         market_baseline_used=False,
         data_quality_score=None,
-        inputs_json={
-            "lambda_home": lambda_home,
-            "lambda_away": lambda_away,
-            "max_goals": max_goals,
-            "data_source": fixture.data_source,
-            "snapshot_ids": used_snapshot_ids,
-            "priced_at": now.isoformat(),
-        },
+        data_source=_run_data_source(priced, fixture),
+        inputs_json=inputs,
     )
     session.add(model_run)
     session.flush()
@@ -204,11 +285,73 @@ def price_fixture(
                 reason_codes_json={
                     "codes": item.reason_codes,
                     "outcome_distribution": item.outcome_distribution,
+                    "snapshot_id": item.snapshot_id,
+                    "opposite_snapshot_id": item.opposite_snapshot_id,
+                    "odds_age_seconds": item.odds_age_seconds,
+                    "edge": item.edge,
+                    "market_disagreement": item.market_disagreement,
+                    "strong_candidate": item.strong_candidate,
+                    "data_source": item.data_source,
                 },
             )
         )
     session.commit()
     return model_run, priced
+
+
+def _run_data_source(priced: list[PricedMarket], fixture: Fixture) -> str:
+    """Походження прогону = походження даних, на яких він реально порахований."""
+    sources = {item.data_source for item in priced}
+    if not sources:
+        return fixture.data_source
+    if len(sources) == 1:
+        return sources.pop()
+    return "MIXED"
+
+
+def build_inputs_json(
+    *,
+    lambda_home: float,
+    lambda_away: float,
+    max_goals: int,
+    model_version: str,
+    snapshot_ids: list[int],
+    prediction_cutoff: datetime,
+    data_source: str,
+) -> dict:
+    """Повний набір входів прогону (ТЗ §51).
+
+    Достатній, щоб перерахувати кожну prediction з нуля: моделі, пороги
+    рішень, мапа ринків, використані снапшоти і момент зрізу. `inputs_hash`
+    фіксує весь набір одним значенням.
+    """
+    payload = {
+        "schema_version": INPUTS_SCHEMA_VERSION,
+        "model_version": model_version,
+        "lambda_home": lambda_home,
+        "lambda_away": lambda_away,
+        "max_goals": max_goals,
+        "data_source": data_source,
+        "snapshot_ids": sorted(snapshot_ids),
+        "prediction_cutoff": prediction_cutoff.isoformat(),
+        "priced_at": prediction_cutoff.isoformat(),
+        "decision_thresholds": decision_thresholds(),
+        "market_mapping": {
+            selection: {"side": side.value, "scope": scope, "opposite": opposite}
+            for selection, (side, scope, opposite) in SELECTION_SPEC.items()
+        },
+        "feature_flags": {
+            "market_baseline_used": False,
+            "dixon_coles": False,          # ТЗ §11, Sprint 10
+            "data_quality_score": False,   # ТЗ §23, Sprint 6
+            "confidence_grade": False,     # ТЗ §24, Sprint 6
+            "reverse_engine": False,       # ТЗ §26, Sprint 7
+        },
+    }
+    payload["inputs_hash"] = hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return payload
 
 
 def priced_market_to_dict(item: PricedMarket) -> dict:
