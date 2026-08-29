@@ -3,14 +3,15 @@
   "warning": "СИНТЕТИЧНІ ДАНІ. Не реальні коефіцієнти. Згенеровано, бо зовнішні odds-API заблоковані egress-політикою середовища — див. gate0/GATE0_REPORT.md.",
   "payload_format": "the-odds-api-v4",
   "sport_key": "soccer_epl",
-  "generated_at": "2026-08-29T14:00:00+00:00",
+  "generated_at": "2026-08-29T21:19:00+00:00",
   "poll_schedule": [
-    "T-48h",
-    "T-24h",
-    "T-6h",
-    "T-1h",
-    "T-15m"
+    "-48h",
+    "-24h",
+    "-6h",
+    "-1h",
+    "-2m"
   ],
+  "poll_schedule_note": "Зсуви відлічені назад від моменту генерації. Усі зрізи в минулому і до kickoff — як у справжнього провайдера.",
   "events": 5,
   "polls": [
     "odds_soccer_epl_t0.json",

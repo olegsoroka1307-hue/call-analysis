@@ -1,68 +1,103 @@
-[
-  {
-    "name": "The Odds API v4",
-    "host": "api.the-odds-api.com",
-    "reachable": "BLOCKED",
-    "detail": "проксі відхилив CONNECT: 403 Forbidden",
-    "has_key": false,
-    "capabilities": {
-      "Fixtures": "BLOCKED",
-      "Stake odds": "BLOCKED",
-      "Asian totals": "BLOCKED",
-      "Team totals": "BLOCKED",
-      "BTTS": "BLOCKED",
-      "Historical odds": "BLOCKED",
-      "xG": "BLOCKED",
-      "Lineups": "BLOCKED",
-      "Injuries": "BLOCKED",
-      "Price/limits": "BLOCKED"
-    },
-    "matches_checked": 0,
-    "errors": [],
-    "gate0_passed": false
+{
+  "generated_at": "2026-08-29T21:30:40.962204+00:00",
+  "match_target": 25,
+  "stack_coverage": {
+    "Fixtures": "UNKNOWN",
+    "Asian totals": "UNKNOWN",
+    "Team totals": "UNKNOWN",
+    "BTTS": "UNKNOWN",
+    "Historical odds": "UNKNOWN",
+    "xG": "UNKNOWN",
+    "Lineups": "UNKNOWN",
+    "Injuries": "UNKNOWN"
   },
-  {
-    "name": "API-Football (api-sports.io)",
-    "host": "v3.football.api-sports.io",
-    "reachable": "BLOCKED",
-    "detail": "проксі відхилив CONNECT: 403 Forbidden",
-    "has_key": false,
-    "capabilities": {
-      "Fixtures": "BLOCKED",
-      "Stake odds": "BLOCKED",
-      "Asian totals": "BLOCKED",
-      "Team totals": "BLOCKED",
-      "BTTS": "BLOCKED",
-      "Historical odds": "BLOCKED",
-      "xG": "BLOCKED",
-      "Lineups": "BLOCKED",
-      "Injuries": "BLOCKED",
-      "Price/limits": "BLOCKED"
+  "gate0_passed": false,
+  "blockers": [
+    "Fixtures: UNKNOWN",
+    "Asian totals: UNKNOWN",
+    "Team totals: UNKNOWN",
+    "BTTS: UNKNOWN",
+    "Historical odds: UNKNOWN",
+    "xG: UNKNOWN",
+    "Lineups: UNKNOWN",
+    "Injuries: UNKNOWN",
+    "жоден провайдер не опитаний на реальних матчах"
+  ],
+  "providers": [
+    {
+      "name": "The Odds API v4",
+      "host": "api.the-odds-api.com",
+      "reachable": "YES",
+      "reachability_detail": "TLS-з'єднання встановлено",
+      "has_key": false,
+      "capabilities": {
+        "Fixtures": "UNKNOWN",
+        "Stake odds": "UNKNOWN",
+        "Asian totals": "UNKNOWN",
+        "Team totals": "UNKNOWN",
+        "BTTS": "UNKNOWN",
+        "Historical odds": "UNKNOWN",
+        "xG": "UNKNOWN",
+        "Lineups": "UNKNOWN",
+        "Injuries": "UNKNOWN",
+        "Price/limits": "UNKNOWN"
+      },
+      "coverage": {},
+      "matches_checked": 0,
+      "events_probed": 0,
+      "sample_timestamps": [],
+      "latency_ms": null,
+      "errors": []
     },
-    "matches_checked": 0,
-    "errors": [],
-    "gate0_passed": false
-  },
-  {
-    "name": "SportMonks Football",
-    "host": "api.sportmonks.com",
-    "reachable": "BLOCKED",
-    "detail": "проксі відхилив CONNECT: 403 Forbidden",
-    "has_key": false,
-    "capabilities": {
-      "Fixtures": "BLOCKED",
-      "Stake odds": "BLOCKED",
-      "Asian totals": "BLOCKED",
-      "Team totals": "BLOCKED",
-      "BTTS": "BLOCKED",
-      "Historical odds": "BLOCKED",
-      "xG": "BLOCKED",
-      "Lineups": "BLOCKED",
-      "Injuries": "BLOCKED",
-      "Price/limits": "BLOCKED"
+    {
+      "name": "API-Football (api-sports.io)",
+      "host": "v3.football.api-sports.io",
+      "reachable": "YES",
+      "reachability_detail": "TLS-з'єднання встановлено",
+      "has_key": false,
+      "capabilities": {
+        "Fixtures": "UNKNOWN",
+        "Stake odds": "UNKNOWN",
+        "Asian totals": "UNKNOWN",
+        "Team totals": "UNKNOWN",
+        "BTTS": "UNKNOWN",
+        "Historical odds": "UNKNOWN",
+        "xG": "UNKNOWN",
+        "Lineups": "UNKNOWN",
+        "Injuries": "UNKNOWN",
+        "Price/limits": "UNKNOWN"
+      },
+      "coverage": {},
+      "matches_checked": 0,
+      "events_probed": 0,
+      "sample_timestamps": [],
+      "latency_ms": null,
+      "errors": []
     },
-    "matches_checked": 0,
-    "errors": [],
-    "gate0_passed": false
-  }
-]
+    {
+      "name": "SportMonks Football",
+      "host": "api.sportmonks.com",
+      "reachable": "YES",
+      "reachability_detail": "TLS-з'єднання встановлено",
+      "has_key": false,
+      "capabilities": {
+        "Fixtures": "UNKNOWN",
+        "Stake odds": "UNKNOWN",
+        "Asian totals": "UNKNOWN",
+        "Team totals": "UNKNOWN",
+        "BTTS": "UNKNOWN",
+        "Historical odds": "UNKNOWN",
+        "xG": "UNKNOWN",
+        "Lineups": "UNKNOWN",
+        "Injuries": "UNKNOWN",
+        "Price/limits": "UNKNOWN"
+      },
+      "coverage": {},
+      "matches_checked": 0,
+      "events_probed": 0,
+      "sample_timestamps": [],
+      "latency_ms": null,
+      "errors": []
+    }
+  ]
+}

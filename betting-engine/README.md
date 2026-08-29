@@ -15,11 +15,11 @@
 
 ## 1. Головне, що треба знати одразу
 
-**Gate 0 не пройдений, і це не питання коду.** Усі хости data-провайдерів
-(`api.the-odds-api.com`, `v3.football.api-sports.io`, `api.sportmonks.com` та
-інші) заблоковані egress-політикою середовища — проксі відповідає `403` ще на
-етапі `CONNECT`, запит не доходить до провайдера. Деталі, наслідки та що саме
-потрібно від замовника — у [gate0/GATE0_REPORT.md](gate0/GATE0_REPORT.md).
+**Gate 0 не пройдений, і це не питання коду.** Харнес написаний, прогнаний,
+усі три хости провайдерів досяжні — бракує **тільки API-ключів**. Раніше
+блокером була egress-політика середовища (проксі різав `403` на `CONNECT`);
+у поточному середовищі мережа відкрита. Деталі та що саме потрібно від
+замовника — у [gate0/GATE0_REPORT.md](gate0/GATE0_REPORT.md).
 
 За ТЗ §48 це означає: **до Sprint 1 переходити не можна**, доки Gate 0 не закритий.
 
@@ -97,7 +97,7 @@ Docker Compose» треба читати як «PoC-контур запуска�
 | # | Вимога | Де реалізовано | Перевірено |
 |---|---|---|---|
 | 1 | Підключити 1 odds API | `app/providers/the_odds_api.py` (HTTP) + `replay.py` (офлайн) | ✅ |
-| 2 | 5 реальних майбутніх матчів | `app/tools/make_replay_dataset.py` — 5 матчів; ⚠️ **синтетичні**, бо API заблоковані | ⚠️ |
+| 2 | 5 реальних майбутніх матчів | `app/tools/make_replay_dataset.py` — 5 матчів; ⚠️ **синтетичні**, бо немає API-ключів | ⚠️ |
 | 3 | Fixtures у PostgreSQL | `app/db/models.py`, `app/services/ingest.py` | ✅ |
 | 4 | 3–5 odds snapshots на тотальний ринок | `insert_odds_snapshots` — 5 опитувань, append-only | ✅ |
 | 5 | Opening / current movement | `app/services/movement.py` | ✅ |
@@ -105,7 +105,7 @@ Docker Compose» треба читати як «PoC-контур запуска�
 | 7 | Poisson: O2.5 і team O2.5 | `app/models_engine/poisson.py` | ✅ |
 | 8 | Fair odds та EV | `app/models_engine/ev.py` | ✅ |
 | 9 | Результат через FastAPI | `app/main.py` → `GET /poc/report` | ✅ |
-| 10 | ≥5 unit-тестів + O2.75 settlement | `tests/` — **109 тестів** | ✅ |
+| 10 | ≥5 unit-тестів + O2.75 settlement | `tests/` — **139 тестів**, 0 skipped на PostgreSQL 16 | ✅ |
 
 Єдиний пункт із застереженням — №2: матчі синтетичні. Це прямий наслідок
 незакритого Gate 0, а не спрощення.

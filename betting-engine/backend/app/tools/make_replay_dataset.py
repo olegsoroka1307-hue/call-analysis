@@ -47,12 +47,26 @@ def _price_walk(rng: random.Random, start: float, steps: int, drift: float) -> l
 
 def build(days_ahead: int, seed: int = 20260829) -> tuple[list[list[dict]], datetime]:
     rng = random.Random(seed)
-    base = datetime.now(UTC).replace(minute=0, second=0, microsecond=0)
+    base = datetime.now(UTC).replace(second=0, microsecond=0)
     kickoff_base = base + timedelta(days=days_ahead)
 
-    # Опитування: 48h, 24h, 6h, 1h, 15m до старту (сітка з ТЗ §27).
+    # Опитування відлічуються НАЗАД ВІД ЗАРАЗ, а не від kickoff.
+    #
+    # Раніше було `kickoff - offset`, і при days_ahead=3 навіть найраніший
+    # зріз (T-48h) опинявся на добу В МАЙБУТНЬОМУ. Жоден odds-провайдер не
+    # повертає last_update з майбутнього, тому такий датасет не міг би
+    # приїхати з реального API — а PoC заявляє, що payload має точно ту саму
+    # форму, що й відповідь The Odds API v4.
+    #
+    # Поки не було data-guard (аудит, п.3), це нічим не проявлялось. Тепер
+    # від'ємний вік ціни коректно трактується як PROVIDER_ERROR, і весь
+    # прогін чесно ставав PASS.
+    #
+    # Реалістична модель: систему опитували останні 48 годин, матч попереду.
+    # Найсвіжіший зріз — 2 хвилини тому, щоб демо показувало живі рішення,
+    # а не «все прострочене».
     offsets = [timedelta(hours=48), timedelta(hours=24), timedelta(hours=6),
-               timedelta(hours=1), timedelta(minutes=15)][:POLL_COUNT]
+               timedelta(hours=1), timedelta(minutes=2)][:POLL_COUNT]
 
     per_match = []
     for index, (home, away, line_start, line_end) in enumerate(MATCHES):
@@ -86,7 +100,7 @@ def build(days_ahead: int, seed: int = 20260829) -> tuple[list[list[dict]], date
     for poll_index, offset in enumerate(offsets):
         events = []
         for match in per_match:
-            observed_at = match["kickoff"] - offset
+            observed_at = base - offset
             line = match["lines"][poll_index]
             bookmakers = []
             for key, title in BOOKMAKERS:
@@ -154,13 +168,17 @@ def main() -> None:
     manifest = {
         "data_source": "SYNTHETIC_REPLAY",
         "warning": (
-            "СИНТЕТИЧНІ ДАНІ. Не реальні коефіцієнти. Згенеровано, бо зовнішні "
-            "odds-API заблоковані egress-політикою середовища — див. gate0/GATE0_REPORT.md."
+            "СИНТЕТИЧНІ ДАНІ. Не реальні коефіцієнти. Згенеровано, бо Gate 0 "
+            "не пройдений і немає API-ключів — див. gate0/GATE0_REPORT.md."
         ),
         "payload_format": "the-odds-api-v4",
         "sport_key": SPORT_KEY,
         "generated_at": generated_at.isoformat(),
-        "poll_schedule": ["T-48h", "T-24h", "T-6h", "T-1h", "T-15m"][:len(polls)],
+        "poll_schedule": ["-48h", "-24h", "-6h", "-1h", "-2m"][:len(polls)],
+        "poll_schedule_note": (
+            "Зсуви відлічені назад від моменту генерації. Усі зрізи в минулому "
+            "і до kickoff — як у справжнього провайдера."
+        ),
         "events": len(polls[0]),
         "polls": filenames,
     }

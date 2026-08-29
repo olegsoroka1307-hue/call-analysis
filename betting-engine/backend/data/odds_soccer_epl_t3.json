@@ -3,18 +3,18 @@
     "id": "poc0000ab3fab3fab3fab3fab3fab3f",
     "sport_key": "soccer_epl",
     "sport_title": "EPL",
-    "commence_time": "2026-09-01T14:00:00Z",
+    "commence_time": "2026-09-01T21:19:00Z",
     "home_team": "Arsenal",
     "away_team": "Tottenham Hotspur",
     "bookmakers": [
       {
         "key": "pinnacle",
         "title": "Pinnacle",
-        "last_update": "2026-09-01T13:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T13:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -30,7 +30,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T13:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -63,11 +63,11 @@
       {
         "key": "stake",
         "title": "Stake",
-        "last_update": "2026-09-01T13:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T13:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -83,7 +83,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T13:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -119,18 +119,18 @@
     "id": "poc0001ab3fab3fab3fab3fab3fab3f",
     "sport_key": "soccer_epl",
     "sport_title": "EPL",
-    "commence_time": "2026-09-01T16:00:00Z",
+    "commence_time": "2026-09-01T23:19:00Z",
     "home_team": "Manchester City",
     "away_team": "Brighton and Hove Albion",
     "bookmakers": [
       {
         "key": "pinnacle",
         "title": "Pinnacle",
-        "last_update": "2026-09-01T15:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T15:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -146,7 +146,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T15:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -179,11 +179,11 @@
       {
         "key": "stake",
         "title": "Stake",
-        "last_update": "2026-09-01T15:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T15:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -199,7 +199,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T15:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -235,18 +235,18 @@
     "id": "poc0002ab3fab3fab3fab3fab3fab3f",
     "sport_key": "soccer_epl",
     "sport_title": "EPL",
-    "commence_time": "2026-09-01T18:00:00Z",
+    "commence_time": "2026-09-02T01:19:00Z",
     "home_team": "Liverpool",
     "away_team": "Everton",
     "bookmakers": [
       {
         "key": "pinnacle",
         "title": "Pinnacle",
-        "last_update": "2026-09-01T17:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T17:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -262,7 +262,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T17:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -295,11 +295,11 @@
       {
         "key": "stake",
         "title": "Stake",
-        "last_update": "2026-09-01T17:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T17:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -315,7 +315,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T17:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -351,18 +351,18 @@
     "id": "poc0003ab3fab3fab3fab3fab3fab3f",
     "sport_key": "soccer_epl",
     "sport_title": "EPL",
-    "commence_time": "2026-09-01T20:00:00Z",
+    "commence_time": "2026-09-02T03:19:00Z",
     "home_team": "Chelsea",
     "away_team": "Newcastle United",
     "bookmakers": [
       {
         "key": "pinnacle",
         "title": "Pinnacle",
-        "last_update": "2026-09-01T19:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T19:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -378,7 +378,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T19:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -411,11 +411,11 @@
       {
         "key": "stake",
         "title": "Stake",
-        "last_update": "2026-09-01T19:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T19:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -431,7 +431,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T19:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -467,18 +467,18 @@
     "id": "poc0004ab3fab3fab3fab3fab3fab3f",
     "sport_key": "soccer_epl",
     "sport_title": "EPL",
-    "commence_time": "2026-09-01T22:00:00Z",
+    "commence_time": "2026-09-02T05:19:00Z",
     "home_team": "Aston Villa",
     "away_team": "Fulham",
     "bookmakers": [
       {
         "key": "pinnacle",
         "title": "Pinnacle",
-        "last_update": "2026-09-01T21:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T21:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -494,7 +494,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T21:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -527,11 +527,11 @@
       {
         "key": "stake",
         "title": "Stake",
-        "last_update": "2026-09-01T21:00:00Z",
+        "last_update": "2026-08-29T20:19:00Z",
         "markets": [
           {
             "key": "totals",
-            "last_update": "2026-09-01T21:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -547,7 +547,7 @@
           },
           {
             "key": "team_totals",
-            "last_update": "2026-09-01T21:00:00Z",
+            "last_update": "2026-08-29T20:19:00Z",
             "outcomes": [
               {
                 "name": "Over",

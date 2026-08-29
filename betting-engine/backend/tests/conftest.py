@@ -54,6 +54,26 @@ def session(engine):
         yield session
 
 
-@pytest.fixture
-def replay_data_dir() -> str:
-    return str(BACKEND_DIR / "data")
+@pytest.fixture(scope="session")
+def replay_data_dir(tmp_path_factory) -> str:
+    """Свіжий replay-датасет на кожен прогін тестів.
+
+    Закомічений датасет у `data/` має абсолютні мітки часу, тому він
+    старіє: через 15 хвилин після генерації data-guard (ТЗ §22) чесно
+    визнає всі ціни простроченими і кожне рішення стає PASS. Тести, які
+    цього не враховують, починають падати «за годинником», а не за кодом.
+
+    Тому тести генерують власний датасет у тимчасовий каталог. Робочий
+    `data/` лишається для демо і для compose, який теж перегенеровує його
+    перед запуском.
+    """
+    out_dir = tmp_path_factory.mktemp("replay")
+    subprocess.run(
+        [sys.executable, "-m", "app.tools.make_replay_dataset",
+         "--days-ahead", "3", "--out", str(out_dir)],
+        cwd=BACKEND_DIR,
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
+        check=True,
+        capture_output=True,
+    )
+    return str(out_dir)
