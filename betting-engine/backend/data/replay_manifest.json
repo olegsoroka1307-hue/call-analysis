@@ -1,0 +1,22 @@
+{
+  "data_source": "SYNTHETIC_REPLAY",
+  "warning": "СИНТЕТИЧНІ ДАНІ. Не реальні коефіцієнти. Згенеровано, бо зовнішні odds-API заблоковані egress-політикою середовища — див. gate0/GATE0_REPORT.md.",
+  "payload_format": "the-odds-api-v4",
+  "sport_key": "soccer_epl",
+  "generated_at": "2026-08-29T14:00:00+00:00",
+  "poll_schedule": [
+    "T-48h",
+    "T-24h",
+    "T-6h",
+    "T-1h",
+    "T-15m"
+  ],
+  "events": 5,
+  "polls": [
+    "odds_soccer_epl_t0.json",
+    "odds_soccer_epl_t1.json",
+    "odds_soccer_epl_t2.json",
+    "odds_soccer_epl_t3.json",
+    "odds_soccer_epl_t4.json"
+  ]
+}

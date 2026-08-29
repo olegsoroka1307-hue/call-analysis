@@ -1,0 +1,582 @@
+[
+  {
+    "id": "poc0000ab3fab3fab3fab3fab3fab3f",
+    "sport_key": "soccer_epl",
+    "sport_title": "EPL",
+    "commence_time": "2026-09-01T14:00:00Z",
+    "home_team": "Arsenal",
+    "away_team": "Tottenham Hotspur",
+    "bookmakers": [
+      {
+        "key": "pinnacle",
+        "title": "Pinnacle",
+        "last_update": "2026-09-01T13:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T13:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 1.86,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "price": 1.99,
+                "point": 2.5
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T13:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Arsenal",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Arsenal",
+                "price": 1.88,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Arsenal",
+                "price": 4.33,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Arsenal",
+                "price": 1.18,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "stake",
+        "title": "Stake",
+        "last_update": "2026-09-01T13:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T13:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 1.9,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "price": 2.03,
+                "point": 2.5
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T13:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Arsenal",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Arsenal",
+                "price": 1.88,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Arsenal",
+                "price": 4.33,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Arsenal",
+                "price": 1.18,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poc0001ab3fab3fab3fab3fab3fab3f",
+    "sport_key": "soccer_epl",
+    "sport_title": "EPL",
+    "commence_time": "2026-09-01T16:00:00Z",
+    "home_team": "Manchester City",
+    "away_team": "Brighton and Hove Albion",
+    "bookmakers": [
+      {
+        "key": "pinnacle",
+        "title": "Pinnacle",
+        "last_update": "2026-09-01T15:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T15:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.01,
+                "point": 3.5
+              },
+              {
+                "name": "Under",
+                "price": 1.78,
+                "point": 3.5
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T15:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Manchester City",
+                "price": 2.23,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Manchester City",
+                "price": 1.63,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Manchester City",
+                "price": 4.93,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Manchester City",
+                "price": 1.22,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "stake",
+        "title": "Stake",
+        "last_update": "2026-09-01T15:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T15:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.05,
+                "point": 3.5
+              },
+              {
+                "name": "Under",
+                "price": 1.79,
+                "point": 3.5
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T15:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Manchester City",
+                "price": 2.23,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Manchester City",
+                "price": 1.63,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Manchester City",
+                "price": 4.93,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Manchester City",
+                "price": 1.22,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poc0002ab3fab3fab3fab3fab3fab3f",
+    "sport_key": "soccer_epl",
+    "sport_title": "EPL",
+    "commence_time": "2026-09-01T18:00:00Z",
+    "home_team": "Liverpool",
+    "away_team": "Everton",
+    "bookmakers": [
+      {
+        "key": "pinnacle",
+        "title": "Pinnacle",
+        "last_update": "2026-09-01T17:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T17:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 1.85,
+                "point": 2.75
+              },
+              {
+                "name": "Under",
+                "price": 2.01,
+                "point": 2.75
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T17:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Liverpool",
+                "price": 2.04,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Liverpool",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Liverpool",
+                "price": 4.55,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Liverpool",
+                "price": 1.17,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "stake",
+        "title": "Stake",
+        "last_update": "2026-09-01T17:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T17:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 1.96,
+                "point": 2.75
+              },
+              {
+                "name": "Under",
+                "price": 2.0,
+                "point": 2.75
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T17:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Liverpool",
+                "price": 2.04,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Liverpool",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Liverpool",
+                "price": 4.55,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Liverpool",
+                "price": 1.17,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poc0003ab3fab3fab3fab3fab3fab3f",
+    "sport_key": "soccer_epl",
+    "sport_title": "EPL",
+    "commence_time": "2026-09-01T20:00:00Z",
+    "home_team": "Chelsea",
+    "away_team": "Newcastle United",
+    "bookmakers": [
+      {
+        "key": "pinnacle",
+        "title": "Pinnacle",
+        "last_update": "2026-09-01T19:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T19:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.1,
+                "point": 2.75
+              },
+              {
+                "name": "Under",
+                "price": 1.87,
+                "point": 2.75
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T19:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Chelsea",
+                "price": 2.27,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Chelsea",
+                "price": 1.79,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Chelsea",
+                "price": 5.17,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Chelsea",
+                "price": 1.16,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "stake",
+        "title": "Stake",
+        "last_update": "2026-09-01T19:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T19:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.17,
+                "point": 2.75
+              },
+              {
+                "name": "Under",
+                "price": 1.9,
+                "point": 2.75
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T19:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Chelsea",
+                "price": 2.27,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Chelsea",
+                "price": 1.79,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Chelsea",
+                "price": 5.17,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Chelsea",
+                "price": 1.16,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "poc0004ab3fab3fab3fab3fab3fab3f",
+    "sport_key": "soccer_epl",
+    "sport_title": "EPL",
+    "commence_time": "2026-09-01T22:00:00Z",
+    "home_team": "Aston Villa",
+    "away_team": "Fulham",
+    "bookmakers": [
+      {
+        "key": "pinnacle",
+        "title": "Pinnacle",
+        "last_update": "2026-09-01T21:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T21:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.02,
+                "point": 2.25
+              },
+              {
+                "name": "Under",
+                "price": 2.12,
+                "point": 2.25
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T21:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Aston Villa",
+                "price": 2.08,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Aston Villa",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Aston Villa",
+                "price": 4.75,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Aston Villa",
+                "price": 1.35,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "key": "stake",
+        "title": "Stake",
+        "last_update": "2026-09-01T21:45:00Z",
+        "markets": [
+          {
+            "key": "totals",
+            "last_update": "2026-09-01T21:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "price": 2.07,
+                "point": 2.25
+              },
+              {
+                "name": "Under",
+                "price": 2.06,
+                "point": 2.25
+              }
+            ]
+          },
+          {
+            "key": "team_totals",
+            "last_update": "2026-09-01T21:45:00Z",
+            "outcomes": [
+              {
+                "name": "Over",
+                "description": "Aston Villa",
+                "price": 2.08,
+                "point": 1.5
+              },
+              {
+                "name": "Under",
+                "description": "Aston Villa",
+                "price": 1.93,
+                "point": 1.5
+              },
+              {
+                "name": "Over",
+                "description": "Aston Villa",
+                "price": 4.75,
+                "point": 2.5
+              },
+              {
+                "name": "Under",
+                "description": "Aston Villa",
+                "price": 1.35,
+                "point": 2.5
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

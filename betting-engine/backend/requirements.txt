@@ -1,0 +1,19 @@
+# Betting Decision Engine — PoC (ТЗ §52)
+# ТЗ §4 рекомендує Python 3.12+; PoC перевірений на 3.11 (див. README, розділ «Відхилення»).
+
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.9
+pydantic-settings>=2.6
+
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+alembic>=1.14
+
+numpy>=2.0
+scipy>=1.14
+
+httpx>=0.27
+python-dotenv>=1.0
+
+pytest>=8.3

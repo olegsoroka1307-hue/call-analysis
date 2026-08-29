@@ -1,0 +1,39 @@
+# ТЗ §47. УВАГА: у середовищі, де писався PoC, docker-демон недоступний,
+# тому цей compose НЕ перевірений прогоном. Перевірений шлях запуску —
+# локальний, описаний у README («Запуск без Docker»).
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: betting_poc
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/betting_poc
+      ODDS_PROVIDER: ${ODDS_PROVIDER:-replay}
+      ODDS_API_KEY: ${ODDS_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "alembic upgrade head &&
+             python -m app.tools.run_poc &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  pgdata:

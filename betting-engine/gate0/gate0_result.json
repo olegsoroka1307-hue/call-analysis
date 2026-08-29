@@ -1,0 +1,68 @@
+[
+  {
+    "name": "The Odds API v4",
+    "host": "api.the-odds-api.com",
+    "reachable": "BLOCKED",
+    "detail": "проксі відхилив CONNECT: 403 Forbidden",
+    "has_key": false,
+    "capabilities": {
+      "Fixtures": "BLOCKED",
+      "Stake odds": "BLOCKED",
+      "Asian totals": "BLOCKED",
+      "Team totals": "BLOCKED",
+      "BTTS": "BLOCKED",
+      "Historical odds": "BLOCKED",
+      "xG": "BLOCKED",
+      "Lineups": "BLOCKED",
+      "Injuries": "BLOCKED",
+      "Price/limits": "BLOCKED"
+    },
+    "matches_checked": 0,
+    "errors": [],
+    "gate0_passed": false
+  },
+  {
+    "name": "API-Football (api-sports.io)",
+    "host": "v3.football.api-sports.io",
+    "reachable": "BLOCKED",
+    "detail": "проксі відхилив CONNECT: 403 Forbidden",
+    "has_key": false,
+    "capabilities": {
+      "Fixtures": "BLOCKED",
+      "Stake odds": "BLOCKED",
+      "Asian totals": "BLOCKED",
+      "Team totals": "BLOCKED",
+      "BTTS": "BLOCKED",
+      "Historical odds": "BLOCKED",
+      "xG": "BLOCKED",
+      "Lineups": "BLOCKED",
+      "Injuries": "BLOCKED",
+      "Price/limits": "BLOCKED"
+    },
+    "matches_checked": 0,
+    "errors": [],
+    "gate0_passed": false
+  },
+  {
+    "name": "SportMonks Football",
+    "host": "api.sportmonks.com",
+    "reachable": "BLOCKED",
+    "detail": "проксі відхилив CONNECT: 403 Forbidden",
+    "has_key": false,
+    "capabilities": {
+      "Fixtures": "BLOCKED",
+      "Stake odds": "BLOCKED",
+      "Asian totals": "BLOCKED",
+      "Team totals": "BLOCKED",
+      "BTTS": "BLOCKED",
+      "Historical odds": "BLOCKED",
+      "xG": "BLOCKED",
+      "Lineups": "BLOCKED",
+      "Injuries": "BLOCKED",
+      "Price/limits": "BLOCKED"
+    },
+    "matches_checked": 0,
+    "errors": [],
+    "gate0_passed": false
+  }
+]
